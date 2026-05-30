@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@14 *)",
+      "Bash(cp -r /tmp/nrt-temp/. /Users/rudyliger/tresorerie-nrt/)",
+      "Bash(rm -rf /tmp/nrt-temp)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(npx tsx *)",
+      "Bash(node *)",
+      "Bash(sed -i '' 's/PrismaBetterSQLite/PrismaBetterSqlite3/g' /Users/rudyliger/tresorerie-nrt/prisma/seed.ts /Users/rudyliger/tresorerie-nrt/lib/prisma.ts)",
+      "Bash(sed -i '' 's/adapter-better-sqlite3.*PrismaBetterSQLite/adapter-better-sqlite3\" }\\\\n import { PrismaBetterSqlite3/g' /Users/rudyliger/tresorerie-nrt/prisma/seed.ts)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s http://localhost:3000/api/dashboard)",
+      "Bash(curl *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(npx --yes chromium-cli --version)",
+      "Bash(npx playwright *)",
+      "Bash(/usr/bin/open --version)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-dashboard.png --window-size=1400,900 http://localhost:3000/dashboard)",
+      "Bash(echo \"exit: $?\")",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-planning.png --window-size=1400,900 http://localhost:3000/planning)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-planning2.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=3000 http://localhost:3000/planning)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-planning3.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=3000 http://localhost:3000/planning)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-dashboard2.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=3000 http://localhost:3000/dashboard)"
+    ]
+  }
+}

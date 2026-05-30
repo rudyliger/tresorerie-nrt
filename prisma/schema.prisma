@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ─── Comptes bancaires ────────────────────────────────────────────────────────
+
+model BankAccount {
+  id             String    @id @default(cuid())
+  name           String    @unique
+  code           String    @unique
+  currentBalance Float     @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  payments       Payment[]
+}
+
+// ─── Entités (pour les recettes) ─────────────────────────────────────────────
+
+model Entity {
+  id       String    @id @default(cuid())
+  name     String    @unique // "RNV O", "RNV B", "RNV T", "RNV Web", "OMC Web"
+  code     String    @unique // "RNV_O", "RNV_B", "RNV_T", "RNV_WEB", "OMC_WEB"
+  revenues Revenue[]
+}
+
+// ─── Catégories de dépenses ───────────────────────────────────────────────────
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  order    Int       @default(0)
+  payments Payment[]
+}
+
+// ─── Paiements / Dépenses ─────────────────────────────────────────────────────
+
+model Payment {
+  id                  String      @id @default(cuid())
+  label               String
+  amount              Float
+  dueDate             DateTime
+  method              PaymentMethod
+  isPaid              Boolean     @default(false)
+  paidAt              DateTime?
+  notes               String?
+
+  // Récurrence
+  isRecurring         Boolean     @default(false)
+  recurringDayOfMonth Int?
+  parentId            String?
+  parent              Payment?    @relation("Recurrences", fields: [parentId], references: [id])
+  children            Payment[]   @relation("Recurrences")
+
+  categoryId          String
+  category            Category    @relation(fields: [categoryId], references: [id])
+
+  bankAccountId       String
+  bankAccount         BankAccount @relation(fields: [bankAccountId], references: [id])
+
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+enum PaymentMethod {
+  VIREMENT
+  PRELEVEMENT
+  CHEQUE
+  CB
+  EFFET
+}
+
+// ─── Recettes ─────────────────────────────────────────────────────────────────
+
+model Revenue {
+  id        String   @id @default(cuid())
+  amount    Float
+  date      DateTime
+  notes     String?
+
+  entityId  String
+  entity    Entity   @relation(fields: [entityId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Historique des soldes bancaires ──────────────────────────────────────────
+
+model BalanceSnapshot {
+  id            String   @id @default(cuid())
+  bankAccountId String
+  balance       Float
+  snapshotDate  DateTime
+  createdAt     DateTime @default(now())
+
+  @@unique([bankAccountId, snapshotDate])
+  @@index([bankAccountId, snapshotDate])
+}
