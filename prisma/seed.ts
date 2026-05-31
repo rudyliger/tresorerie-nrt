@@ -35,11 +35,11 @@ async function main() {
 
   // ─── Entités ──────────────────────────────────────────────────────────────
   const [rnvO, rnvB, rnvT, rnvWeb, omcWeb] = await Promise.all([
-    prisma.entity.upsert({ where: { code: "RNV_O" },   update: {}, create: { name: "RNV O",   code: "RNV_O" } }),
-    prisma.entity.upsert({ where: { code: "RNV_B" },   update: {}, create: { name: "RNV B",   code: "RNV_B" } }),
-    prisma.entity.upsert({ where: { code: "RNV_T" },   update: {}, create: { name: "RNV T",   code: "RNV_T" } }),
-    prisma.entity.upsert({ where: { code: "RNV_WEB" }, update: {}, create: { name: "RNV Web", code: "RNV_WEB" } }),
-    prisma.entity.upsert({ where: { code: "OMC_WEB" }, update: {}, create: { name: "OMC Web", code: "OMC_WEB" } }),
+    prisma.entity.upsert({ where: { code: "RNV_O" },   update: { order: 1 }, create: { name: "Renouveau Orléans",      code: "RNV_O",   order: 1 } }),
+    prisma.entity.upsert({ where: { code: "RNV_B" },   update: { order: 2 }, create: { name: "Renouveau Bourges",      code: "RNV_B",   order: 2 } }),
+    prisma.entity.upsert({ where: { code: "RNV_T" },   update: { order: 3 }, create: { name: "Renouveau Tours",        code: "RNV_T",   order: 3 } }),
+    prisma.entity.upsert({ where: { code: "RNV_WEB" }, update: { order: 4 }, create: { name: "Renouveau Web",          code: "RNV_WEB", order: 4 } }),
+    prisma.entity.upsert({ where: { code: "OMC_WEB" }, update: { order: 5 }, create: { name: "Onze Mètres Carrés Web", code: "OMC_WEB", order: 5 } }),
   ]);
 
   // ─── Catégories ───────────────────────────────────────────────────────────
@@ -142,3 +142,5 @@ async function main() {
 main()
   .catch((e) => { console.error(e); process.exit(1); })
   .finally(() => prisma.$disconnect());
+
+// Seed prêts de démonstration (ajout à la suite du seed existant)

@@ -22,10 +22,13 @@ model BankAccount {
 // ─── Entités (pour les recettes) ─────────────────────────────────────────────
 
 model Entity {
-  id       String    @id @default(cuid())
-  name     String    @unique // "RNV O", "RNV B", "RNV T", "RNV Web", "OMC Web"
-  code     String    @unique // "RNV_O", "RNV_B", "RNV_T", "RNV_WEB", "OMC_WEB"
-  revenues Revenue[]
+  id               String               @id @default(cuid())
+  name             String               @unique
+  code             String               @unique
+  order            Int                  @default(99)
+  revenues         Revenue[]
+  weeklyObjectives WeeklyCAObjective[]
+  dailyObjectives  DailyCAObjective[]
 }
 
 // ─── Catégories de dépenses ───────────────────────────────────────────────────
@@ -87,6 +90,75 @@ model Revenue {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// ─── Objectifs CA hebdomadaires ───────────────────────────────────────────────
+
+model WeeklyCAObjective {
+  id           String   @id @default(cuid())
+  entityId     String
+  entity       Entity   @relation(fields: [entityId], references: [id])
+  weekStart    DateTime // Lundi de la semaine, à midi UTC
+  targetAmount Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([entityId, weekStart])
+  @@index([weekStart])
+}
+
+// ─── Prêts bancaires ──────────────────────────────────────────────────────────
+
+model Loan {
+  id              String   @id @default(cuid())
+  name            String
+  bankName        String
+  initialAmount   Float
+  remainingAmount Float
+  monthlyPayment  Float
+  nextDueDate     DateTime
+  endDate         DateTime
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ─── Chéquier ─────────────────────────────────────────────────────────────────
+
+model Cheque {
+  id               String        @id @default(cuid())
+  number           String
+  recipient        String
+  subject          String
+  amount           Float
+  issuedAt         DateTime
+  expectedCashDate DateTime?
+  actualCashDate   DateTime?
+  status           ChequeStatus  @default(EN_ATTENTE)
+  notes            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+enum ChequeStatus {
+  EN_ATTENTE
+  ENCAISSE
+  ANNULE
+}
+
+// ─── Objectifs CA journaliers (magasins) ─────────────────────────────────────
+
+model DailyCAObjective {
+  id           String   @id @default(cuid())
+  entityId     String
+  entity       Entity   @relation(fields: [entityId], references: [id])
+  date         DateTime // Jour exact, à midi UTC
+  targetAmount Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([entityId, date])
+  @@index([date])
 }
 
 // ─── Historique des soldes bancaires ──────────────────────────────────────────

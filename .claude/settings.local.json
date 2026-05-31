@@ -25,7 +25,17 @@
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-planning.png --window-size=1400,900 http://localhost:3000/planning)",
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-planning2.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=3000 http://localhost:3000/planning)",
       "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-planning3.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=3000 http://localhost:3000/planning)",
-      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-dashboard2.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=3000 http://localhost:3000/dashboard)"
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-dashboard2.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=3000 http://localhost:3000/dashboard)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-dashboard-v2.png --window-size=1400,1000 --run-all-compositor-stages-before-draw --virtual-time-budget=8000 http://localhost:3000/dashboard)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-saisie-v2.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=5000 http://localhost:3000/saisie)",
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless=new --screenshot=/tmp/nrt-planning-v2.png --window-size=1400,900 --run-all-compositor-stages-before-draw --virtual-time-budget=5000 http://localhost:3000/planning)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d['id']\\)\")",
+      "Bash(sqlite3 prisma/dev.db ' *)",
+      "Bash(echo \"PID=$!\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); print\\(f'{len\\(data\\)} objectifs weekly retrournés'\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(kill 25619)"
     ]
   }
 }

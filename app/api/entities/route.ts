@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 
 export async function GET() {
   const entities = await prisma.entity.findMany({
-    orderBy: { name: "asc" },
+    orderBy: { order: "asc" },
   });
   return NextResponse.json(entities);
 }
