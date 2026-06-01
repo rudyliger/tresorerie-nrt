@@ -89,28 +89,6 @@ export default function ListePage() {
     setEdit({ id, field, value });
   }
 
-  function EditableCell({ payment, field, display, children }: {
-    payment: Payment; field: string; display: React.ReactNode; children: React.ReactNode;
-  }) {
-    const isEditing = edit?.id === payment.id && edit?.field === field;
-    if (isEditing) {
-      return (
-        <div className="flex items-center gap-1">
-          {children}
-          <button onClick={() => saveEdit(payment, field, edit.value)}
-            className="text-[10px] bg-blue-600 text-white px-1.5 py-0.5 rounded hover:bg-blue-700">✓</button>
-          <button onClick={() => setEdit(null)}
-            className="text-[10px] text-gray-400 hover:text-gray-600 px-1">×</button>
-        </div>
-      );
-    }
-    return (
-      <span onClick={() => startEdit(payment.id, field, "")}
-        className="cursor-pointer hover:bg-blue-50 rounded px-1 -mx-1 transition-colors">
-        {display}
-      </span>
-    );
-  }
 
   const totalAmount = payments.reduce((s, p) => s + p.amount, 0);
   const paidAmount = payments.filter((p) => p.isPaid).reduce((s, p) => s + p.amount, 0);

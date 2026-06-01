@@ -35,7 +35,15 @@
       "Bash(echo \"PID=$!\")",
       "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); print\\(f'{len\\(data\\)} objectifs weekly retrournés'\\)\")",
       "Bash(python3 -c ' *)",
-      "Bash(kill 25619)"
+      "Bash(kill 25619)",
+      "Bash(npx next *)",
+      "Bash(sed -n '113,117p' /Users/rudyliger/tresorerie-nrt/app/dashboard/page.tsx)",
+      "Bash(sed -n '90,95p' /Users/rudyliger/tresorerie-nrt/app/liste/page.tsx)",
+      "Bash(perl -i -pe 's/\\\\.replace\\\\\\(\\\\/\\\\[.*?\\\\]\\\\/g, \"\"\\\\\\)  \\\\/\\\\/ enlève les diacritiques pour la comparaison/.replace\\(\\\\/[\\\\\\\\u0300-\\\\\\\\u036f]\\\\/g, \"\"\\)  \\\\/\\\\/ enlève les diacritiques pour la comparaison/' /Users/rudyliger/tresorerie-nrt/app/api/cheques/import/route.ts)",
+      "Bash(sed -n '126p' /Users/rudyliger/tresorerie-nrt/app/api/cheques/import/route.ts)",
+      "Bash(awk 'length > 500 {print FILENAME \":\" NR \" \\(\" length \" chars\\)\"}' /Users/rudyliger/tresorerie-nrt/app/saisie/page.tsx /Users/rudyliger/tresorerie-nrt/app/planning/page.tsx /Users/rudyliger/tresorerie-nrt/app/chequier/page.tsx)",
+      "Bash(awk 'length > 200')",
+      "Bash(git add *)"
     ]
   }
 }

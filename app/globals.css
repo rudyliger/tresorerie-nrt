@@ -32,3 +32,8 @@
   /* Nombres tabulaires pour l'alignement */
   .tabular { font-variant-numeric: tabular-nums; }
 }
+
+/* Tableau Planning : empêche le retour à la ligne dans les cellules */
+.planning-table td {
+  white-space: nowrap;
+}

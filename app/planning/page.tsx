@@ -12,6 +12,7 @@ type Payment = {
   isPaid: boolean;
   category: { id: string; name: string };
   bankAccount: { id: string; name: string };
+  isVirtual?: boolean;
 };
 
 type Revenue = {
@@ -35,26 +36,6 @@ const CATEGORIES_ORDER = [
   "Banque",
   "Autres charges",
 ];
-
-const METHOD_LABELS: Record<string, string> = {
-  VIREMENT: "Vir.", PRELEVEMENT: "Prél.", CHEQUE: "Chq.", CB: "CB", EFFET: "Eff.",
-};
-
-const METHOD_BADGE: Record<string, string> = {
-  VIREMENT:   "bg-blue-100 text-blue-700",
-  PRELEVEMENT:"bg-orange-100 text-orange-700",
-  CHEQUE:     "bg-purple-100 text-purple-700",
-  CB:         "bg-yellow-100 text-yellow-700",
-  EFFET:      "bg-gray-100 text-gray-500",
-};
-
-const METHOD_TABLE_TEXT: Record<string, string> = {
-  VIREMENT:    "text-blue-700",
-  PRELEVEMENT: "text-orange-600",
-  CHEQUE:      "text-purple-700",
-  CB:          "text-pink-600",
-  EFFET:       "text-slate-400",
-};
 
 const METHOD_ROW_BG: Record<string, string> = {
   VIREMENT:    "bg-blue-50",
@@ -150,8 +131,9 @@ export default function PlanningPage() {
     const toISO   = toDateKey(new Date(year, month + 1, 0));
     const weekFrom = toDateKey(new Date(year, month, -5));
 
-    const [p, r, c, b, e, daily, weekly] = await Promise.all([
+    const [p, extras, r, c, b, e, daily, weekly] = await Promise.all([
       fetch(`/api/payments?${qs}`).then(x => x.json()),
+      fetch(`/api/planning-extras?${qs}`).then(x => x.json()),
       fetch(`/api/revenues?${qs}`).then(x => x.json()),
       fetch("/api/categories").then(x => x.json()),
       fetch("/api/bank-accounts").then(x => x.json()),
@@ -159,7 +141,8 @@ export default function PlanningPage() {
       fetch(`/api/daily-ca-objective?from=${fromISO}&to=${toISO}`).then(x => x.json()),
       fetch(`/api/weekly-ca-objective?from=${weekFrom}&to=${toISO}`).then(x => x.json()),
     ]);
-    setPayments(p); setRevenues(r); setCategories(c);
+    setPayments([...p, ...extras]);
+    setRevenues(r); setCategories(c);
     setBankAccounts(b); setEntities(e);
     setDailyObjectives(daily); setWeeklyWebObjectives(weekly);
   }, [year, month]);
@@ -179,10 +162,20 @@ export default function PlanningPage() {
     revenuesByDay[k] = revenuesByDay[k] ?? []; revenuesByDay[k].push(r);
   }
 
-  const caByDay: Record<string, number> = {};
+  const STORE_CODES = new Set(["RNV_O", "RNV_B", "RNV_T"]);
+  const storeEntityIds = new Set(
+    entities.filter(e => STORE_CODES.has(e.code)).map(e => e.id)
+  );
+
+  const caStoresByDay: Record<string, number> = {};
+  const caWebByDay:   Record<string, number> = {};
+
   for (const obj of dailyObjectives) {
-    const k = toDateKey(new Date(obj.date));
-    caByDay[k] = (caByDay[k] ?? 0) + obj.targetAmount;
+    const d = new Date(obj.date);
+    const k = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+    if (storeEntityIds.has(obj.entityId)) {
+      caStoresByDay[k] = (caStoresByDay[k] ?? 0) + obj.targetAmount;
+    }
   }
   for (const obj of weeklyWebObjectives) {
     if (!["RNV_WEB", "OMC_WEB"].includes(obj.entity?.code ?? "")) continue;
@@ -192,13 +185,25 @@ export default function PlanningPage() {
       const d = new Date(monday);
       d.setUTCDate(d.getUTCDate() + i);
       const k = toDateKey(d);
-      caByDay[k] = (caByDay[k] ?? 0) + daily;
+      caWebByDay[k] = (caWebByDay[k] ?? 0) + daily;
     }
+  }
+
+  const caByDay: Record<string, number> = {};
+  const allCaKeys = Array.from(new Set([...Object.keys(caStoresByDay), ...Object.keys(caWebByDay)]));
+  for (const k of allCaKeys) {
+    caByDay[k] = (caStoresByDay[k] ?? 0) + (caWebByDay[k] ?? 0);
   }
 
   const bankTotal = bankAccounts.reduce((s, a) => s + a.currentBalance, 0);
   const daysInMonth = getDaysInMonth(year, month);
   const days = Array.from({ length: daysInMonth }, (_, i) => toDateKey(new Date(year, month, i + 1)));
+
+  // Décalage J+1 : les recettes du jour J sont créditées en banque le jour J+1
+  // shiftedCAByDay[J] = caByDay[J-1]
+  // Premier jour du mois : pas de données du mois précédent → 0
+  const shiftedCAByDay: Record<string, number> = {};
+  days.forEach((k, i) => { shiftedCAByDay[k] = i > 0 ? (caByDay[days[i - 1]] ?? 0) : 0; });
 
   let cumul = bankTotal;
   const dayData = days.map(dateKey => {
@@ -206,9 +211,11 @@ export default function PlanningPage() {
     const dayRevenues = revenuesByDay[dateKey] ?? [];
     const totalExpenses = dayPayments.reduce((s, p) => s + p.amount, 0);
     const totalRevenues = dayRevenues.reduce((s, r) => s + r.amount, 0);
-    const balance = totalRevenues - totalExpenses;
+    // Recettes disponibles = objectifs CA de J-1 (décalage d'un jour)
+    const prevCA = shiftedCAByDay[dateKey];
+    const balance = prevCA - totalExpenses;
     cumul += balance;
-    return { dateKey, dayPayments, dayRevenues, totalExpenses, totalRevenues, balance, cumul };
+    return { dateKey, dayPayments, dayRevenues, totalExpenses, totalRevenues, prevCA, balance, cumul };
   });
 
   // ── Table-view row construction ─────────────────────────────────────────
@@ -260,8 +267,11 @@ export default function PlanningPage() {
   }
   tableRows.push({ kind: "total", label: "Total dépenses", amountByDay: expTotalByDay, style: "expense" });
 
-  // TOTAL RECETTES (ligne unique, sans détail par shop)
-  tableRows.push({ kind: "total", label: "Total recettes", amountByDay: revTotalByDay, style: "revenue" });
+  // RECETTES PRÉVISIONNELLES
+  tableRows.push({ kind: "section", label: "Recettes" });
+  tableRows.push({ kind: "data", label: "Objectif Magasins", amountByDay: caStoresByDay, sign: "pos" });
+  tableRows.push({ kind: "data", label: "Objectif Web",      amountByDay: caWebByDay,    sign: "pos" });
+  tableRows.push({ kind: "total", label: "Total objectifs CA", amountByDay: caByDay, style: "revenue" });
 
   // BALANCE & CUMUL
   const balanceByDay: Record<string, number> = {};
@@ -326,12 +336,6 @@ export default function PlanningPage() {
   async function deletePayment(id: string) {
     if (!confirm("Supprimer ce paiement ?")) return;
     await fetch(`/api/payments/${id}`, { method: "DELETE" });
-    load();
-  }
-
-  async function deleteRevenue(id: string) {
-    if (!confirm("Supprimer cette recette ?")) return;
-    await fetch(`/api/revenues/${id}`, { method: "DELETE" });
     load();
   }
 
@@ -409,14 +413,15 @@ export default function PlanningPage() {
             {Array.from({ length: firstDayOffset }).map((_, i) => (
               <div key={`empty-${i}`} className="min-h-[140px] bg-gray-50 border-r border-b border-gray-100" />
             ))}
-            {dayData.map(({ dateKey, dayPayments, dayRevenues, totalExpenses, totalRevenues, balance, cumul: cumulVal }) => {
+            {dayData.map(({ dateKey, dayPayments, dayRevenues, totalRevenues, balance, cumul: cumulVal }) => {
               const dayNum = parseInt(dateKey.slice(8, 10));
               const todayKey = toDateKey(today);
               const isToday = dateKey === todayKey;
               const isFuture = dateKey > todayKey;
               const payByCategory = getPaymentsByCategory(dayPayments);
               const hasActivity = dayPayments.length > 0 || dayRevenues.length > 0;
-              const hasSummary = hasActivity || (isFuture && caByDay[dateKey] > 0);
+              // Afficher la synthèse si : activité, objectif aujourd'hui, ou recettes de la veille (J+1)
+              const hasSummary = hasActivity || caByDay[dateKey] > 0 || (shiftedCAByDay[dateKey] ?? 0) > 0;
               return (
                 <div key={dateKey} className={`min-h-[140px] border-r border-b border-gray-100 p-1.5 flex flex-col gap-0.5 ${isToday ? "bg-blue-50" : ""}`}>
                   <div className="flex items-center justify-between mb-0.5">
@@ -439,22 +444,29 @@ export default function PlanningPage() {
                           <span className={`shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap tabular-nums ${METHOD_AMOUNT_BADGE[p.method] ?? "bg-gray-100 text-gray-500"}`}>
                             {fmt(p.amount)}
                           </span>
-                          <button onClick={() => togglePaid(p)} className="hidden group-hover:inline text-gray-400 hover:text-green-600" title={p.isPaid ? "Marquer non payé" : "Marquer payé"}>✓</button>
-                          <button onClick={() => deletePayment(p.id)} className="hidden group-hover:inline text-gray-400 hover:text-red-600" title="Supprimer">×</button>
+                          {!p.isVirtual && <button onClick={() => togglePaid(p)} className="hidden group-hover:inline text-gray-400 hover:text-green-600" title={p.isPaid ? "Marquer non payé" : "Marquer payé"}>✓</button>}
+                          {!p.isVirtual && <button onClick={() => deletePayment(p.id)} className="hidden group-hover:inline text-gray-400 hover:text-red-600" title="Supprimer">×</button>}
                         </div>
                       ))}
                     </div>
                   ))}
                   {hasSummary && (
                     <div className="mt-auto pt-1 border-t border-gray-100 space-y-0.5">
+                      {/* Objectifs CA (aujourd'hui inclus) */}
+                      {dateKey >= toDateKey(today) && (caStoresByDay[dateKey] ?? 0) > 0 && (
+                        <div className="flex justify-between text-[10px]">
+                          <span className="text-violet-400 font-semibold">Obj. Magasins</span>
+                          <span className="font-semibold text-violet-600 tabular-nums">{fmt(caStoresByDay[dateKey])}</span>
+                        </div>
+                      )}
+                      {dateKey >= toDateKey(today) && (caWebByDay[dateKey] ?? 0) > 0 && (
+                        <div className="flex justify-between text-[10px]">
+                          <span className="text-sky-400 font-semibold">Obj. Web</span>
+                          <span className="font-semibold text-sky-600 tabular-nums">{fmt(caWebByDay[dateKey])}</span>
+                        </div>
+                      )}
                       {isFuture ? (
                         <>
-                          {caByDay[dateKey] > 0 && (
-                            <div className="flex justify-between text-[10px]">
-                              <span className="text-violet-400 font-semibold">Obj. CA</span>
-                              <span className="font-semibold text-violet-600 tabular-nums">{fmt(caByDay[dateKey])}</span>
-                            </div>
-                          )}
                           <div className="flex justify-between text-[10px]">
                             <span className="text-gray-300">Balance prév.</span>
                             <span className={`font-semibold opacity-70 ${balance >= 0 ? "text-green-600" : "text-red-600"}`}>{fmt(balance)}</span>
@@ -466,12 +478,6 @@ export default function PlanningPage() {
                         </>
                       ) : (
                         <>
-                          {totalRevenues > 0 && (
-                            <div className="flex justify-between text-[10px]">
-                              <span className="text-gray-400">Recettes</span>
-                              <span className="font-semibold text-green-600 tabular-nums">{fmt(totalRevenues)}</span>
-                            </div>
-                          )}
                           <div className="flex justify-between text-[10px]">
                             <span className="text-gray-400">Balance</span>
                             <span className={`font-semibold ${balance >= 0 ? "text-green-600" : "text-red-600"}`}>{fmt(balance)}</span>
@@ -494,7 +500,7 @@ export default function PlanningPage() {
       {/* ══ VUE TABLEAU ════════════════════════════════════════════════════════ */}
       {view === "table" && (
         <div className="rounded-xl border border-slate-200 shadow-sm bg-white overflow-x-auto">
-            <table className="text-xs border-collapse [&_td]:whitespace-nowrap" style={{ minWidth: "max-content" }}>
+            <table className="text-xs border-collapse planning-table" style={{ minWidth: "max-content" }}>
 
               {/* ── En-tête des jours ───────────────────────────────────────── */}
               <thead>

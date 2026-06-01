@@ -380,7 +380,7 @@ export default function SaisiePage() {
               <input className={fieldCls} value={pay.label} onChange={(e) => setPay((p) => ({ ...p, label: e.target.value }))} placeholder="Nom du fournisseur / charge" />
             </div>
             <div>
-              <label className={labelCls}>Date d'échéance *</label>
+              <label className={labelCls}>Date d&apos;échéance *</label>
               <input type="date" className={fieldCls} value={pay.dueDate} onChange={(e) => setPay((p) => ({ ...p, dueDate: e.target.value }))} />
             </div>
             <div>

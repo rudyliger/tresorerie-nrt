@@ -110,17 +110,39 @@ model WeeklyCAObjective {
 // ─── Prêts bancaires ──────────────────────────────────────────────────────────
 
 model Loan {
-  id              String   @id @default(cuid())
+  id              String            @id @default(cuid())
+  loanNumber      String?
   name            String
   bankName        String
+  iban            String?
   initialAmount   Float
   remainingAmount Float
+  interestRate    Float?
+  durationMonths  Int?
   monthlyPayment  Float
   nextDueDate     DateTime
   endDate         DateTime
   notes           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  loanType        String            @default("PRET")
+  residualValue   Float?
+  schedule        LoanInstallment[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model LoanInstallment {
+  id               String   @id @default(cuid())
+  loanId           String
+  loan             Loan     @relation(fields: [loanId], references: [id], onDelete: Cascade)
+  dueDate          DateTime
+  totalAmount      Float
+  principal        Float
+  interest         Float
+  remainingBalance  Float
+  installmentNumber Int?
+  createdAt         DateTime @default(now())
+
+  @@index([loanId, dueDate])
 }
 
 // ─── Chéquier ─────────────────────────────────────────────────────────────────
@@ -135,6 +157,7 @@ model Cheque {
   expectedCashDate DateTime?
   actualCashDate   DateTime?
   status           ChequeStatus  @default(EN_ATTENTE)
+  chequier         String?       // Identifiant du carnet de chèques source
   notes            String?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt

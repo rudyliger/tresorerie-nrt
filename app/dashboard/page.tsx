@@ -23,6 +23,7 @@ type DashboardData = {
   entities: Entity[];
   weeklyObjectives: WeeklyObjective[];
   caByEntity: Record<string, number>;
+  caObjectiveByEntity: Record<string, number>;
   thisWeekRevenueTotal: number;
   thisWeekExpensesTotal: number;
 };
@@ -63,6 +64,32 @@ const SHOP_ACCENT: Record<string, { bg: string; text: string }> = {
   OMC_WEB: { bg: "bg-violet-600",  text: "text-white" },
 };
 
+const CAT_ORDER = [
+  "Fournisseurs",
+  "Loyers",
+  "Charges personnel",
+  "Charges fiscales",
+  "Banque",
+  "Autres charges",
+];
+
+function groupByCategory(payments: Payment[]): Payment[] {
+  const grouped: Record<string, Payment[]> = {};
+  for (const p of payments) {
+    const cat = p.category.name;
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(p);
+  }
+  // Trier chaque groupe par montant décroissant
+  for (const cat of Object.keys(grouped)) {
+    grouped[cat].sort((a, b) => b.amount - a.amount);
+  }
+  // Ordonner les catégories
+  const known = CAT_ORDER.filter(c => grouped[c]);
+  const other = Object.keys(grouped).filter(c => !CAT_ORDER.includes(c));
+  return [...known, ...other].flatMap(cat => grouped[cat]);
+}
+
 const COLS: ColDef[] = [
   { key: "thisWeekPayments",  totalKey: "thisWeekPaymentsTotal",  label: "Cette semaine",      Icon: CalendarCheck,  accentBg: "bg-indigo-600", accentText: "text-white", emptyText: "Aucun paiement prévu" },
   { key: "nextWeekPayments",  totalKey: "nextWeekPaymentsTotal",  label: "Semaine prochaine",  Icon: CalendarClock,  accentBg: "bg-slate-700",  accentText: "text-white", emptyText: "Aucun paiement prévu" },
@@ -101,9 +128,17 @@ export default function DashboardPage() {
 
   // Calculs CA semaine
   const weekLabel = `${fmtDate(data.weekStart)} → ${fmtDate(data.weekEnd)}`;
-  const objectiveByEntity: Record<string, number> = {};
-  for (const o of data.weeklyObjectives ?? []) objectiveByEntity[o.entityId] = o.targetAmount;
-  const totalObjectifs = Object.values(objectiveByEntity).reduce((s, v) => s + v, 0);
+  const objectiveByEntity = data.caObjectiveByEntity ?? {};
+
+  const STORE_CODES = ["RNV_O", "RNV_B", "RNV_T"];
+  const WEB_CODES   = ["RNV_WEB", "OMC_WEB"];
+  const totalMagasins = (data.entities ?? [])
+    .filter(e => STORE_CODES.includes(e.code))
+    .reduce((s, e) => s + (objectiveByEntity[e.id] ?? 0), 0);
+  const totalWeb = (data.entities ?? [])
+    .filter(e => WEB_CODES.includes(e.code))
+    .reduce((s, e) => s + (objectiveByEntity[e.id] ?? 0), 0);
+  const totalObjectifs = totalMagasins + totalWeb;
   const ecart = totalObjectifs - data.thisWeekPaymentsTotal;
 
   return (
@@ -112,7 +147,7 @@ export default function DashboardPage() {
       {/* ── En-tête ──────────────────────────────────────────────────────────── */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
-        <p className="text-slate-400 text-sm mt-0.5">Vue d'ensemble de votre trésorerie</p>
+        <p className="text-slate-400 text-sm mt-0.5">Vue d&apos;ensemble de votre trésorerie</p>
       </div>
 
       {/* ── 1. SOLDES BANCAIRES ──────────────────────────────────────────────── */}
@@ -174,22 +209,33 @@ export default function DashboardPage() {
         <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-3">
           Semaine en cours — {weekLabel}
         </p>
-        <div className="grid grid-cols-3 gap-4">
-          {/* Objectif CA */}
+        <div className="grid grid-cols-4 gap-4">
+
+          {/* Objectif CA Magasins */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
                 <Target size={15} className="text-indigo-500" />
               </div>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Objectif CA semaine</p>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Obj. CA Magasins</p>
             </div>
-            <p className="text-3xl font-bold text-slate-900 tracking-tight tabular-nums">
-              {fmt(totalObjectifs)}
-            </p>
-            {totalObjectifs === 0 && (
-              <a href="/saisie" className="text-xs text-indigo-400 hover:underline mt-1 block">
-                Saisir les objectifs →
-              </a>
+            <p className="text-3xl font-bold text-slate-900 tracking-tight tabular-nums">{fmt(totalMagasins)}</p>
+            {totalMagasins === 0 && (
+              <a href="/saisie" className="text-xs text-indigo-400 hover:underline mt-1 block">Saisir les objectifs →</a>
+            )}
+          </div>
+
+          {/* Objectif CA Web */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-xl bg-sky-50 flex items-center justify-center shrink-0">
+                <Target size={15} className="text-sky-500" />
+              </div>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Obj. CA Web</p>
+            </div>
+            <p className="text-3xl font-bold text-slate-900 tracking-tight tabular-nums">{fmt(totalWeb)}</p>
+            {totalWeb === 0 && (
+              <a href="/saisie" className="text-xs text-sky-400 hover:underline mt-1 block">Saisir les objectifs →</a>
             )}
           </div>
 
@@ -201,9 +247,7 @@ export default function DashboardPage() {
               </div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Dépenses prévues semaine</p>
             </div>
-            <p className="text-3xl font-bold text-red-500 tracking-tight tabular-nums">
-              {fmt(data.thisWeekPaymentsTotal)}
-            </p>
+            <p className="text-3xl font-bold text-red-500 tracking-tight tabular-nums">{fmt(data.thisWeekPaymentsTotal)}</p>
           </div>
 
           {/* Écart */}
@@ -214,9 +258,7 @@ export default function DashboardPage() {
                   ? <TrendingUp size={15} className="text-emerald-600" />
                   : <TrendingDown size={15} className="text-red-500" />}
               </div>
-              <p className={`text-xs font-semibold uppercase tracking-wide ${ecart >= 0 ? "text-emerald-600" : "text-red-500"}`}>
-                Écart
-              </p>
+              <p className={`text-xs font-semibold uppercase tracking-wide ${ecart >= 0 ? "text-emerald-600" : "text-red-500"}`}>Écart</p>
             </div>
             <p className={`text-3xl font-bold tracking-tight tabular-nums ${ecart >= 0 ? "text-emerald-700" : "text-red-600"}`}>
               {ecart >= 0 ? "+" : ""}{fmt(ecart)}
@@ -225,6 +267,7 @@ export default function DashboardPage() {
               {ecart >= 0 ? "Objectif CA > dépenses" : "Dépenses > objectif CA"}
             </p>
           </div>
+
         </div>
       </div>
 
@@ -257,26 +300,36 @@ export default function DashboardPage() {
                   </span>
                 </div>
               </div>
-              <div className="flex-1 divide-y divide-slate-50 overflow-y-auto max-h-64">
+              <div className="flex-1 overflow-y-auto max-h-64">
                 {payments.length === 0 ? (
                   <p className="px-4 py-5 text-xs text-slate-400 text-center">{col.emptyText}</p>
-                ) : (
-                  payments.map((p) => (
-                    <div key={p.id} className="px-4 py-3 hover:bg-slate-50 transition-colors">
-                      <div className="flex items-start justify-between gap-2 mb-1">
-                        <p className="text-sm font-medium text-slate-800 leading-tight">{p.label}</p>
-                        <p className="text-sm font-bold text-slate-900 shrink-0 tabular-nums">{fmt(p.amount)}</p>
+                ) : (() => {
+                  const grouped = groupByCategory(payments);
+                  let lastCat = "";
+                  return grouped.map((p) => {
+                    const cat = p.category.name;
+                    const showSep = lastCat !== "" && cat !== lastCat;
+                    lastCat = cat;
+                    return (
+                      <div key={p.id}>
+                        {showSep && <div className="mx-4 border-t border-slate-100" />}
+                        <div className="px-4 py-3 hover:bg-slate-50 transition-colors">
+                          <div className="flex items-start justify-between gap-2 mb-1">
+                            <p className="text-sm font-medium text-slate-800 leading-tight">{p.label}</p>
+                            <p className="text-sm font-bold text-slate-900 shrink-0 tabular-nums">{fmt(p.amount)}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-slate-400 tabular-nums">{fmtDate(p.dueDate)}</span>
+                            <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${METHOD_BADGE[p.method] ?? "bg-slate-100 text-slate-500"}`}>
+                              {METHOD_LABELS[p.method]}
+                            </span>
+                            <span className="text-[10px] text-slate-300">{p.bankAccount.name.replace("CACL ", "")}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-slate-400 tabular-nums">{fmtDate(p.dueDate)}</span>
-                        <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${METHOD_BADGE[p.method] ?? "bg-slate-100 text-slate-500"}`}>
-                          {METHOD_LABELS[p.method]}
-                        </span>
-                        <span className="text-[10px] text-slate-300">{p.bankAccount.name.replace("CACL ", "")}</span>
-                      </div>
-                    </div>
-                  ))
-                )}
+                    );
+                  });
+                })()}
               </div>
             </div>
           );

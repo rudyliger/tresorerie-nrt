@@ -168,7 +168,7 @@ export default function PretsPage() {
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Capital restant dû</p>
           </div>
           <p className="text-3xl font-bold text-slate-900 tracking-tight">{fmt(totalRemaining)}</p>
-          <p className="text-xs text-slate-400 mt-1">sur l'ensemble des prêts</p>
+          <p className="text-xs text-slate-400 mt-1">sur l&apos;ensemble des prêts</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">

@@ -31,6 +31,7 @@ export async function PATCH(
       ...(actualCashDate !== undefined && { actualCashDate }),
       ...(data.status    !== undefined && { status: data.status }),
       ...(data.notes     !== undefined && { notes: data.notes }),
+      ...(data.chequier  !== undefined && { chequier: data.chequier }),
     },
   });
   return NextResponse.json(cheque);
