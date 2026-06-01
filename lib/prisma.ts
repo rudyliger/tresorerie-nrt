@@ -1,9 +1,10 @@
 import { PrismaClient } from "@/app/generated/prisma";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 function createPrismaClient() {
-  const url = process.env.DATABASE_URL ?? "file:./prisma/dev.db";
-  const adapter = new PrismaBetterSqlite3({ url });
+  const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL ?? "postgresql://localhost:5432/tresorerie_dev",
+  });
   return new PrismaClient({ adapter });
 }
 
