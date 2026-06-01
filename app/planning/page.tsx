@@ -413,7 +413,7 @@ export default function PlanningPage() {
             {Array.from({ length: firstDayOffset }).map((_, i) => (
               <div key={`empty-${i}`} className="min-h-[140px] bg-gray-50 border-r border-b border-gray-100" />
             ))}
-            {dayData.map(({ dateKey, dayPayments, dayRevenues, totalRevenues, balance, cumul: cumulVal }) => {
+            {dayData.map(({ dateKey, dayPayments, dayRevenues, balance, cumul: cumulVal }) => {
               const dayNum = parseInt(dateKey.slice(8, 10));
               const todayKey = toDateKey(today);
               const isToday = dateKey === todayKey;
