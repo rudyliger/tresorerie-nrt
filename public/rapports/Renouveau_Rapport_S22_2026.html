@@ -929,7 +929,7 @@ function buildTotal(){
       <div class="kpi-big-label">Objectif semaine</div>
       <div class="kpi-big-val">${fmtEur(totalObj)}</div>
       <div class="kpi-big-n1">
-        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+Math.round(T3.ca-totalObj).toLocaleString(\'fr-FR\')+' €</span>' : '<span class="kpi-n1-val">Objectifs à renseigner</span>'}
+        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+Math.round(T3.ca-totalObj).toLocaleString('fr-FR')+' €</span>' : '<span class="kpi-n1-val">Objectifs à renseigner</span>'}
       </div>
     </div>
     <div class="kpi-card-big ${eDir(evPr)}">
