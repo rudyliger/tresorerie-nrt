@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0065)file:///Users/rudyliger/Downloads/Renouveau_Rapport_S22_2026.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rapport Semaine S22 — 25→31 Mai 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Rapport Semaine S22 — 25→31 Mai 2026_files/css2" rel="stylesheet">
 <style>
 :root {
   --white: #ffffff;
@@ -409,7 +409,7 @@ const D = {
     name:'Renouveau', accent:'Orléans',
     ca:16468.11, ca_n1:18719.03,
     profit:6258.02, profit_n1:7782.32,
-    margin_pct:38.0, margin_n1_pct:41.6,
+    margin_pct:50.1, margin_n1_pct:48.7,
     orders:209, orders_n1:227,
     pcs:357, pcs_n1:360,
     idv:1.71, idv_n1:1.59,
@@ -447,7 +447,7 @@ const D = {
     name:'Renouveau', accent:'Bourges',
     ca:4112.60, ca_n1:4468.40,
     profit:1706.68, profit_n1:1676.69,
-    margin_pct:41.5, margin_n1_pct:37.5,
+    margin_pct:50.8, margin_n1_pct:52.1,
     orders:47, orders_n1:52,
     pcs:76, pcs_n1:68,
     idv:1.62, idv_n1:1.31,
@@ -483,7 +483,7 @@ const D = {
     name:'Renouveau', accent:'Tours',
     ca:3370.95, ca_n1:1825.39,
     profit:1258.95, profit_n1:1405.59,
-    margin_pct:37.3, margin_n1_pct:77.0,
+    margin_pct:45.9, margin_n1_pct:47.6,
     orders:39, orders_n1:37,
     pcs:70, pcs_n1:54,
     idv:1.79, idv_n1:1.46,
@@ -841,9 +841,9 @@ function buildTotalRanks(){
 
 function buildTotal(){
   const SL=[
-    {id:'orleans',name:'Orléans',isShop:true,ca:16468.11,ca_n1:18719.03,orders:209,orders_n1:227,pcs:357,pcs_n1:360,profit:6258.02,profit_n1:7782.32,margin_pct:38.0,margin_n1:41.6},
-    {id:'bourges',name:'Bourges',isShop:true,ca:4112.60, ca_n1:4468.40, orders:47, orders_n1:52, pcs:76, pcs_n1:68, profit:1706.68,profit_n1:1676.69,margin_pct:41.5,margin_n1:37.5},
-    {id:'tours',  name:'Tours',  isShop:true,ca:3370.95, ca_n1:1825.39, orders:39, orders_n1:37, pcs:70, pcs_n1:54, profit:1258.95,profit_n1:1405.59,margin_pct:37.3,margin_n1:77.0},
+    {id:'orleans',name:'Orléans',isShop:true,ca:16468.11,ca_n1:18719.03,orders:209,orders_n1:227,pcs:357,pcs_n1:360,profit:6258.02,profit_n1:7782.32,margin_pct:50.1,margin_n1:48.7},
+    {id:'bourges',name:'Bourges',isShop:true,ca:4112.60, ca_n1:4468.40, orders:47, orders_n1:52, pcs:76, pcs_n1:68, profit:1706.68,profit_n1:1676.69,margin_pct:50.8,margin_n1:52.1},
+    {id:'tours',  name:'Tours',  isShop:true,ca:3370.95, ca_n1:1825.39, orders:39, orders_n1:37, pcs:70, pcs_n1:54, profit:1258.95,profit_n1:1405.59,margin_pct:45.9,margin_n1:47.6},
   ];
   function totals(arr){
     const ca=arr.reduce((s,r)=>s+r.ca,0), ca_n1=arr.reduce((s,r)=>s+r.ca_n1,0);
@@ -925,10 +925,12 @@ function buildTotal(){
       <div class="kpi-big-val">${fmtEur(Math.round(T3.ca))}</div>
       <div class="kpi-big-n1">${badge(evCA)} ${n1v(fmtEur(Math.round(T3.ca_n1)))}</div>
     </div>
-    <div class="kpi-card-big neu">
+    <div class="kpi-card-big ${evObj!==null?eDir(evObj):'neu'}">
       <div class="kpi-big-label">Objectif semaine</div>
-      <div class="kpi-big-val">—</div>
-      <div class="kpi-big-n1"><span class="kpi-n1-val">Objectifs à renseigner</span></div>
+      <div class="kpi-big-val">${fmtEur(totalObj)}</div>
+      <div class="kpi-big-n1">
+        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+Math.round(T3.ca-totalObj).toLocaleString(\'fr-FR\')+' €</span>' : '<span class="kpi-n1-val">Objectifs à renseigner</span>'}
+      </div>
     </div>
     <div class="kpi-card-big ${eDir(evPr)}">
       <div class="kpi-big-label">Marge brute</div>
@@ -979,5 +981,5 @@ function buildTotal(){
   ${buildDailyChart({daily_ca:dtCA,daily_ca_n1:dtN1,daily_idv:null,daily_idv_n1:null})}`;
 }
 </script>
-</body>
-</html>
+
+</body></html>
