@@ -43,7 +43,17 @@
       "Bash(sed -n '126p' /Users/rudyliger/tresorerie-nrt/app/api/cheques/import/route.ts)",
       "Bash(awk 'length > 500 {print FILENAME \":\" NR \" \\(\" length \" chars\\)\"}' /Users/rudyliger/tresorerie-nrt/app/saisie/page.tsx /Users/rudyliger/tresorerie-nrt/app/planning/page.tsx /Users/rudyliger/tresorerie-nrt/app/chequier/page.tsx)",
       "Bash(awk 'length > 200')",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(railway status *)",
+      "Bash(sqlite3 *)",
+      "Bash(DATABASE_URL=\"postgresql://dummy:dummy@localhost:5432/dummy\" npx prisma *)",
+      "Bash(DATABASE_URL=\"postgresql://dummy:dummy@localhost:5432/dummy\" npx prisma@7 migrate diff --from-empty --to-schema ./prisma/schema.prisma --script)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(python3 -c \"import sys,json; d=sys.stdin.read\\(\\); print\\('DB error' if 'connect' in d.lower\\(\\) or 'ECONNREFUSED' in d else 'Page OK' if 'dashboard' in d.lower\\(\\) else d[:300]\\)\")",
+      "Bash(python3 -c \"import sys; d=sys.stdin.read\\(\\); print\\(d[:500]\\)\")",
+      "Bash(DATABASE_URL=\"postgresql://postgres:tgQhhYvWTkNHlYiQlukaYQeOQbhwiJEn@crossover.proxy.rlwy.net:23731/railway\" npm run seed)"
     ]
   }
 }

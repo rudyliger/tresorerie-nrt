@@ -22,9 +22,9 @@ async function main() {
 
   // ─── Comptes bancaires ────────────────────────────────────────────────────
   await prisma.bankAccount.createMany({ data: [
-    { name: "CACL NRT",        code: "CACL_NRT",   currentBalance: 48320.50 },
-    { name: "CACL Tours",      code: "CACL_TOURS",  currentBalance: 12740.00 },
-    { name: "Banque Populaire", code: "BP",          currentBalance: -2150.00 },
+    { name: "CACL NRT",         code: "CACL_NRT",   currentBalance: -44316.62 },
+    { name: "CACL Tours",       code: "CACL_TOURS",  currentBalance:   1909.04 },
+    { name: "Banque Populaire", code: "BP",           currentBalance:    -18.48 },
   ]});
 
   // ─── Entités ──────────────────────────────────────────────────────────────
