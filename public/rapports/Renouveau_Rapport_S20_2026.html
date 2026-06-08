@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///Users/rudyliger/Downloads/Renouveau_Rapport_S22_2026.html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rapport Semaine S22 — 25→31 Mai 2026</title>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./Rapport Semaine S22 — 25→31 Mai 2026_files/css2" rel="stylesheet">
+<title>Rapport Semaine S20 — 11→17 Mai 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
   --white: #ffffff;
@@ -343,8 +343,8 @@ button { cursor: pointer; font-family: inherit; }
 <div id="login">
   <div class="login-wrap">
     <div class="login-logo">Renouveau</div>
-    <div class="login-week">Semaine 22</div>
-    <div class="login-period">25 → 31 Mai 2026</div>
+    <div class="login-week">Semaine 20</div>
+    <div class="login-period">11 → 17 Mai 2026</div>
     <div class="pin-dots">
       <div class="pin-dot" id="d0"></div>
       <div class="pin-dot" id="d1"></div>
@@ -382,7 +382,7 @@ button { cursor: pointer; font-family: inherit; }
   <div class="main" id="main-panel"></div>
   <div class="footer">
     <span>Renouveau · NRT Associés SAS</span>
-    <span>Semaine 22 · 11→17 Mai 2026</span>
+    <span>Semaine 20 · 11→17 Mai 2026</span>
   </div>
 </div>
 
@@ -396,154 +396,116 @@ const ACCESS = {
 const SHOP_NAMES = { total:'Total', orleans:'Orléans', bourges:'Bourges', tours:'Tours' };
 const DAYS_LABELS = ['Lun','Mar','Mer','Jeu','Ven','Sam'];
 
-const OBJ = { orleans:18800, bourges:4100, tours:3900 };
+const OBJ = { orleans:17400, bourges:4500, tours:4400 };
 
 const STOCK = {
-  orleans: { units:17775, val:473481, units_n1:17186, val_n1:525880 },
-  bourges:  { units:3961,  val:107467, units_n1:4302,  val_n1:129050 },
-  tours:    { units:2007,  val:69178,  units_n1:2457,  val_n1:91806  },
+  orleans: { units:17813, val:476832, units_n1:17473, val_n1:530040 },
+  bourges:  { units:3975,  val:109225, units_n1:4342,  val_n1:130253 },
+  tours:    { units:2043,  val:70858,  units_n1:2451,  val_n1:92941  },
 };
 
 const D = {
   orleans: {
     name:'Renouveau', accent:'Orléans',
-    ca:16468.11, ca_n1:18719.03,
-    profit:6258.02, profit_n1:7782.32,
-    margin_pct:50.1, margin_n1_pct:48.7,
-    orders:209, orders_n1:227,
-    pcs:357, pcs_n1:360,
-    idv:1.71, idv_n1:1.59,
-    panier:78.79, panier_n1:82.46,
-    daily_ca:     [0, 2924.70, 2110.10, 2292.66, 2723.04, 6417.61],
-    daily_ca_n1:  [1187.17, 1139.40, 2645.60, 2109.66, 2780.90, 8856.30],
-    daily_idv:    [0, 1.80, 2.10, 1.96, 1.48, 1.64],
-    daily_idv_n1: [1.53, 1.57, 1.21, 1.66, 1.88, 1.44],
+    ca:21269.12, ca_n1:19315.49, profit:7688.46, profit_n1:5929.64,
+    margin_pct:36.1, margin_n1_pct:30.7,
+    orders:244, orders_n1:272, pcs:402, pcs_n1:400,
+    idv:1.65, idv_n1:1.47, panier:87.17, panier_n1:71.01,
+    daily_ca:     [1537.73,2983.30,2992.40,2644.70,4717.29,6393.70],
+    daily_ca_n1:  [1477.68,1911.50,2587.20,2950.71,2703.80,7684.60],
+    daily_idv:    [2.00,1.81,1.54,1.77,1.57,1.57],
+    daily_idv_n1: [1.47,1.24,1.46,1.50,1.20,1.68],
     brands:[
-      {n:'Onze Mètres Carrés', pcs:186, ca:5451.01, pct:33.9},
-      {n:'Carhartt WIP',       pcs:68,  ca:4563.20, pct:28.4},
-      {n:'Obey',               pcs:17,  ca:948.00,  pct:5.9},
-      {n:'Service Works',      pcs:12,  ca:851.43,  pct:5.3},
-      {n:'Arte Antwerp',       pcs:7,   ca:485.50,  pct:3.0},
-      {n:'New Era',            pcs:15,  ca:482.10,  pct:3.0},
-      {n:'Deus Ex Machina',    pcs:7,   ca:450.00,  pct:2.8},
-      {n:'No Stress',          pcs:8,   ca:418.00,  pct:2.6},
-      {n:'Sebago',             pcs:2,   ca:323.00,  pct:2.0},
-      {n:'Rhythm',             pcs:6,   ca:286.50,  pct:1.8},
+      {n:'Carhartt WIP',       pcs:111,ca:8276.30,pct:39.5},
+      {n:'Onze Mètres Carrés', pcs:150,ca:5293.50,pct:25.3},
+      {n:'Obey',               pcs:18, ca:1177.50,pct:5.6},
+      {n:'Arte Antwerp',       pcs:10, ca:1119.00,pct:5.3},
+      {n:'Wooden',             pcs:4,  ca:530.00, pct:2.5},
+      {n:'Service Works',      pcs:7,  ca:469.40, pct:2.2},
+      {n:'Bobo Choses',        pcs:12, ca:462.19, pct:2.2},
+      {n:'Sebago',             pcs:2,  ca:420.00, pct:2.0},
+      {n:'Deus Ex Machina',    pcs:8,  ca:407.50, pct:1.9},
+      {n:'Rains',              pcs:4,  ca:375.80, pct:1.8},
     ],
     cats:[
-      {n:'T-Shirts',    pcs:193, ca:7461.71, pct:47.7, n1_pcs:214, n1_ca:8852.64},
-      {n:'Shorts',      pcs:37,  ca:2625.26, pct:16.8, n1_pcs:34,  n1_ca:2511.65},
-      {n:'Pantalons',   pcs:17,  ca:1558.73, pct:10.0, n1_pcs:25,  n1_ca:2440.89},
-      {n:'Chemises',    pcs:8,   ca:645.00,  pct:4.1,  n1_pcs:13,  n1_ca:1165.50},
-      {n:'Casquettes',  pcs:14,  ca:534.00,  pct:3.4,  n1_pcs:21,  n1_ca:841.00},
-      {n:'Chaussures',  pcs:6,   ca:531.00,  pct:3.4,  n1_pcs:9,   n1_ca:1169.00},
-      {n:'Chaussettes', pcs:56,  ca:527.60,  pct:3.4,  n1_pcs:8,   n1_ca:106.70},
-      {n:'Sweats',      pcs:7,   ca:487.30,  pct:3.1,  n1_pcs:16,  n1_ca:1319.00},
-      {n:'Sacs',        pcs:5,   ca:286.90,  pct:1.8,  n1_pcs:13,  n1_ca:679.56},
-      {n:'Hauts',       pcs:3,   ca:241.00,  pct:1.5,  n1_pcs:6,   n1_ca:666.00},
+      {n:'T-Shirts',  pcs:135,ca:5422.77,pct:26.9,n1_pcs:242,n1_ca:9360.81},
+      {n:'Pantalons', pcs:44, ca:3967.87,pct:19.7,n1_pcs:14, n1_ca:1394.57},
+      {n:'Sweats',    pcs:34, ca:2423.70,pct:12.0,n1_pcs:17, n1_ca:1571.30},
+      {n:'Vestes',    pcs:14, ca:1873.00,pct:9.3, n1_pcs:9,  n1_ca:1237.40},
+      {n:'Chemises',  pcs:9,  ca:963.50, pct:4.8, n1_pcs:6,  n1_ca:669.50},
+      {n:'Shorts',    pcs:15, ca:886.85, pct:4.4, n1_pcs:13, n1_ca:1000.60},
+      {n:'Chaussures',pcs:6,  ca:883.50, pct:4.4, n1_pcs:6,  n1_ca:682.50},
+      {n:'Hauts',     pcs:7,  ca:729.50, pct:3.6, n1_pcs:1,  n1_ca:79.00},
+      {n:'Casquettes',pcs:13, ca:416.44, pct:2.1, n1_pcs:11, n1_ca:439.80},
+      {n:'T-Shirt',   pcs:24, ca:884.50, pct:4.4, n1_pcs:0,  n1_ca:0},
     ],
   },
   bourges: {
     name:'Renouveau', accent:'Bourges',
-    ca:4112.60, ca_n1:4468.40,
-    profit:1706.68, profit_n1:1676.69,
-    margin_pct:50.8, margin_n1_pct:52.1,
-    orders:47, orders_n1:52,
-    pcs:76, pcs_n1:68,
-    idv:1.62, idv_n1:1.31,
-    panier:87.50, panier_n1:85.93,
-    daily_ca:     [0, 159.00, 826.00, 247.00, 650.40, 2230.20],
-    daily_ca_n1:  [0, 466.00, 229.00, 645.00, 646.90, 2481.50],
-    daily_idv:    [0, 1.67, 1.67, 1.50, 1.71, 1.58],
-    daily_idv_n1: [0, 1.50, 1.00, 1.36, 1.22, 1.30],
+    ca:3214.50,ca_n1:3986.10,profit:1354.88,profit_n1:1666.34,
+    margin_pct:42.1,margin_n1_pct:41.8,
+    orders:41,orders_n1:45,pcs:56,pcs_n1:70,
+    idv:1.37,idv_n1:1.56,panier:78.40,panier_n1:88.58,
+    daily_ca:     [0,377.00,331.80,0,1282.00,1223.70],
+    daily_ca_n1:  [0,298.00,721.30,542.00,922.20,1502.60],
+    daily_idv:    [0,1.25,1.14,0,1.31,1.57],
+    daily_idv_n1: [0,1.00,1.62,1.60,1.56,1.67],
     brands:[
-      {n:'Carhartt WIP',       pcs:44, ca:2671.76, pct:66.3},
-      {n:'Service Works',      pcs:4,  ca:364.58,  pct:9.0},
-      {n:'Onze Mètres Carrés', pcs:6,  ca:204.06,  pct:5.1},
-      {n:'Obey',               pcs:2,  ca:145.00,  pct:3.6},
-      {n:'Deus Ex Machina',    pcs:2,  ca:138.00,  pct:3.4},
-      {n:'Arte Antwerp',       pcs:2,  ca:130.00,  pct:3.2},
-      {n:'New Era',            pcs:3,  ca:116.00,  pct:2.9},
-      {n:'Rhythm',             pcs:1,  ca:80.00,   pct:2.0},
-      {n:'Mother Socker',      pcs:6,  ca:60.00,   pct:1.5},
-      {n:'Jansport',           pcs:1,  ca:55.00,   pct:1.4},
+      {n:'Carhartt WIP',      pcs:21,ca:1769.00,pct:55.0},
+      {n:'Obey',              pcs:4, ca:385.00, pct:12.0},
+      {n:'Arte Antwerp',      pcs:4, ca:253.50, pct:7.9},
+      {n:'Deus Ex Machina',   pcs:3, ca:137.00, pct:4.3},
+      {n:'Onze Mètres Carrés',pcs:6, ca:132.00, pct:4.1},
+      {n:'No Stress',         pcs:2, ca:110.00, pct:3.4},
+      {n:'Volcom',            pcs:1, ca:110.00, pct:3.4},
+      {n:"Don't Order",       pcs:1, ca:80.00,  pct:2.5},
+      {n:'Take Care',         pcs:9, ca:54.00,  pct:1.7},
+      {n:'RVCA',              pcs:1, ca:50.00,  pct:1.6},
     ],
     cats:[
-      {n:'T-Shirts',    pcs:32, ca:1461.19, pct:38.5, n1_pcs:44, n1_ca:1943.50},
-      {n:'Shorts',      pcs:12, ca:1118.10, pct:29.5, n1_pcs:8,  n1_ca:684.10},
-      {n:'Pantalons',   pcs:7,  ca:716.81,  pct:18.9, n1_pcs:2,  n1_ca:188.00},
-      {n:'Chemises',    pcs:2,  ca:169.00,  pct:4.5,  n1_pcs:1,  n1_ca:89.00},
-      {n:'Chaussettes', pcs:9,  ca:106.20,  pct:2.8,  n1_pcs:3,  n1_ca:65.00},
-      {n:'Casquettes',  pcs:2,  ca:69.00,   pct:1.8,  n1_pcs:1,  n1_ca:35.10},
-      {n:'Sacs',        pcs:1,  ca:55.00,   pct:1.5,  n1_pcs:2,  n1_ca:98.00},
-      {n:'Bobs',        pcs:1,  ca:49.00,   pct:1.3,  n1_pcs:0,  n1_ca:0},
+      {n:'Pantalons', pcs:11,ca:1191.00,pct:37.1,n1_pcs:4, n1_ca:366.00},
+      {n:'T-Shirts',  pcs:19,ca:957.00, pct:29.8,n1_pcs:33,n1_ca:1640.90},
+      {n:'Sweats',    pcs:5, ca:508.00, pct:15.8,n1_pcs:5, n1_ca:523.00},
+      {n:'Hauts',     pcs:2, ca:144.50, pct:4.5, n1_pcs:0, n1_ca:0},
+      {n:'Casquettes',pcs:4, ca:137.00, pct:4.3, n1_pcs:6, n1_ca:224.00},
     ],
   },
   tours: {
     name:'Renouveau', accent:'Tours',
-    ca:3370.95, ca_n1:1825.39,
-    profit:1258.95, profit_n1:1405.59,
-    margin_pct:45.9, margin_n1_pct:47.6,
-    orders:39, orders_n1:37,
-    pcs:70, pcs_n1:54,
-    idv:1.79, idv_n1:1.46,
-    panier:86.43, panier_n1:49.33,
-    daily_ca:     [0, 643.00, 563.60, 311.00, 609.00, 1244.35],
-    daily_ca_n1:  [0, 0.00, 300.56, 432.50, 297.00, 795.33],
-    daily_idv:    [0, 1.67, 1.67, 2.00, 2.14, 1.71],
-    daily_idv_n1: [0, 1.00, 1.67, 2.00, 1.29, 1.44],
+    ca:4952.66,ca_n1:5602.90,profit:1682.98,profit_n1:1989.03,
+    margin_pct:34.0,margin_n1_pct:35.5,
+    orders:44,orders_n1:51,pcs:74,pcs_n1:73,
+    idv:1.68,idv_n1:1.43,panier:112.56,panier_n1:109.86,
+    daily_ca:     [0,1242.36,930.90,0,901.30,1878.10],
+    daily_ca_n1:  [0,592.00,545.50,907.00,904.10,2654.30],
+    daily_idv:    [0,2.50,1.71,0,1.27,1.56],
+    daily_idv_n1: [0,1.00,1.80,1.67,1.40,1.42],
     brands:[
-      {n:'Obey',               pcs:9,  ca:610.00, pct:18.4},
-      {n:'Arte Antwerp',       pcs:14, ca:610.00, pct:18.4},
-      {n:'Deus Ex Machina',    pcs:6,  ca:390.70, pct:11.8},
-      {n:'New Era',            pcs:9,  ca:293.00, pct:8.8},
-      {n:'Service Works',      pcs:4,  ca:279.00, pct:8.4},
-      {n:'Universal Works',    pcs:3,  ca:201.00, pct:6.1},
-      {n:'Onze Mètres Carrés', pcs:11, ca:174.00, pct:5.3},
-      {n:"Don't Order",        pcs:2,  ca:160.00, pct:4.8},
-      {n:'Rhythm',             pcs:4,  ca:125.00, pct:3.8},
-      {n:'Edwin',              pcs:2,  ca:124.00, pct:3.7},
+      {n:'Arte Antwerp',      pcs:11,ca:959.00, pct:19.7},
+      {n:'Obey',              pcs:9, ca:650.00, pct:13.3},
+      {n:'Universal Works',   pcs:5, ca:478.96, pct:9.8},
+      {n:'Deus Ex Machina',   pcs:6, ca:454.00, pct:9.3},
+      {n:'Service Works',     pcs:5, ca:426.00, pct:8.7},
+      {n:'Edwin',             pcs:3, ca:203.00, pct:4.2},
+      {n:'Casual Friday',     pcs:2, ca:178.00, pct:3.7},
+      {n:'Rhythm',            pcs:3, ca:155.00, pct:3.2},
+      {n:'Onze Mètres Carrés',pcs:6, ca:139.00, pct:2.9},
+      {n:'East Pacific Trade',pcs:2, ca:136.00, pct:2.8},
     ],
     cats:[
-      {n:'T-Shirts',    pcs:27, ca:1407.95, pct:42.5, n1_pcs:23, n1_ca:1164.50},
-      {n:'Pantalons',   pcs:7,  ca:577.50,  pct:17.4, n1_pcs:5,  n1_ca:488.00},
-      {n:'Sweats',      pcs:6,  ca:340.00,  pct:10.3, n1_pcs:6,  n1_ca:478.05},
-      {n:'Shorts',      pcs:3,  ca:239.00,  pct:7.2,  n1_pcs:7,  n1_ca:620.20},
-      {n:'Casquettes',  pcs:6,  ca:226.00,  pct:6.8,  n1_pcs:3,  n1_ca:179.00},
-      {n:'Chemises',    pcs:2,  ca:177.50,  pct:5.4,  n1_pcs:3,  n1_ca:210.00},
-      {n:'Chaussettes', pcs:13, ca:162.00,  pct:4.9,  n1_pcs:0,  n1_ca:0},
-      {n:'Vestes',      pcs:1,  ca:90.00,   pct:2.7,  n1_pcs:0,  n1_ca:0},
-      {n:'Souvenirs',   pcs:1,  ca:30.00,   pct:0.9,  n1_pcs:0,  n1_ca:0},
-      {n:'Sacs',        pcs:1,  ca:19.00,   pct:0.6,  n1_pcs:7,  n1_ca:324.50},
+      {n:'T-Shirts',  pcs:23,ca:1289.86,pct:26.5,n1_pcs:31,n1_ca:1527.80},
+      {n:'Vestes',    pcs:5, ca:961.60, pct:19.7,n1_pcs:6, n1_ca:1109.00},
+      {n:'Pantalons', pcs:11,ca:935.50, pct:19.2,n1_pcs:8, n1_ca:895.50},
+      {n:'Hauts',     pcs:4, ca:398.00, pct:8.2, n1_pcs:0, n1_ca:0},
+      {n:'Casquettes',pcs:6, ca:256.00, pct:5.3, n1_pcs:2, n1_ca:95.10},
+      {n:'Sacs',      pcs:2, ca:220.00, pct:4.5, n1_pcs:3, n1_ca:189.00},
+      {n:'Chemises',  pcs:2, ca:175.00, pct:3.6, n1_pcs:1, n1_ca:185.00},
+      {n:'Shorts',    pcs:2, ca:148.00, pct:3.0, n1_pcs:5, n1_ca:468.00},
+      {n:'Sweats',    pcs:3, ca:145.00, pct:3.0, n1_pcs:6, n1_ca:555.00},
+      {n:'Chaussures',pcs:2, ca:136.00, pct:2.8, n1_pcs:2, n1_ca:300.00},
     ],
   },
 };
-
-const TOTAL_BRANDS = [
-  {n:'Carhartt WIP',       ca:7234.96, pcs:112, pct:30.9, orl:{pcs:68, ca:4563}, bou:{pcs:44,ca:2672}, tou:{pcs:0,  ca:0}},
-  {n:'Onze Mètres Carrés', ca:5829.07, pcs:203, pct:24.9, orl:{pcs:186,ca:5451}, bou:{pcs:6, ca:204},  tou:{pcs:11, ca:174}},
-  {n:'Obey',               ca:1703.00, pcs:28,  pct:7.3,  orl:{pcs:17, ca:948},  bou:{pcs:2, ca:145},  tou:{pcs:9,  ca:610}},
-  {n:'Service Works',      ca:1495.01, pcs:20,  pct:6.4,  orl:{pcs:12, ca:851},  bou:{pcs:4, ca:365},  tou:{pcs:4,  ca:279}},
-  {n:'Arte Antwerp',       ca:1225.50, pcs:23,  pct:5.2,  orl:{pcs:7,  ca:486},  bou:{pcs:2, ca:130},  tou:{pcs:14, ca:610}},
-  {n:'Deus Ex Machina',    ca:978.70,  pcs:15,  pct:4.2,  orl:{pcs:7,  ca:450},  bou:{pcs:2, ca:138},  tou:{pcs:6,  ca:391}},
-  {n:'New Era',            ca:891.10,  pcs:27,  pct:3.8,  orl:{pcs:15, ca:482},  bou:{pcs:3, ca:116},  tou:{pcs:9,  ca:293}},
-  {n:'Rhythm',             ca:491.50,  pcs:11,  pct:2.1,  orl:{pcs:6,  ca:287},  bou:{pcs:1, ca:80},   tou:{pcs:4,  ca:125}},
-  {n:'No Stress',          ca:418.00,  pcs:8,   pct:1.8,  orl:{pcs:8,  ca:418},  bou:{pcs:0, ca:0},    tou:{pcs:0,  ca:0}},
-  {n:'Sebago',             ca:323.00,  pcs:2,   pct:1.4,  orl:{pcs:2,  ca:323},  bou:{pcs:0, ca:0},    tou:{pcs:0,  ca:0}},
-];
-
-const TOTAL_CATS = [
-  {n:'T-Shirts',    ca:10330.85, pcs:252, pct:45.4, n1_ca:11960.64, n1_pcs:281},
-  {n:'Shorts',      ca:3982.36,  pcs:52,  pct:17.5, n1_ca:3815.95,  n1_pcs:49},
-  {n:'Pantalons',   ca:2853.04,  pcs:31,  pct:12.5, n1_ca:3116.89,  n1_pcs:32},
-  {n:'Chemises',    ca:991.50,   pcs:12,  pct:4.4,  n1_ca:1464.50,  n1_pcs:17},
-  {n:'Casquettes',  ca:829.00,   pcs:22,  pct:3.6,  n1_ca:1055.10,  n1_pcs:25},
-  {n:'Sweats',      ca:827.30,   pcs:13,  pct:3.6,  n1_ca:2262.65,  n1_pcs:27},
-  {n:'Chaussettes', ca:795.80,   pcs:78,  pct:3.5,  n1_ca:171.70,   n1_pcs:11},
-  {n:'Chaussures',  ca:531.00,   pcs:6,   pct:2.3,  n1_ca:1624.00,  n1_pcs:11},
-  {n:'Sacs',        ca:360.90,   pcs:7,   pct:1.6,  n1_ca:1102.06,  n1_pcs:22},
-  {n:'Hauts',       ca:241.00,   pcs:3,   pct:1.1,  n1_ca:785.00,   n1_pcs:7},
-];
 
 function fmtK(n){ return typeof n==='number'?n.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0}):String(n); }
 function fmtEur(n){ return fmtK(n)+' €'; }
@@ -610,18 +572,22 @@ function animateBars(pid){
 
 function buildShop(id){
   const d=D[id], s=STOCK[id], obj=OBJ[id]||0;
-  const evCA=ePct(d.ca,d.ca_n1), evPr=ePct(d.profit,d.profit_n1);
+  const evCA =ePct(d.ca,d.ca_n1);
+  const evPr =ePct(d.profit,d.profit_n1);
   const evMarg=d.margin_pct-d.margin_n1_pct;
-  const evOrd=ePct(d.orders,d.orders_n1), evPcs=ePct(d.pcs,d.pcs_n1);
-  const evPan=ePct(d.panier,d.panier_n1), evIDV=ePct(d.idv,d.idv_n1);
+  const evOrd=ePct(d.orders,d.orders_n1);
+  const evPcs=ePct(d.pcs,d.pcs_n1);
+  const evPan=ePct(d.panier,d.panier_n1);
+  const evIDV=ePct(d.idv,d.idv_n1);
   const evObj=obj>0?ePct(d.ca,obj):null;
+  const margSign=evMarg>=0?'+':'';
   const stkEvol=((s.val/s.val_n1-1)*100).toFixed(1);
   const uDiff=(s.units-s.units_n1).toLocaleString('fr-FR');
 
   return `
   <div class="shop-hd">
     <div><div class="shop-title">${d.name} <span>${d.accent}</span></div>
-    <div class="shop-date">S22 · Lun 25 → Sam 31 Mai 2026</div></div>
+    <div class="shop-date">S20 · Lun 11 → Sam 17 Mai 2026</div></div>
   </div>
 
   <div class="sec-label">Ligne 1 · Performance commerciale</div>
@@ -633,9 +599,9 @@ function buildShop(id){
     </div>
     <div class="kpi-card-big ${evObj!==null?eDir(evObj):'neu'}">
       <div class="kpi-big-label">Objectif semaine</div>
-      <div class="kpi-big-val">${obj>0?fmtEur(obj):'—'}</div>
+      <div class="kpi-big-val">${fmtEur(obj)}</div>
       <div class="kpi-big-n1">
-        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+Math.round(d.ca-obj).toLocaleString('fr-FR')+' €</span>' : '<span class="kpi-n1-val">Objectifs à renseigner</span>'}
+        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+Math.round(d.ca-obj).toLocaleString('fr-FR')+' €</span>' : '<span class="kpi-n1-val">—</span>'}
       </div>
     </div>
     <div class="kpi-card-big ${eDir(evPr)}">
@@ -647,7 +613,7 @@ function buildShop(id){
       <div class="kpi-big-label">Taux de marge</div>
       <div class="kpi-big-val">${d.margin_pct}%</div>
       <div class="kpi-big-n1">
-        <span class="evol-badge ${evMarg>=0?'up':'down'}">${evMarg>=0?'+':''}${evMarg.toFixed(1)} pt</span>
+        <span class="evol-badge ${evMarg>=0?'up':'down'}">${margSign}${evMarg.toFixed(1)} pt</span>
         ${n1v(d.margin_n1_pct+'%')}
       </div>
     </div>
@@ -686,7 +652,7 @@ function buildShop(id){
     </div>
     <div style="border-left:1px solid var(--border);margin:0 20px;height:40px"></div>
     <div>
-      <div class="stock-label">N-1 · 31 mai 2025</div>
+      <div class="stock-label">N-1 · 18 mai 2025</div>
       <div class="stock-val" style="font-size:16px;color:var(--muted)">${s.val_n1.toLocaleString('fr-FR')} €</div>
       <div class="stock-note">${s.units_n1.toLocaleString('fr-FR')} unités</div>
     </div>
@@ -714,7 +680,7 @@ function buildDailyChart(d){
     const n1=d.daily_ca_n1[i];
     const hC=Math.round((ca/maxVal)*100);
     const hN=Math.round((n1/maxVal)*100);
-    const ev=n1>0&&ca>0?((ca/n1-1)*100).toFixed(0):null;
+    const ev=n1>0?((ca/n1-1)*100).toFixed(0):null;
     const idv=d.daily_idv?d.daily_idv[i]:null;
     const idvN=d.daily_idv_n1?d.daily_idv_n1[i]:null;
     const col=ev!==null?(parseFloat(ev)>=0?'var(--up-txt)':'var(--dn-txt)'):'var(--muted)';
@@ -726,14 +692,14 @@ function buildDailyChart(d){
       </div>
       <div class="day-label">${DAYS_LABELS[i]}</div>
       <div class="day-ca">${ca>0?fmtK(Math.round(ca))+' €':'<span style="color:var(--muted)">F</span>'}</div>
-      ${idv&&idv>0?`<div class="day-idv">IDV ${idv.toFixed(2)}${idvN&&idvN>0?` <span style="color:${idv>=idvN?'var(--up-txt)':'var(--dn-txt)'};font-size:7px">${idv>=idvN?'↑':'↓'}${idvN.toFixed(2)}</span>`:''}</div>`:`<div class="day-idv" style="color:var(--muted)">—</div>`}
+      ${idv&&idv>0?`<div class="day-idv">IDV ${idv.toFixed(2)}${idvN&&idvN>0?` <span style="color:${idv>=idvN?'var(--up-txt)':'var(--dn-txt)'};font-size:7px">${idv>=idvN?'↑':'↓'}${idvN.toFixed(2)}</span>`:''}</div>`:'<div class="day-idv" style="color:var(--muted)">—</div>'}
     </div>`;
   }).join('');
   return `<div class="daily-chart-block">
     <div class="daily-chart-hd">
       <span class="daily-chart-title">CA & IDV journaliers</span>
       <div class="daily-legend">
-        <div class="daily-legend-item"><div class="legend-dot cur"></div><span>S22 2026</span></div>
+        <div class="daily-legend-item"><div class="legend-dot cur"></div><span>S20 2026</span></div>
         <div class="daily-legend-item"><div class="legend-dot n1"></div><span>S.A. 2025</span></div>
       </div>
     </div>
@@ -789,133 +755,112 @@ function buildRankCats(items){
   </div>${rows}</div>`;
 }
 
-function buildTotalRanks(){
-  const maxB=TOTAL_BRANDS[0].ca, maxC=TOTAL_CATS[0].ca;
-  const brandRows=TOTAL_BRANDS.map((item,i)=>{
-    const bp=(item.ca/maxB*100).toFixed(1);
-    const shopBreak=`<div class="brand-shops">
-      ${item.orl.ca>0?`<span class="bs-pill bs-orl">Orl. ${item.orl.pcs}p · ${fmtK(item.orl.ca)} €</span>`:''}
-      ${item.bou.ca>0?`<span class="bs-pill bs-bou">Bou. ${item.bou.pcs}p · ${fmtK(item.bou.ca)} €</span>`:''}
-      ${item.tou.ca>0?`<span class="bs-pill bs-tou">Tou. ${item.tou.pcs}p · ${fmtK(item.tou.ca)} €</span>`:''}
-    </div>`;
-    return `<div class="rank-row">
-      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
-      <div><div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
-        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div>
-        ${shopBreak}</div>
-      <div class="rank-pcs">${item.pcs} pcs</div>
-      <div class="rank-ca">${fmtK(item.ca)} €</div>
-    </div>`;
-  }).join('');
-  const catRows=TOTAL_CATS.map((item,i)=>{
-    const bp=(item.ca/maxC*100).toFixed(1);
-    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
-    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
-    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
-    const isNew=item.n1_ca===0;
-    const n1row=`<div class="rank-n1-row">
-      <div></div>
-      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
-      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
-      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
-    </div>`;
-    return `<div class="rank-row">
-      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
-      <div><div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
-        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div></div>
-      <div class="rank-pcs">${item.pcs} pcs</div>
-      <div class="rank-ca">${fmtK(item.ca)} €</div>
-    </div>${n1row}`;
-  }).join('');
-  return `<div class="two-col">
-    <div class="rank-block"><div class="rank-hd">
-      <span class="rank-hd-title">Marques · 3 boutiques</span>
-      <span class="rank-hd-sub">Répartition par shop</span>
-    </div>${brandRows}</div>
-    <div class="rank-block"><div class="rank-hd">
-      <span class="rank-hd-title">Catégories · 3 boutiques</span>
-      <span class="rank-hd-sub">vs N-1 S.A.</span>
-    </div>${catRows}</div>
-  </div>`;
-}
-
 function buildTotal(){
   const SL=[
-    {id:'orleans',name:'Orléans',isShop:true,ca:16468.11,ca_n1:18719.03,orders:209,orders_n1:227,pcs:357,pcs_n1:360,profit:6258.02,profit_n1:7782.32,margin_pct:50.1,margin_n1:48.7},
-    {id:'bourges',name:'Bourges',isShop:true,ca:4112.60, ca_n1:4468.40, orders:47, orders_n1:52, pcs:76, pcs_n1:68, profit:1706.68,profit_n1:1676.69,margin_pct:50.8,margin_n1:52.1},
-    {id:'tours',  name:'Tours',  isShop:true,ca:3370.95, ca_n1:1825.39, orders:39, orders_n1:37, pcs:70, pcs_n1:54, profit:1258.95,profit_n1:1405.59,margin_pct:45.9,margin_n1:47.6},
+    {id:'orleans',name:'Orléans',isShop:true, ca:21269.12,ca_n1:19315.49,orders:244,orders_n1:272,pcs:402,pcs_n1:400,profit:7688.46,profit_n1:5929.64,margin_pct:36.1,margin_n1:30.7},
+    {id:'bourges',name:'Bourges',isShop:true, ca:3214.50, ca_n1:3986.10, orders:41, orders_n1:45, pcs:56, pcs_n1:70, profit:1354.88,profit_n1:1666.34,margin_pct:42.1,margin_n1:41.8},
+    {id:'tours',  name:'Tours',  isShop:true, ca:4952.66, ca_n1:5602.90, orders:44, orders_n1:51, pcs:74, pcs_n1:73, profit:1682.98,profit_n1:1989.03,margin_pct:34.0,margin_n1:35.5},
+    {id:'web',    name:'Web',    isShop:false,ca:878.70,  ca_n1:911.50,  orders:6,  orders_n1:7,  pcs:11, pcs_n1:12, profit:53.56,  profit_n1:184.12, margin_pct:6.1, margin_n1:20.2},
   ];
-  function totals(arr){
-    const ca=arr.reduce((s,r)=>s+r.ca,0), ca_n1=arr.reduce((s,r)=>s+r.ca_n1,0);
-    const ord=arr.reduce((s,r)=>s+r.orders,0), ord_n1=arr.reduce((s,r)=>s+r.orders_n1,0);
-    const pcs=arr.reduce((s,r)=>s+r.pcs,0), pcs_n1=arr.reduce((s,r)=>s+r.pcs_n1,0);
-    const prof=arr.reduce((s,r)=>s+r.profit,0), prof_n1=arr.reduce((s,r)=>s+r.profit_n1,0);
-    return {ca,ca_n1,ord,ord_n1,pcs,pcs_n1,prof,prof_n1,
-      marg:prof/ca*100,marg_n1:prof_n1/ca_n1*100,
-      idv:pcs/ord,idv_n1:pcs_n1/ord_n1,panier:ca/ord,panier_n1:ca_n1/ord_n1};
-  }
-  const T3=totals(SL);
-  const totalObj=Object.values(OBJ).reduce((s,v)=>s+v,0);
-  const evCA=ePct(T3.ca,T3.ca_n1), evObj=totalObj>0?ePct(T3.ca,totalObj):null;
-  const evOrd=ePct(T3.ord,T3.ord_n1), evPcs=ePct(T3.pcs,T3.pcs_n1);
-  const evPan=ePct(T3.panier,T3.panier_n1), evIDV=ePct(T3.idv,T3.idv_n1);
-  const evPr=ePct(T3.prof,T3.prof_n1), evMarg=T3.marg-T3.marg_n1;
-  const tCa=T3.ca;
+  const shops3=SL.filter(s=>s.isShop);
 
+  function totals(arr){
+    const ca=arr.reduce((s,r)=>s+r.ca,0);
+    const ca_n1=arr.reduce((s,r)=>s+r.ca_n1,0);
+    const ord=arr.reduce((s,r)=>s+r.orders,0);
+    const ord_n1=arr.reduce((s,r)=>s+r.orders_n1,0);
+    const pcs=arr.reduce((s,r)=>s+r.pcs,0);
+    const pcs_n1=arr.reduce((s,r)=>s+r.pcs_n1,0);
+    const prof=arr.reduce((s,r)=>s+r.profit,0);
+    const prof_n1=arr.reduce((s,r)=>s+r.profit_n1,0);
+    const marg=prof/ca*100;
+    const marg_n1=prof_n1/ca_n1*100;
+    return {ca,ca_n1,ord,ord_n1,pcs,pcs_n1,prof,prof_n1,marg,marg_n1,
+      idv:pcs/ord, idv_n1:pcs_n1/ord_n1,
+      panier:ca/ord, panier_n1:ca_n1/ord_n1};
+  }
+
+  const T3=totals(shops3);
+  const TAll=totals(SL);
+  const totalObj=Object.values(OBJ).reduce((s,v)=>s+v,0);
+
+  const evCA=ePct(T3.ca,T3.ca_n1);
+  const evObj=ePct(T3.ca,totalObj);
+  const evOrd=ePct(T3.ord,T3.ord_n1);
+  const evPcs=ePct(T3.pcs,T3.pcs_n1);
+  const evPan=ePct(T3.panier,T3.panier_n1);
+  const evIDV=ePct(T3.idv,T3.idv_n1);
+  const evPr=ePct(T3.prof,T3.prof_n1);
+  const evMarg=T3.marg-T3.marg_n1;
+
+  const tCa=TAll.ca;
   const tableRows=[...SL,null].map(s=>{
     const isTot=s===null;
     const name=isTot?'TOTAL':s.name;
+    const isWeb=!isTot&&!s.isShop;
     const stk=s&&STOCK[s.id]?STOCK[s.id]:null;
     const obj_v=!isTot&&s.isShop&&OBJ[s.id]?OBJ[s.id]:(isTot?totalObj:0);
-    const ca_r=isTot?T3.ca:s.ca, ca_n1_r=isTot?T3.ca_n1:s.ca_n1;
+    const stkBlock=stk?`
+      <div class="tbl-main">${stk.val.toLocaleString('fr-FR')} €</div>
+      <div class="tbl-sub">${stk.units.toLocaleString('fr-FR')} u.</div>
+      <div class="tbl-sub" style="color:${stk.val<stk.val_n1?'var(--dn-txt)':'var(--up-txt)'}">${stk.val>=stk.val_n1?'+':''}${((stk.val/stk.val_n1-1)*100).toFixed(1)}% vs N-1</div>`
+      :(isTot?`<div class="tbl-main">${shops3.reduce((a,r)=>a+(STOCK[r.id]?STOCK[r.id].val:0),0).toLocaleString('fr-FR')} €</div>`:'<div class="tbl-main">—</div>');
+
+    const ca_r=isTot?T3.ca:s.ca;
+    const ca_n1_r=isTot?T3.ca_n1:s.ca_n1;
     const ev_ca_r=ePct(ca_r,ca_n1_r);
     const ev_obj_r=obj_v>0?ePct(ca_r,obj_v):null;
-    const marg_r=isTot?T3.marg:s.margin_pct, marg_n1_r=isTot?T3.marg_n1:s.margin_n1;
+    const marg_r=isTot?T3.marg:s.margin_pct;
+    const marg_n1_r=isTot?T3.marg_n1:s.margin_n1;
     const prof_r=isTot?T3.prof:s.profit;
-    const ord_r=isTot?T3.ord:s.orders, ord_n1_r=isTot?T3.ord_n1:s.orders_n1;
-    const pcs_r=isTot?T3.pcs:s.pcs, pcs_n1_r=isTot?T3.pcs_n1:s.pcs_n1;
-    const pan_r=ca_r/ord_r, pan_n1_r=ca_n1_r/ord_n1_r;
-    const idv_r=pcs_r/ord_r, idv_n1_r=pcs_n1_r/ord_n1_r;
+    const ord_r=isTot?T3.ord:s.orders;
+    const ord_n1_r=isTot?T3.ord_n1:s.orders_n1;
+    const pcs_r=isTot?T3.pcs:s.pcs;
+    const pcs_n1_r=isTot?T3.pcs_n1:s.pcs_n1;
+    const pan_r=(ca_r/(isTot?T3.ord:s.orders));
+    const pan_n1_r=(ca_n1_r/(isTot?T3.ord_n1:s.orders_n1));
+    const idv_r=(pcs_r/ord_r);
+    const idv_n1_r=(pcs_n1_r/ord_n1_r);
     const pct_ca=(ca_r/tCa*100).toFixed(1);
-    const stkTv=stk?stk.val:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].val,0);
-    const stkTu=stk?stk.units:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].units,0);
-    const stkN1v=stk?stk.val_n1:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].val_n1,0);
-    const stkEv=((stkTv/stkN1v-1)*100).toFixed(1);
-    const stkHtml=`<div class="tbl-main">${stkTv.toLocaleString('fr-FR')} €</div>
-      <div class="tbl-sub">${stkTu.toLocaleString('fr-FR')} u.</div>
-      <div class="tbl-sub" style="color:${stkTv<stkN1v?'var(--dn-txt)':'var(--up-txt)'}">${stkTv>=stkN1v?'+':''}${stkEv}% vs N-1</div>`;
-    const rowCls=isTot?'tbl-row tbl-row-total':'tbl-row';
+    const rowCls=isTot?'tbl-row tbl-row-total':isWeb?'tbl-row tbl-row-web':'tbl-row';
+    const evDir2=ev_ca_r>=0?'up':'dn';
+
     return `<div class="${rowCls}">
       <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${name}</span>${!isTot?`<span class="tbl-pct-badge">${pct_ca}%</span>`:''}</div>
       <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(ca_r)}</div><div class="tbl-sub">${n1v(fmtEur(ca_n1_r))}</div></div>
       <div class="tbl-cell tbl-num">${obj_v>0?`<div class="tbl-main">${fmtEur(obj_v)}</div><div class="tbl-sub"><span class="evol-badge ${ev_obj_r>=0?'up':'dn'}" style="font-size:9px;padding:1px 5px">${ev_obj_r>=0?'+':''}${ev_obj_r.toFixed(1)}%</span></div>`:'<div class="tbl-main" style="color:var(--muted)">—</div>'}</div>
-      <div class="tbl-cell tbl-num"><span class="evol-badge ${ev_ca_r>=0?'up':'dn'}">${ev_ca_r>=0?'+':''}${ev_ca_r.toFixed(1)}%</span></div>
+      <div class="tbl-cell tbl-num"><span class="evol-badge ${evDir2}">${ev_ca_r>=0?'+':''}${ev_ca_r.toFixed(1)}%</span></div>
       <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(Math.round(prof_r))}</div></div>
       <div class="tbl-cell tbl-num"><div class="tbl-main">${marg_r.toFixed(1)}%</div><div class="tbl-sub">${n1v(marg_n1_r.toFixed(1)+'%')}</div></div>
       <div class="tbl-cell tbl-num"><div class="tbl-main">${ord_r}</div><div class="tbl-sub">${n1v(ord_n1_r)}</div></div>
       <div class="tbl-cell tbl-num"><div class="tbl-main">${pcs_r}</div><div class="tbl-sub">${n1v(pcs_n1_r)}</div></div>
       <div class="tbl-cell tbl-num"><div class="tbl-main">${pan_r.toFixed(0)} €</div><div class="tbl-sub">${n1v(pan_n1_r.toFixed(0)+' €')}</div></div>
       <div class="tbl-cell tbl-num"><div class="tbl-main">${idv_r.toFixed(2)}</div><div class="tbl-sub">${n1v(idv_n1_r.toFixed(2))}</div></div>
-      <div class="tbl-cell tbl-num">${stkHtml}</div>
+      <div class="tbl-cell tbl-num">${stkBlock}</div>
     </div>`;
   }).join('');
 
   const tableHead=`<div class="tbl-row tbl-head">
-    <div class="tbl-cell tbl-name">Boutique</div><div class="tbl-cell tbl-num">CA TTC</div>
-    <div class="tbl-cell tbl-num">Objectif</div><div class="tbl-cell tbl-num">vs N-1</div>
-    <div class="tbl-cell tbl-num">Marge</div><div class="tbl-cell tbl-num">Taux</div>
-    <div class="tbl-cell tbl-num">Cmd.</div><div class="tbl-cell tbl-num">Articles</div>
-    <div class="tbl-cell tbl-num">Panier</div><div class="tbl-cell tbl-num">IDV</div>
+    <div class="tbl-cell tbl-name">Boutique</div>
+    <div class="tbl-cell tbl-num">CA TTC</div>
+    <div class="tbl-cell tbl-num">Objectif</div>
+    <div class="tbl-cell tbl-num">vs N-1</div>
+    <div class="tbl-cell tbl-num">Marge</div>
+    <div class="tbl-cell tbl-num">Taux</div>
+    <div class="tbl-cell tbl-num">Cmd.</div>
+    <div class="tbl-cell tbl-num">Articles</div>
+    <div class="tbl-cell tbl-num">Panier</div>
+    <div class="tbl-cell tbl-num">IDV</div>
     <div class="tbl-cell tbl-num">Stock</div>
   </div>`;
 
-  const dtCA=[0,1,2,3,4,5].map(i=>SL.reduce((s,r)=>s+(D[r.id].daily_ca[i]||0),0));
-  const dtN1=[0,1,2,3,4,5].map(i=>SL.reduce((s,r)=>s+(D[r.id].daily_ca_n1[i]||0),0));
+  const dtCA=[0,1,2,3,4,5].map(i=>shops3.reduce((s,r)=>s+(D[r.id].daily_ca[i]||0),0));
+  const dtN1=[0,1,2,3,4,5].map(i=>shops3.reduce((s,r)=>s+(D[r.id].daily_ca_n1[i]||0),0));
 
   return `
   <div class="shop-hd">
     <div><div class="shop-title">Total <span>Tous canaux</span></div>
-    <div class="shop-date">S22 · Lun 25 → Sam 31 Mai 2026</div></div>
+    <div class="shop-date">S20 · Lun 11 → Sam 17 Mai 2026</div></div>
   </div>
 
   <div class="sec-label">Ligne 1 · Performance commerciale — 3 boutiques</div>
@@ -925,12 +870,10 @@ function buildTotal(){
       <div class="kpi-big-val">${fmtEur(Math.round(T3.ca))}</div>
       <div class="kpi-big-n1">${badge(evCA)} ${n1v(fmtEur(Math.round(T3.ca_n1)))}</div>
     </div>
-    <div class="kpi-card-big ${evObj!==null?eDir(evObj):'neu'}">
+    <div class="kpi-card-big ${eDir(evObj)}">
       <div class="kpi-big-label">Objectif semaine</div>
       <div class="kpi-big-val">${fmtEur(totalObj)}</div>
-      <div class="kpi-big-n1">
-        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+Math.round(T3.ca-totalObj).toLocaleString(\'fr-FR\')+' €</span>' : '<span class="kpi-n1-val">Objectifs à renseigner</span>'}
-      </div>
+      <div class="kpi-big-n1">${badge(evObj)} <span class="kpi-n1-val">Écart : ${evObj>=0?'+':''}${Math.round(T3.ca-totalObj).toLocaleString('fr-FR')} €</span></div>
     </div>
     <div class="kpi-card-big ${eDir(evPr)}">
       <div class="kpi-big-label">Marge brute</div>
@@ -977,9 +920,116 @@ function buildTotal(){
   <div class="sec-label">Top 10 Marques · Catégories · 3 boutiques</div>
   ${buildTotalRanks()}
 
-  <div class="sec-label">CA journalier consolidé vs N-1</div>
+  <div class="sec-label">CA journalier consolidé · 3 boutiques vs N-1</div>
   ${buildDailyChart({daily_ca:dtCA,daily_ca_n1:dtN1,daily_idv:null,daily_idv_n1:null})}`;
 }
-</script>
 
-</body></html>
+// ── TOTAL BRANDS TOP 10 (3 shops) ──
+const TOTAL_BRANDS = [
+  {n:'Carhartt WIP',       ca:10045.30, pcs:132, pct:34.6, orl:{pcs:111,ca:8276.30}, bou:{pcs:21,ca:1769.00}, tou:{pcs:0,ca:0}},
+  {n:'Onze Mètres Carrés', ca:5564.50,  pcs:162, pct:19.2, orl:{pcs:150,ca:5293.50}, bou:{pcs:6, ca:132.00},  tou:{pcs:6,ca:139.00}},
+  {n:'Arte Antwerp',       ca:2331.50,  pcs:25,  pct:8.0,  orl:{pcs:10, ca:1119.00}, bou:{pcs:4, ca:253.50},  tou:{pcs:11,ca:959.00}},
+  {n:'Obey',               ca:2212.50,  pcs:31,  pct:7.6,  orl:{pcs:18, ca:1177.50}, bou:{pcs:4, ca:385.00},  tou:{pcs:9,ca:650.00}},
+  {n:'Deus Ex Machina',    ca:998.50,   pcs:17,  pct:3.4,  orl:{pcs:8,  ca:407.50},  bou:{pcs:3, ca:137.00},  tou:{pcs:6,ca:454.00}},
+  {n:'Service Works',      ca:895.40,   pcs:12,  pct:3.1,  orl:{pcs:7,  ca:469.40},  bou:{pcs:0, ca:0},       tou:{pcs:5,ca:426.00}},
+  {n:'Wooden',             ca:530.00,   pcs:4,   pct:1.8,  orl:{pcs:4,  ca:530.00},  bou:{pcs:0, ca:0},       tou:{pcs:0,ca:0}},
+  {n:'Universal Works',    ca:478.96,   pcs:5,   pct:1.6,  orl:{pcs:0,  ca:0},       bou:{pcs:0, ca:0},       tou:{pcs:5,ca:478.96}},
+  {n:'Rains',              ca:470.80,   pcs:5,   pct:1.6,  orl:{pcs:4,  ca:375.80},  bou:{pcs:0, ca:0},       tou:{pcs:1,ca:95.00}},
+  {n:'Bobo Choses',        ca:462.19,   pcs:12,  pct:1.6,  orl:{pcs:12, ca:462.19},  bou:{pcs:0, ca:0},       tou:{pcs:0,ca:0}},
+];
+
+// ── TOTAL CATS TOP 10 (3 shops) with N-1 ──
+const TOTAL_CATS = [
+  {n:'T-Shirts',   ca:7669.63,  pcs:177, pct:27.2, n1_ca:12529.51, n1_pcs:306},
+  {n:'Pantalons',  ca:6094.37,  pcs:66,  pct:21.6, n1_ca:2656.07,  n1_pcs:26},
+  {n:'Sweats',     ca:3076.70,  pcs:42,  pct:10.9, n1_ca:2649.30,  n1_pcs:28},
+  {n:'Vestes',     ca:2834.60,  pcs:19,  pct:10.0, n1_ca:2536.40,  n1_pcs:16},
+  {n:'Hauts',      ca:1272.00,  pcs:13,  pct:4.5,  n1_ca:79.00,    n1_pcs:1},
+  {n:'Chemises',   ca:1138.50,  pcs:11,  pct:4.0,  n1_ca:1022.50,  n1_pcs:9},
+  {n:'Shorts',     ca:1034.85,  pcs:17,  pct:3.7,  n1_ca:1835.70,  n1_pcs:22},
+  {n:'Chaussures', ca:1019.50,  pcs:8,   pct:3.6,  n1_ca:982.50,   n1_pcs:8},
+  {n:'T-Shirt',    ca:929.50,   pcs:25,  pct:3.3,  n1_ca:0,        n1_pcs:0},
+  {n:'Casquettes', ca:809.44,   pcs:23,  pct:2.9,  n1_ca:758.90,   n1_pcs:19},
+];
+
+function buildTotalRanks(){
+  const maxB = TOTAL_BRANDS[0].ca;
+  const maxC = TOTAL_CATS[0].ca;
+
+  // Brands with per-shop breakdown
+  const brandRows = TOTAL_BRANDS.map((item,i)=>{
+    const bp = (item.ca/maxB*100).toFixed(1);
+    const shopBreak = `
+      <div class="brand-shops">
+        ${item.orl.ca>0?`<span class="bs-pill bs-orl">Orl. ${item.orl.pcs}p · ${fmtK(item.orl.ca)} €</span>`:''}
+        ${item.bou.ca>0?`<span class="bs-pill bs-bou">Bou. ${item.bou.pcs}p · ${fmtK(item.bou.ca)} €</span>`:''}
+        ${item.tou.ca>0?`<span class="bs-pill bs-tou">Tou. ${item.tou.pcs}p · ${fmtK(item.tou.ca)} €</span>`:''}
+      </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div>
+        <div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div>
+        ${shopBreak}
+      </div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>`;
+  }).join('');
+
+  // Cats with N-1
+  const catRows = TOTAL_CATS.map((item,i)=>{
+    const bp = (item.ca/maxC*100).toFixed(1);
+    const ev = item.n1_ca>0 ? ((item.ca/item.n1_ca-1)*100).toFixed(1) : null;
+    const eDir2 = ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr  = ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew = item.n1_ca===0;
+    const n1row = `<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
+      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
+      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div>
+        <div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div>
+      </div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+
+  return `
+  <div class="two-col">
+    <div class="rank-block">
+      <div class="rank-hd">
+        <span class="rank-hd-title">Marques · 3 boutiques</span>
+        <span class="rank-hd-sub">Répartition par shop</span>
+      </div>
+      ${brandRows}
+    </div>
+    <div class="rank-block">
+      <div class="rank-hd">
+        <span class="rank-hd-title">Catégories · 3 boutiques</span>
+        <span class="rank-hd-sub">vs N-1 S.A.</span>
+      </div>
+      ${catRows}
+    </div>
+  </div>`;
+}
+
+// Auto-déverrouillage si chargé depuis le hub (#code=XXXX)
+(function(){
+  var h = window.location.hash;
+  var m = h.match(/code=(\d{4})/);
+  if(m && ACCESS[m[1]]){
+    pin = m[1];
+    if(typeof checkPin === 'function'){ checkPin(); }
+  }
+})();
+
+</script>
+</body>
+</html>
