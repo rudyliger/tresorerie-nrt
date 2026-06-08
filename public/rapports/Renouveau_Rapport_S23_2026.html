@@ -985,6 +985,17 @@ function buildTotal(){
   <div class="sec-label">CA journalier consolidé vs N-1</div>
   ${buildDailyChart({daily_ca:dtCA,daily_ca_n1:dtN1,daily_idv:null,daily_idv_n1:null})}`;
 }
+
+// Auto-déverrouillage si chargé depuis le hub (#code=XXXX)
+(function(){
+  var h = window.location.hash;
+  var m = h.match(/code=(\d{4})/);
+  if(m && ACCESS[m[1]]){
+    pin = m[1];
+    if(typeof checkPin === 'function'){ checkPin(); }
+  }
+})();
+
 </script>
 </body>
 </html>
