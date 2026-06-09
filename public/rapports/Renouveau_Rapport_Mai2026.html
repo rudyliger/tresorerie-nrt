@@ -967,8 +967,8 @@ const D = {
     ],
     big:[
       {label:'CA TTC',      val:'3 465 €', evol:'-51,3%', dir:'down', n1:'N-1 : 7 122 €'},
-      {label:'Marge brute', val:'N/D',     evol:'—',     dir:'neu',  n1:'Non disponible'},
-      {label:'Taux marge',  val:'N/D',     evol:'—',     dir:'neu',  n1:'Non disponible'},
+      {label:'Marge brute', val:'1 733 €', evol:'-51,3%', dir:'down', n1:'N-1 : 3 561 € · estim. 60%'},
+      {label:'Taux marge',  val:'60,0%',   evol:'0,0 pt', dir:'neu',  n1:'N-1 : 60,0% · estimé'},
     ],
     small:[
       {label:'Commandes',     val:'78',      evol:'-35,0%', dir:'down', n1:'N-1 : 120'},
@@ -995,8 +995,8 @@ const TOTAL = {
   // Mai 2026 all shops
   ca26: 82907 + 16460 + 13373 + 4138 + 3465,
   ca25: 94861 + 20771 + 24100 + 4613 + 7122,
-  mg26: 31769 + 6956 + 4852 + 424,
-  mg25: 31897 + 8307 + 8994 + 1085,
+  mg26: 31769 + 6956 + 4852 + 424 + 1733,
+  mg25: 31897 + 8307 + 8994 + 1085 + 3561,
   byShop:[
     {name:'Orléans', ca26:82907, ca25:94861},
     {name:'Bourges', ca26:16460, ca25:20771},
@@ -1022,8 +1022,8 @@ const TOTAL = {
 };
 TOTAL.hist.ca.forEach(r=>{ r.cum=r.j+r.f+r.m+r.a; });
 TOTAL.hist.mg.forEach(r=>{ r.cum=r.j+r.f+r.m+r.a; });
-TOTAL.hist.mg[0].tx = (TOTAL.mg26/((82907+16460+13373+4138)/1.2)*100).toFixed(1)+'%';
-TOTAL.hist.mg[1].tx = (TOTAL.mg25/((94861+20771+24100+4613)/1.2)*100).toFixed(1)+'%';
+TOTAL.hist.mg[0].tx = (TOTAL.mg26/((82907+16460+13373+4138+3465)/1.2)*100).toFixed(1)+'%';
+TOTAL.hist.mg[1].tx = (TOTAL.mg25/((94861+20771+24100+4613+7122)/1.2)*100).toFixed(1)+'%';
 
 /* ════════════════════════════
    BUILD
@@ -1107,8 +1107,8 @@ function buildTotal(){
     </div>`;
   });
 
-  const tx26 = (mg26/((82890+25213+15140+3470)/1.2+2737.81)*100).toFixed(1);
-  const tx25 = (mg25/((86998+30278+19095+4284)/1.2+2737.81)*100).toFixed(1);
+  const tx26 = (mg26/((82907+16460+13373+4138+3465)/1.2)*100).toFixed(1);
+  const tx25 = (mg25/((94861+20771+24100+4613+7122)/1.2)*100).toFixed(1);
   const txDir = parseFloat(tx26)>=parseFloat(tx25)?'up':'down';
 
   html += `</div>
