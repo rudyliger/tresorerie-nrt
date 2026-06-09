@@ -851,7 +851,7 @@ function buildTotal(){
     const pcs=arr.reduce((s,r)=>s+r.pcs,0), pcs_n1=arr.reduce((s,r)=>s+r.pcs_n1,0);
     const prof=arr.reduce((s,r)=>s+r.profit,0), prof_n1=arr.reduce((s,r)=>s+r.profit_n1,0);
     return {ca,ca_n1,ord,ord_n1,pcs,pcs_n1,prof,prof_n1,
-      marg:prof/ca*100,marg_n1:prof_n1/ca_n1*100,
+      marg:prof/(ca/1.2)*100,marg_n1:prof_n1/(ca_n1/1.2)*100,
       idv:pcs/ord,idv_n1:pcs_n1/ord_n1,panier:ca/ord,panier_n1:ca_n1/ord_n1};
   }
   const T3=totals(SL);

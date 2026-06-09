@@ -773,8 +773,8 @@ function buildTotal(){
     const pcs_n1=arr.reduce((s,r)=>s+r.pcs_n1,0);
     const prof=arr.reduce((s,r)=>s+r.profit,0);
     const prof_n1=arr.reduce((s,r)=>s+r.profit_n1,0);
-    const marg=prof/ca*100;
-    const marg_n1=prof_n1/ca_n1*100;
+    const marg=prof/(ca/1.2)*100;
+    const marg_n1=prof_n1/(ca_n1/1.2)*100;
     return {ca,ca_n1,ord,ord_n1,pcs,pcs_n1,prof,prof_n1,marg,marg_n1,
       idv:pcs/ord, idv_n1:pcs_n1/ord_n1,
       panier:ca/ord, panier_n1:ca_n1/ord_n1};
