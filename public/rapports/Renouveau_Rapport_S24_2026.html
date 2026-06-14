@@ -858,6 +858,64 @@ function buildTotalRanks(){
   </div>`;
 }
 
+function buildBBTop20(){
+  const D=[
+    {n:'Carhartt WIP',bb:3269,mg:43.5,bb1:3765,mg1:47.8},
+    {n:'Onze Mètres Carrés',bb:3053,mg:49.3,bb1:3094,mg1:46.7},
+    {n:'Arte Antwerp',bb:1122,mg:49.9,bb1:490,mg1:52.0},
+    {n:'Deus Ex Machina',bb:682,mg:45.7,bb1:737,mg1:48.6},
+    {n:'Obey',bb:503,mg:45.1,bb1:595,mg1:48.9},
+    {n:'Service Works',bb:295,mg:44.9,bb1:0,mg1:0},
+    {n:'New Era',bb:255,mg:48.3,bb1:14,mg1:47.8},
+    {n:'RVCA',bb:206,mg:45.8,bb1:84,mg1:46.9},
+    {n:'By Parra',bb:183,mg:46.2,bb1:0,mg1:0},
+    {n:'Rhythm',bb:130,mg:44.2,bb1:0,mg1:0},
+    {n:'Reebok',bb:77,mg:51.3,bb1:0,mg1:0},
+    {n:'No Stress',bb:71,mg:52.0,bb1:0,mg1:0},
+    {n:'Volcom',bb:71,mg:45.6,bb1:32,mg1:47.8},
+    {n:"Don't Order",bb:69,mg:43.3,bb1:0,mg1:0},
+    {n:'Eastpak',bb:66,mg:49.2,bb1:6,mg1:17.4},
+    {n:'Rains',bb:60,mg:48.4,bb1:260,mg1:55.5},
+    {n:'American Vintage',bb:56,mg:52.0,bb1:0,mg1:0},
+    {n:'Nixon',bb:48,mg:27.1,bb1:42,mg1:40.0},
+    {n:'Graine',bb:43,mg:49.3,bb1:23,mg1:46.7},
+    {n:'Sebago',bb:40,mg:20.1,bb1:0,mg1:0}
+  ];
+  const AUTRES={n:'Autres marques (51)',bb:188,mg:9.5,bb1:1202,mg1:40.4};
+  const TOT={n:'TOTAL \u00b7 toutes marques',bb:10486,mg:43.2,bb1:10342,mg1:46.8};
+  const vbad=o=>{
+    if(!o.bb1){return '<span class="evol-badge up">Nouv.</span>';}
+    const v=(o.bb/o.bb1-1)*100;
+    const disp=v>300?'+300%\u2191':(v>=0?'+':'')+v.toFixed(0)+'%';
+    return `<span class="evol-badge ${v>=0?'up':'down'}">${disp}</span>`;
+  };
+  const line=(o,i,cls)=>`<div class="tbl-row ${cls||''}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${i!=null?'<span class="bb-rk">'+(i+1)+'</span>':''}${o.n}</span></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(o.bb)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${o.mg.toFixed(1)}%</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':fmtEur(o.bb1)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':o.mg1.toFixed(1)+'%'}</div></div>
+      <div class="tbl-cell tbl-num">${vbad(o)}</div>
+    </div>`;
+  const head=`<div class="tbl-row tbl-head">
+      <div class="tbl-cell tbl-name">Marque</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut</div>
+      <div class="tbl-cell tbl-num">Taux</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut N-1</div>
+      <div class="tbl-cell tbl-num">Taux N-1</div>
+      <div class="tbl-cell tbl-num">Var.</div>
+    </div>`;
+  return `<style>
+    .bb-cmp .tbl-row{grid-template-columns:minmax(120px,1fr) 104px 60px 116px 70px 76px;min-width:600px}
+    .bb-cmp .bb-rk{color:var(--muted);font-size:11px;margin-right:8px;font-weight:400}
+    .bb-cmp .bb-n1{color:var(--muted);font-weight:400}
+    .bb-cmp .bb-autres{background:var(--off)}
+    .bb-cmp .bb-autres .tbl-shop-name{color:var(--muted);font-style:italic}
+  </style>
+  <div class="sec-label">B\u00e9n\u00e9fice brut \u00b7 Top 20 marques \u00b7 3 boutiques</div>
+  <div class="cmp-table bb-cmp">${head}${D.map((o,i)=>line(o,i)).join('')}${line(AUTRES,null,'bb-autres')}${line(TOT,null,'tbl-row-total')}</div>`;
+}
+
 function buildTotal(){
   const SL=[
     {id:'orleans',name:'Orléans',isShop:true,ca:21954.50,ca_n1:18635.88,orders:274,orders_n1:266,pcs:491,pcs_n1:409,profit:7625.37,profit_n1:7341.68,margin_pct:41.7,margin_n1:47.3},
@@ -984,6 +1042,7 @@ function buildTotal(){
   <div class="cmp-table">${tableHead}${tableRows}</div>
   <div class="sec-label">Top 10 Marques · Catégories · 3 boutiques</div>
   ${buildTotalRanks()}
+  ${buildBBTop20()}
   <div class="sec-label">CA journalier consolidé vs N-1</div>
   ${buildDailyChart({daily_ca:dtCA,daily_ca_n1:dtN1,daily_idv:null,daily_idv_n1:null})}`;
 }
