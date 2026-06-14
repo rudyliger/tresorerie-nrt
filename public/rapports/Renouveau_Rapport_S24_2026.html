@@ -612,6 +612,71 @@ function animateBars(pid){
   setTimeout(()=>{ document.querySelectorAll('#'+pid+' .rank-bar-fill').forEach(el=>{ el.style.width=el.dataset.pct+'%'; }); },60);
 }
 
+function buildBBTop10(id){
+  const BB_SHOP={
+    orleans:{name:'Orléans',rows:[
+      {n:'Onze Mètres Carrés',bb:2706,mg:47.8,bb1:2747,mg1:48.3},
+      {n:'Carhartt WIP',bb:2384,mg:41.8,bb1:2654,mg1:47.7},
+      {n:'Deus Ex Machina',bb:613,mg:45.0,bb1:375,mg1:46.3},
+      {n:'Arte Antwerp',bb:516,mg:48.9,bb1:314,mg1:52.0},
+      {n:'Obey',bb:341,mg:42.4,bb1:201,mg1:43.6},
+      {n:'Service Works',bb:167,mg:40.6,bb1:0,mg1:0},
+      {n:'By Parra',bb:158,mg:45.7,bb1:0,mg1:0},
+      {n:'New Era',bb:109,mg:47.8,bb1:14,mg1:47.8},
+      {n:'RVCA',bb:100,mg:43.5,bb1:68,mg1:46.6},
+      {n:'Rains',bb:83,mg:49.9,bb1:260,mg1:55.5}
+    ],autres:{n:'Autres marques (54)',bb:448,mg:18.9,bb1:708,mg1:40.2},tot:{n:'TOTAL boutique',bb:7625,mg:41.6,bb1:7342,mg1:47.3}},
+    bourges:{name:'Bourges',rows:[
+      {n:'Carhartt WIP',bb:884,mg:48.6,bb1:878,mg1:48.5},
+      {n:'Onze Mètres Carrés',bb:140,mg:61.6,bb1:191,mg1:28.7},
+      {n:'Arte Antwerp',bb:132,mg:52.0,bb1:91,mg1:52.0},
+      {n:'Obey',bb:61,mg:52.0,bb1:229,mg1:52.4},
+      {n:'Service Works',bb:32,mg:52.0,bb1:0,mg1:0},
+      {n:'Eastpak',bb:31,mg:49.2,bb1:0,mg1:0},
+      {n:'RVCA',bb:28,mg:44.7,bb1:0,mg1:0},
+      {n:'New Era',bb:23,mg:47.8,bb1:0,mg1:0},
+      {n:'Rains',bb:14,mg:55.9,bb1:0,mg1:0},
+      {n:'Swet',bb:3,mg:40.6,bb1:0,mg1:0}
+    ],autres:{n:'Autres marques (5)',bb:3,mg:40.0,bb1:179,mg1:44.8},tot:{n:'TOTAL boutique',bb:1352,mg:50.2,bb1:1567,mg1:45.0}},
+    tours:{name:'Tours',rows:[
+      {n:'Arte Antwerp',bb:474,mg:50.3,bb1:85,mg1:52.0},
+      {n:'Onze Mètres Carrés',bb:207,mg:68.8,bb1:156,mg1:55.6},
+      {n:'New Era',bb:122,mg:48.9,bb1:0,mg1:0},
+      {n:'Obey',bb:102,mg:52.0,bb1:165,mg1:52.0},
+      {n:'Service Works',bb:95,mg:52.0,bb1:0,mg1:0},
+      {n:'RVCA',bb:79,mg:49.8,bb1:16,mg1:47.8},
+      {n:'Reebok',bb:77,mg:51.3,bb1:0,mg1:0},
+      {n:'Deus Ex Machina',bb:69,mg:52.9,bb1:305,mg1:51.0},
+      {n:"Don't Order",bb:57,mg:48.7,bb1:0,mg1:0},
+      {n:'Nixon',bb:55,mg:40.0,bb1:0,mg1:0}
+    ],autres:{n:'Autres marques (22)',bb:172,mg:24.6,bb1:707,mg1:42.0},tot:{n:'TOTAL boutique',bb:1508,mg:46.2,bb1:1433,mg1:46.6}}
+  };
+  const S=BB_SHOP[id]; if(!S) return '';
+  const vbad=o=>{
+    if(!o.bb1){return '<span class="evol-badge up">Nouv.</span>';}
+    const v=o.mg-o.mg1;
+    return `<span class="evol-badge ${v>=0?'up':'down'}">${v>=0?'+':''}${v.toFixed(1)} pt</span>`;
+  };
+  const line=(o,i,cls)=>`<div class="tbl-row ${cls||''}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${i!=null?'<span class="bb-rk">'+(i+1)+'</span>':''}${o.n}</span></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(o.bb)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${o.mg.toFixed(1)}%</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':fmtEur(o.bb1)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':o.mg1.toFixed(1)+'%'}</div></div>
+      <div class="tbl-cell tbl-num">${vbad(o)}</div>
+    </div>`;
+  const head=`<div class="tbl-row tbl-head">
+      <div class="tbl-cell tbl-name">Marque</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut</div>
+      <div class="tbl-cell tbl-num">Taux</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut N-1</div>
+      <div class="tbl-cell tbl-num">Taux N-1</div>
+      <div class="tbl-cell tbl-num">Var.</div>
+    </div>`;
+  return `<div class="sec-label">B\u00e9n\u00e9fice brut \u00b7 Top 10 marques \u00b7 ${S.name}</div>
+  <div class="cmp-table bb-cmp">${head}${S.rows.map((o,i)=>line(o,i)).join('')}${line(S.autres,null,'bb-autres')}${line(S.tot,null,'tbl-row-total')}</div>`;
+}
+
 function buildShop(id){
   const d=D[id], s=STOCK[id], obj=OBJ[id]||0;
   const evCA=ePct(d.ca,d.ca_n1), evPr=ePct(d.profit,d.profit_n1);
@@ -704,7 +769,8 @@ function buildShop(id){
   <div class="two-col">
     ${buildRankBrands(d.brands)}
     ${buildRankCats(d.cats)}
-  </div>`;
+  </div>
+  ${buildBBTop10(id)}`;
 }
 
 function buildDailyChart(d){
