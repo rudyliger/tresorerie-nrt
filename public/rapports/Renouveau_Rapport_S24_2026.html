@@ -885,8 +885,8 @@ function buildBBTop20(){
   const TOT={n:'TOTAL \u00b7 toutes marques',bb:10486,mg:43.2,bb1:10342,mg1:46.8};
   const vbad=o=>{
     if(!o.bb1){return '<span class="evol-badge up">Nouv.</span>';}
-    const v=(o.bb/o.bb1-1)*100;
-    const disp=v>300?'+300%\u2191':(v>=0?'+':'')+v.toFixed(0)+'%';
+    const v=o.mg-o.mg1;
+    const disp=(v>=0?'+':'')+v.toFixed(1)+' pt';
     return `<span class="evol-badge ${v>=0?'up':'down'}">${disp}</span>`;
   };
   const line=(o,i,cls)=>`<div class="tbl-row ${cls||''}">
