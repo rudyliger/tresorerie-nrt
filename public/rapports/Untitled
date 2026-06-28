@@ -1,2 +1,0 @@
-sed -i '' "s/toLocaleString('fr-FR')/toLocaleString('fr-FR')/g" ~/tresorerie-nrt/public/rapports/Renouveau_Rapport_S25_2026.html
-cd ~/tresorerie-nrt && git add . && git commit -m "Rapport S25 2026 + BB Top10 par boutique + fix buildTotal" && git push
