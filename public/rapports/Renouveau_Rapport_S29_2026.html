@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapport Semaine S29 — 13→18 Juil. 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white: #ffffff;
+  --off:   #f7f6f3;
+  --light: #eeece8;
+  --border:#d8d5ce;
+  --muted: #9a9690;
+  --mid:   #6b6760;
+  --ink:   #1a1917;
+  --blue:  #1a3a8f;
+
+  --up-bg:   #eef6f0; --up-bord: #b6dcc2; --up-txt: #1a5c35;
+  --dn-bg:   #fdf0ef; --dn-bord: #f2c0bb; --dn-txt: #9b2318;
+  --neu-bg:  #f2f2f2; --neu-bord:#d0d0d0; --neu-txt:#555;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { background: var(--off); font-family: 'Inter', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ══ LOGIN ══ */
+#login {
+  min-height: 100svh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; background: var(--white);
+}
+.login-wrap { width: 100%; max-width: 320px; text-align: center; padding: 40px 24px; }
+.login-logo {
+  font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400;
+  letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px;
+}
+.login-week {
+  font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.05em; color: var(--blue); margin-bottom: 6px;
+}
+.login-period { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 48px; }
+.pin-dots { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+.pin-dot {
+  width: 46px; height: 46px; border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 500; color: var(--ink); background: var(--white);
+  transition: all .15s;
+}
+.pin-dot.filled { border-color: var(--ink); background: var(--ink); color: var(--white); }
+.pin-dot.error  { border-color: var(--dn-txt); background: var(--dn-bg); color: var(--dn-txt); animation: shake .3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+.numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 220px; margin: 0 auto 14px; }
+.num-btn {
+  height: 50px; border: 1.5px solid var(--border); background: var(--white);
+  color: var(--ink); font-size: 17px; font-weight: 400;
+  display: flex; align-items: center; justify-content: center; transition: all .12s;
+}
+.num-btn:hover { background: var(--off); border-color: var(--ink); }
+.num-btn:active { background: var(--ink); color: var(--white); }
+.num-btn.del { font-size: 12px; color: var(--muted); }
+.num-btn.zero { grid-column: 2; }
+.login-err { font-size: 11px; color: var(--dn-txt); letter-spacing: 0.05em; height: 18px; font-weight: 500; }
+
+/* ══ APP ══ */
+#app { display: none; }
+
+/* TOPBAR */
+.topbar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0 40px; display: flex; align-items: center; justify-content: space-between;
+  height: 52px; position: sticky; top: 0; z-index: 100;
+}
+.topbar-brand { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; }
+.topbar-week { font-family: 'Unbounded', sans-serif; font-size: 10px; font-weight: 600; color: var(--blue); letter-spacing: 0.1em; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.access-pill { font-size: 10px; padding: 3px 10px; border: 1px solid var(--border); color: var(--mid); background: var(--off); }
+.logout-btn { font-size: 11px; padding: 4px 12px; border: 1px solid var(--border); background: var(--white); color: var(--mid); transition: all .12s; }
+.logout-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* TABS */
+.tabs-strip {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0 40px; display: flex; overflow-x: auto;
+}
+.tab-btn {
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+  padding: 13px 20px; background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--muted); white-space: nowrap; transition: all .15s;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* MAIN */
+.main { padding: 36px 40px; max-width: 1280px; margin: 0 auto; }
+
+/* PANEL */
+.shop-panel { display: none; }
+.shop-panel.active { display: block; animation: fadeUp .2s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* SHOP HEADER */
+.shop-hd {
+  margin-bottom: 28px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.shop-title { font-family: 'Unbounded', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+.shop-title span { color: var(--blue); }
+.shop-date { font-size: 12px; color: var(--muted); font-weight: 300; margin-top: 4px; }
+
+/* SECTION LABEL */
+.sec-label {
+  font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 12px; margin-top: 32px;
+}
+.sec-label:first-of-type { margin-top: 0; }
+
+/* KPI BIG */
+.kpi-big { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
+.kpi-card-big { padding: 22px 20px; border: 1.5px solid var(--border); background: var(--white); }
+.kpi-card-big.up   { background: var(--up-bg); border-color: var(--up-bord); }
+.kpi-card-big.down { background: var(--dn-bg); border-color: var(--dn-bord); }
+.kpi-big-label { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.kpi-big-val { font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
+.kpi-card-big.up   .kpi-big-val { color: var(--up-txt); }
+.kpi-card-big.down .kpi-big-val { color: var(--dn-txt); }
+.kpi-big-n1 { margin-top: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kpi-big-n1-val { font-size: 11px; color: var(--muted); font-weight: 300; }
+.evol-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; }
+.evol-badge.up   { background: var(--up-bg); color: var(--up-txt); border: 1px solid var(--up-bord); }
+.evol-badge.down { background: var(--dn-bg); color: var(--dn-txt); border: 1px solid var(--dn-bord); }
+.evol-badge.neu  { background: var(--neu-bg); color: var(--neu-txt); border: 1px solid var(--neu-bord); }
+
+/* KPI SMALL */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 8px; }
+.kpi-card-sm { padding: 14px 16px 12px; border: 1px solid var(--border); background: var(--white); }
+.kpi-card-sm.up   { background: var(--up-bg); border-color: var(--up-bord); }
+.kpi-card-sm.down { background: var(--dn-bg); border-color: var(--dn-bord); }
+.kpi-sm-label { font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.kpi-sm-val { font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+.kpi-card-sm.up   .kpi-sm-val { color: var(--up-txt); }
+.kpi-card-sm.down .kpi-sm-val { color: var(--dn-txt); }
+.kpi-sm-n1 { margin-top: 6px; display: flex; align-items: center; gap: 5px; }
+.kpi-sm-n1-val { font-size: 10px; color: var(--muted); font-weight: 300; }
+
+/* COMPARISON TABLE */
+.cmp-table { border: 1px solid var(--border); background: var(--white); overflow: hidden; overflow-x: auto; margin-bottom: 14px; }
+.tbl-row {
+  display: grid;
+  grid-template-columns: 120px 110px 90px 72px 110px 80px 60px 70px 90px 60px 80px;
+  border-bottom: 1px solid var(--light);
+  min-width: 944px;
+}
+.tbl-row:last-child { border-bottom: none; }
+.tbl-row:hover:not(.tbl-head):not(.tbl-row-total) { background: var(--off); }
+.tbl-head {
+  background: var(--ink); border-bottom: none;
+}
+.tbl-head .tbl-cell {
+  font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6); padding: 10px 12px;
+}
+.tbl-head .tbl-name { color: rgba(255,255,255,0.4); }
+.tbl-cell { padding: 12px 12px; display: flex; flex-direction: column; justify-content: center; }
+.tbl-name { border-right: 1px solid var(--light); }
+.tbl-num  { text-align: right; align-items: flex-end; }
+.tbl-main { font-size: 13px; font-weight: 500; color: var(--ink); }
+.tbl-sub  { font-size: 10px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+.tbl-shop-name { font-size: 13px; font-weight: 500; }
+.tbl-pct-badge {
+  font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 600;
+  background: var(--off); border: 1px solid var(--border);
+  padding: 2px 5px; margin-top: 4px; color: var(--muted); align-self: flex-start;
+}
+.tbl-row-total {
+  background: var(--off);
+  border-top: 2px solid var(--border);
+}
+.tbl-row-total .tbl-main { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 600; }
+.tbl-row-total .tbl-shop-name { font-family: 'Unbounded', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; }
+.tbl-row-web { background: #f8f7ff; }
+.tbl-row-web .tbl-shop-name { color: var(--blue); }
+
+@media(max-width:680px){
+  .cmp-table { font-size: 11px; }
+  .tbl-row { grid-template-columns: 90px 90px 60px 90px 65px 50px 55px 70px 50px 65px; min-width: 680px; }
+  .tbl-cell { padding: 9px 8px; }
+  .tbl-main { font-size: 11px; }
+}
+.daily-chart-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; margin-bottom: 0; }
+.daily-chart-hd { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.daily-chart-title { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+.daily-legend { display: flex; gap: 14px; }
+.daily-legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+.legend-dot.cur { background: var(--ink); }
+.legend-dot.n1  { background: var(--border); }
+.daily-chart-area { padding: 20px 18px 16px; }
+.day-bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: end; height: 130px; }
+.day-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; }
+.day-bar-group { width: 100%; display: flex; gap: 3px; align-items: flex-end; justify-content: center; }
+.bar { border-radius: 1px 1px 0 0; transition: opacity .2s; width: 12px; }
+.bar.cur { background: var(--ink); }
+.bar.n1  { background: var(--light); }
+.day-label { font-size: 9px; color: var(--muted); font-weight: 400; text-align: center; }
+.day-val   { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 600; color: var(--ink); text-align: center; white-space: nowrap; }
+
+/* TOP RANKS */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.rank-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; }
+.rank-hd { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--off); }
+.rank-hd-title { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; }
+.rank-hd-sub   { font-size: 10px; color: var(--muted); font-weight: 300; }
+.rank-row {
+  display: grid; grid-template-columns: 26px 1fr 48px 76px;
+  padding: 10px 16px; border-bottom: 1px solid var(--light); align-items: center; gap: 8px;
+}
+.rank-row:last-child { border-bottom: none; }
+.rank-row:hover { background: var(--off); }
+.rank-num { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 300; color: var(--muted); text-align: center; }
+.rank-num.n1 { font-weight: 600; color: var(--ink); }
+.rank-name { font-size: 12px; font-weight: 400; }
+.rank-bar-bg { height: 2px; background: var(--light); margin-top: 5px; overflow: hidden; }
+.rank-bar-fill { height: 100%; background: var(--ink); transition: width .6s ease; }
+.rank-pcs { font-size: 10px; color: var(--muted); text-align: right; font-weight: 300; }
+.rank-ca  { font-size: 12px; font-weight: 500; text-align: right; }
+.rank-n1-row {
+  display: grid; grid-template-columns: 26px 1fr 48px 76px;
+  padding: 4px 16px 8px; border-bottom: 1px solid var(--light); gap: 8px;
+}
+.rank-n1-row:last-child { border-bottom: none; }
+.rank-n1-label { font-size: 9px; color: var(--muted); font-weight: 300; font-style: italic; }
+.rank-n1-pcs   { font-size: 9px; color: var(--muted); text-align: right; }
+.rank-n1-ca    { font-size: 10px; color: var(--muted); text-align: right; font-weight: 300; }
+.rank-n1-evol  { font-size: 10px; font-weight: 600; margin-left: 4px; }
+.rank-n1-evol.up { color: var(--up-txt); }
+.rank-n1-evol.dn { color: var(--dn-txt); }
+
+/* TOTAL SHOP ROWS */
+.total-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; margin-bottom: 14px; }
+.total-hd { padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--off); font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+.total-shop-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--light); }
+.total-shop-row:last-child { border-bottom: none; }
+.total-shop-name { font-size: 13px; font-weight: 500; }
+.total-shop-meta { font-size: 11px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+.total-shop-right { text-align: right; }
+.total-shop-ca { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 600; }
+.total-shop-evol { font-size: 11px; font-weight: 600; margin-top: 3px; }
+.total-shop-evol.up { color: var(--up-txt); }
+.total-shop-evol.dn { color: var(--dn-txt); }
+
+/* FOOTER */
+.footer { border-top: 1px solid var(--border); background: var(--white); padding: 14px 40px; display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-weight: 300; }
+
+/* RESPONSIVE */
+@media(max-width:860px){ .two-col{grid-template-columns:1fr;} }
+@media(max-width:680px){
+  .topbar { padding: 0 16px; height: 46px; }
+  .topbar-week { font-size: 9px; }
+  .access-pill { display: none; }
+  .tabs-strip { padding: 0 8px; }
+  .tab-btn { font-size: 11px; padding: 11px 12px; }
+  .main { padding: 20px 16px; }
+  .shop-hd { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 20px; }
+  .shop-title { font-size: 19px; }
+  .kpi-big { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi-card-big { padding: 14px 12px; }
+  .kpi-big-val { font-size: 20px; }
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .two-col { gap: 12px; }
+  .day-bars { height: 90px; }
+  .bar { width: 9px; }
+  .footer { padding: 12px 16px; flex-direction: column; gap: 4px; font-size: 10px; }
+}
+
+/* KPI grids by count */
+.kpi-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* N-1 value text */
+.kpi-n1-val { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+/* STOCK BAR */
+.stock-bar {
+  border: 1px solid var(--border); background: var(--off);
+  padding: 14px 20px; display: flex; align-items: center; gap: 20px;
+}
+.stock-label {
+  font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  white-space: nowrap;
+}
+.stock-val {
+  font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 600; color: var(--ink);
+}
+.stock-note { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+/* DAY CA + IDV labels */
+.day-evol { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 700; text-align: center; }
+.day-ca   { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 600; color: var(--ink); text-align: center; white-space: nowrap; }
+.day-idv  { font-size: 8px; color: var(--mid); text-align: center; white-space: nowrap; }
+
+/* Weight badge */
+.wgt-badge {
+  font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 600;
+  background: var(--off); border: 1px solid var(--border);
+  padding: 2px 5px; margin-left: 5px; color: var(--muted);
+}
+
+/* TOTAL stock line */
+.total-shop-stock { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.total-shop-stock strong { color: var(--ink); }
+
+/* DAILY chart height — taller to fit IDV */
+.day-bars { height: 155px !important; }
+
+@media(max-width:680px){
+  .kpi-3, .kpi-4 { grid-template-columns: 1fr 1fr !important; }
+  .day-bars { height: 120px !important; }
+}
+
+
+/* Brand per-shop pills */
+.brand-shops { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+.bs-pill {
+  font-size:9px; font-weight:500; padding:2px 7px;
+  border-radius:2px; white-space:nowrap;
+}
+.bs-orl { background:#e8f0fe; color:#1a3a8f; border:1px solid #c5d4f5; }
+.bs-bou { background:#fef3e2; color:#7a4500; border:1px solid #f5d9a0; }
+.bs-tou { background:#e9f5e9; color:#1a5c35; border:1px solid #b6dcc2; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-wrap">
+    <div class="login-logo">Renouveau</div>
+    <div class="login-week">Semaine 29</div>
+    <div class="login-period">13 → 18 Juillet 2026</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="numpad">
+      <button class="num-btn" onclick="digit(1)">1</button>
+      <button class="num-btn" onclick="digit(2)">2</button>
+      <button class="num-btn" onclick="digit(3)">3</button>
+      <button class="num-btn" onclick="digit(4)">4</button>
+      <button class="num-btn" onclick="digit(5)">5</button>
+      <button class="num-btn" onclick="digit(6)">6</button>
+      <button class="num-btn" onclick="digit(7)">7</button>
+      <button class="num-btn" onclick="digit(8)">8</button>
+      <button class="num-btn" onclick="digit(9)">9</button>
+      <button class="num-btn del" onclick="del()">⌫</button>
+      <button class="num-btn zero" onclick="digit(0)">0</button>
+    </div>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-brand">Renouveau</div>
+    <div class="topbar-week">S29 · 13→18 Juil. 2026</div>
+    <div class="topbar-right">
+      <div class="access-pill" id="access-lbl"></div>
+      <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="tabs-strip" id="tabs"></div>
+  <div class="main" id="main-panel"></div>
+  <div class="footer">
+    <span>Renouveau · NRT Associés SAS</span>
+    <span>Semaine 29 · 13→18 Juil. 2026</span>
+  </div>
+</div>
+
+<script>
+const ACCESS = {
+  '4501': { label:'Orléans', shops:['orleans'] },
+  '9937': { label:'Tours',   shops:['tours'] },
+  '1827': { label:'Bourges', shops:['bourges'] },
+  '2201': { label:'Accès complet', shops:['total','orleans','bourges','tours'] },
+};
+const SHOP_NAMES = { total:'Total', orleans:'Orléans', bourges:'Bourges', tours:'Tours' };
+const DAYS_LABELS = ['Lun','Mar','Mer','Jeu','Ven','Sam'];
+
+const CATS_N1_OK = false;
+
+const OBJ = { orleans:17300, bourges:4450, tours:4050 };
+
+const STOCK = {
+  orleans: { units:14985, val:409330, units_n1:14147, val_n1:450779 },
+  bourges: { units:3313, val:92549, units_n1:3577, val_n1:109987 },
+  tours: { units:1818, val:62269, units_n1:1996, val_n1:74509 },
+};
+
+const D = {
+  orleans: {
+    name:'Renouveau', accent:'Orléans',
+    ca:17700.51, ca_n1:17633.20,
+    profit:4398.69, profit_n1:4383.71,
+    margin_pct:29.8, margin_n1_pct:29.8,
+    orders:257, orders_n1:0,
+    pcs:474, pcs_n1:404,
+    idv:1.84, idv_n1:0,
+    panier:68.87, panier_n1:0,
+    daily_ca:     [2808.7, 1351.01, 2082.4, 1955.8, 3633.2, 5869.4],
+    daily_ca_n1:  [0, 2976.5, 2866.6, 2152, 2539.2, 7098.9],
+    daily_idv:    [1.71, 1.84, 2.03, 1.9, 1.7, 1.92],
+    daily_idv_n1: [0, 0, 0, 0, 0, 0],
+    brands:[
+      {n:'Onze Mètres Carrés', pcs:192, ca:5128.10, pct:29.0, n1_pcs:155, n1_ca:5290.20},
+      {n:'Carhartt WIP', pcs:87, ca:4778.60, pct:27.0, n1_pcs:88, n1_ca:4991.50},
+      {n:'Deus Ex Machina', pcs:31, ca:1392.88, pct:7.9, n1_pcs:18, n1_ca:856.80},
+      {n:'Sebago', pcs:9, ca:1266.35, pct:7.2, n1_pcs:0, n1_ca:0.00},
+      {n:'Arte Antwerp', pcs:21, ca:888.00, pct:5.0, n1_pcs:3, n1_ca:342.50},
+      {n:'Obey', pcs:18, ca:676.30, pct:3.8, n1_pcs:13, n1_ca:834.50},
+      {n:'RVCA', pcs:14, ca:461.00, pct:2.6, n1_pcs:1, n1_ca:42.50},
+      {n:'New Era', pcs:12, ca:340.00, pct:1.9, n1_pcs:6, n1_ca:216.00},
+      {n:'Rains', pcs:4, ca:288.93, pct:1.6, n1_pcs:6, n1_ca:382.90},
+      {n:'Rhythm', pcs:7, ca:209.50, pct:1.2, n1_pcs:0, n1_ca:0.00},
+    ],
+    cats:[
+      {n:'T-Shirts', pcs:210, ca:6542.88, pct:40.4, n1_pcs:0, n1_ca:0.00},
+      {n:'Shorts', pcs:50, ca:2692.23, pct:16.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Chaussures', pcs:11, ca:1449.85, pct:9.0, n1_pcs:0, n1_ca:0.00},
+      {n:'Sweats', pcs:21, ca:1051.50, pct:6.5, n1_pcs:0, n1_ca:0.00},
+      {n:'Pantalons', pcs:11, ca:742.40, pct:4.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Casquettes', pcs:21, ca:664.50, pct:4.1, n1_pcs:0, n1_ca:0.00},
+      {n:'Chemises', pcs:11, ca:619.60, pct:3.8, n1_pcs:0, n1_ca:0.00},
+      {n:'Vestes', pcs:5, ca:442.00, pct:2.7, n1_pcs:0, n1_ca:0.00},
+      {n:'T-Shirt', pcs:11, ca:420.00, pct:2.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Chaussettes', pcs:30, ca:338.50, pct:2.1, n1_pcs:0, n1_ca:0.00},
+    ],
+    bbrands:[
+      {n:"Onze Mètres Carrés",bb:2329,mg:54.0,bb1:2382,mg1:54.0},
+      {n:"Carhartt WIP",bb:977,mg:24.5,bb1:1081,mg1:26.0},
+      {n:"Sebago",bb:299,mg:28.3,bb1:0,mg1:0.0},
+      {n:"Deus Ex Machina",bb:226,mg:19.4,bb1:186,mg1:26.1},
+      {n:"Arte Antwerp",bb:156,mg:21.1,bb1:11,mg1:4.0},
+      {n:"Obey",bb:86,mg:15.3,bb1:176,mg1:25.3},
+      {n:"Rains",bb:65,mg:26.9,bb1:102,mg1:31.8},
+      {n:"New Era",bb:59,mg:20.9,bb1:66,mg1:36.7},
+      {n:"RVCA",bb:47,mg:12.3,bb1:-2,mg1:-4.3},
+      {n:"Take Care",bb:36,mg:48.3,bb1:0,mg1:0.0},
+    ],
+    bbtotal:{n:'TOTAL boutique',bb:4399,mg:29.7,bb1:4384,mg1:29.8},
+  },
+
+  bourges: {
+    name:'Renouveau', accent:'Bourges',
+    ca:3640.20, ca_n1:5000.10,
+    profit:720.94, profit_n1:1184.29,
+    margin_pct:23.8, margin_n1_pct:28.4,
+    orders:48, orders_n1:0,
+    pcs:99, pcs_n1:104,
+    idv:2.06, idv_n1:0,
+    panier:75.84, panier_n1:0,
+    daily_ca:     [0, 0.0, 899.7, 568.2, 911.4, 1260.9],
+    daily_ca_n1:  [0, 535.3, 574.8, 1233.9, 453.2, 2202.9],
+    daily_idv:    [0, 0, 2.0, 3.4, 2.86, 1.6],
+    daily_idv_n1: [0, 0, 0, 0, 0, 0],
+    brands:[
+      {n:'Carhartt WIP', pcs:41, ca:1759.90, pct:48.3, n1_pcs:48, n1_ca:2787.40},
+      {n:'Arte Antwerp', pcs:11, ca:490.50, pct:13.5, n1_pcs:2, n1_ca:160.00},
+      {n:'Deus Ex Machina', pcs:9, ca:417.70, pct:11.5, n1_pcs:4, n1_ca:147.60},
+      {n:'Obey', pcs:8, ca:339.00, pct:9.3, n1_pcs:6, n1_ca:353.00},
+      {n:'Onze Mètres Carrés', pcs:11, ca:264.50, pct:7.3, n1_pcs:18, n1_ca:563.60},
+      {n:'RVCA', pcs:5, ca:126.50, pct:3.5, n1_pcs:3, n1_ca:64.00},
+      {n:'No Stress', pcs:2, ca:66.00, pct:1.8, n1_pcs:0, n1_ca:0.00},
+      {n:'Service Works', pcs:3, ca:60.00, pct:1.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Rhythm', pcs:2, ca:46.50, pct:1.3, n1_pcs:0, n1_ca:0.00},
+      {n:'Volcom', pcs:1, ca:20.00, pct:0.5, n1_pcs:4, n1_ca:83.00},
+    ],
+    cats:[
+      {n:'T-Shirts', pcs:57, ca:1755.20, pct:51.8, n1_pcs:0, n1_ca:0.00},
+      {n:'Shorts', pcs:8, ca:455.80, pct:13.4, n1_pcs:0, n1_ca:0.00},
+      {n:'Pantalons', pcs:6, ca:445.50, pct:13.1, n1_pcs:0, n1_ca:0.00},
+      {n:'Sweats', pcs:6, ca:351.90, pct:10.4, n1_pcs:0, n1_ca:0.00},
+      {n:'Hauts', pcs:2, ca:116.50, pct:3.4, n1_pcs:0, n1_ca:0.00},
+      {n:'Maillots de Bain', pcs:2, ca:86.90, pct:2.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Chaussettes', pcs:4, ca:46.00, pct:1.4, n1_pcs:0, n1_ca:0.00},
+      {n:'Casquettes', pcs:1, ca:39.00, pct:1.2, n1_pcs:0, n1_ca:0.00},
+      {n:'Gadgets', pcs:1, ca:29.00, pct:0.9, n1_pcs:0, n1_ca:0.00},
+      {n:'Accessoires Cosmetiques', pcs:3, ca:19.70, pct:0.6, n1_pcs:0, n1_ca:0.00},
+    ],
+    bbrands:[
+      {n:"Carhartt WIP",bb:377,mg:25.6,bb1:704,mg1:30.3},
+      {n:"Onze Mètres Carrés",bb:93,mg:42.4,bb1:205,mg1:43.6},
+      {n:"Deus Ex Machina",bb:90,mg:25.9,bb1:22,mg1:17.9},
+      {n:"Arte Antwerp",bb:89,mg:21.7,bb1:45,mg1:34.0},
+      {n:"Obey",bb:26,mg:9.4,bb1:84,mg1:28.6},
+      {n:"Mother Socker",bb:12,mg:73.6,bb1:9,mg1:52.0},
+      {n:"No Stress",bb:11,mg:20.0,bb1:0,mg1:0.0},
+      {n:"Rhythm",bb:9,mg:22.6,bb1:0,mg1:0.0},
+      {n:"Take Care",bb:8,mg:46.4,bb1:0,mg1:0.0},
+      {n:"Swet",bb:3,mg:40.6,bb1:0,mg1:0.0},
+    ],
+    bbtotal:{n:'TOTAL boutique',bb:721,mg:23.7,bb1:1184,mg1:28.4},
+  },
+
+  tours: {
+    name:'Renouveau', accent:'Tours',
+    ca:5902.38, ca_n1:5233.20,
+    profit:969.21, profit_n1:970.05,
+    margin_pct:19.7, margin_n1_pct:22.2,
+    orders:60, orders_n1:0,
+    pcs:129, pcs_n1:115,
+    idv:2.15, idv_n1:0,
+    panier:98.37, panier_n1:0,
+    daily_ca:     [0, 0.0, 897.7, 1376.54, 1384.84, 2243.3],
+    daily_ca_n1:  [0, 900.6, 613.2, 840.1, 851.8, 2027.5],
+    daily_idv:    [0, 0, 2.0, 2.27, 2.5, 2.0],
+    daily_idv_n1: [0, 0, 0, 0, 0, 0],
+    brands:[
+      {n:'Arte Antwerp', pcs:23, ca:937.50, pct:15.9, n1_pcs:8, n1_ca:482.80},
+      {n:'Service Works', pcs:15, ca:823.10, pct:13.9, n1_pcs:0, n1_ca:0.00},
+      {n:'Sebago', pcs:6, ca:818.07, pct:13.9, n1_pcs:0, n1_ca:0.00},
+      {n:'Deus Ex Machina', pcs:19, ca:766.60, pct:13.0, n1_pcs:17, n1_ca:703.70},
+      {n:'Obey', pcs:9, ca:502.00, pct:8.5, n1_pcs:5, n1_ca:377.00},
+      {n:'RVCA', pcs:15, ca:487.50, pct:8.3, n1_pcs:6, n1_ca:161.00},
+      {n:'Rhythm', pcs:9, ca:232.50, pct:3.9, n1_pcs:0, n1_ca:0.00},
+      {n:'Reebok', pcs:2, ca:180.00, pct:3.0, n1_pcs:0, n1_ca:0.00},
+      {n:'New Era', pcs:4, ca:170.10, pct:2.9, n1_pcs:3, n1_ca:84.10},
+      {n:'Taion', pcs:3, ca:142.00, pct:2.4, n1_pcs:0, n1_ca:0.00},
+    ],
+    cats:[
+      {n:'T-Shirts', pcs:47, ca:1679.40, pct:28.7, n1_pcs:0, n1_ca:0.00},
+      {n:'Chaussures', pcs:9, ca:1078.80, pct:18.4, n1_pcs:0, n1_ca:0.00},
+      {n:'Shorts', pcs:20, ca:885.00, pct:15.1, n1_pcs:0, n1_ca:0.00},
+      {n:'Pantalons', pcs:15, ca:876.10, pct:15.0, n1_pcs:0, n1_ca:0.00},
+      {n:'Vestes', pcs:5, ca:340.00, pct:5.8, n1_pcs:0, n1_ca:0.00},
+      {n:'Casquettes', pcs:8, ca:295.10, pct:5.0, n1_pcs:0, n1_ca:0.00},
+      {n:'Chemises', pcs:4, ca:216.00, pct:3.7, n1_pcs:0, n1_ca:0.00},
+      {n:'Sweats', pcs:4, ca:212.50, pct:3.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Pantalon', pcs:1, ca:105.00, pct:1.8, n1_pcs:0, n1_ca:0.00},
+      {n:'Chaussettes', pcs:10, ca:82.00, pct:1.4, n1_pcs:0, n1_ca:0.00},
+    ],
+    bbrands:[
+      {n:"Sebago",bb:274,mg:40.2,bb1:0,mg1:0.0},
+      {n:"Deus Ex Machina",bb:175,mg:27.4,bb1:104,mg1:17.8},
+      {n:"Arte Antwerp",bb:163,mg:20.9,bb1:94,mg1:23.4},
+      {n:"Service Works",bb:95,mg:13.8,bb1:0,mg1:0.0},
+      {n:"Obey",bb:90,mg:21.6,bb1:82,mg1:26.2},
+      {n:"New Era",bb:71,mg:45.6,bb1:4,mg1:5.1},
+      {n:"RVCA",bb:43,mg:10.5,bb1:8,mg1:6.0},
+      {n:"Don't Order",bb:37,mg:55.0,bb1:0,mg1:0.0},
+      {n:"Onze Mètres Carrés",bb:19,mg:28.8,bb1:189,mg1:44.5},
+      {n:"Edwin",bb:10,mg:9.3,bb1:91,mg1:24.0},
+    ],
+    bbtotal:{n:'TOTAL boutique',bb:969,mg:19.6,bb1:970,mg1:22.2},
+  },
+
+};
+
+const TOTAL_BRANDS = [
+  {n:'Carhartt WIP', ca:6538.50, pcs:128, pct:24.0, n1_ca:8447.80, orl:{pcs:87,ca:4779}, bou:{pcs:41,ca:1760}, tou:{pcs:0,ca:0}},
+  {n:'Onze Mètres Carrés', ca:5469.10, pcs:210, pct:20.1, n1_ca:6364.00, orl:{pcs:192,ca:5128}, bou:{pcs:11,ca:264}, tou:{pcs:7,ca:76}},
+  {n:'Deus Ex Machina', ca:2577.18, pcs:59, pct:9.5, n1_ca:1708.10, orl:{pcs:31,ca:1393}, bou:{pcs:9,ca:418}, tou:{pcs:19,ca:767}},
+  {n:'Arte Antwerp', ca:2316.00, pcs:55, pct:8.5, n1_ca:985.30, orl:{pcs:21,ca:888}, bou:{pcs:11,ca:490}, tou:{pcs:23,ca:938}},
+  {n:'Sebago', ca:2084.42, pcs:15, pct:7.7, n1_ca:0.00, orl:{pcs:9,ca:1266}, bou:{pcs:0,ca:0}, tou:{pcs:6,ca:818}},
+  {n:'Obey', ca:1517.30, pcs:35, pct:5.6, n1_ca:1564.50, orl:{pcs:18,ca:676}, bou:{pcs:8,ca:339}, tou:{pcs:9,ca:502}},
+  {n:'RVCA', ca:1075.00, pcs:34, pct:3.9, n1_ca:267.50, orl:{pcs:14,ca:461}, bou:{pcs:5,ca:126}, tou:{pcs:15,ca:488}},
+  {n:'Service Works', ca:1013.90, pcs:22, pct:3.7, n1_ca:0.00, orl:{pcs:4,ca:131}, bou:{pcs:3,ca:60}, tou:{pcs:15,ca:823}},
+  {n:'New Era', ca:510.10, pcs:16, pct:1.9, n1_ca:335.10, orl:{pcs:12,ca:340}, bou:{pcs:0,ca:0}, tou:{pcs:4,ca:170}},
+  {n:'Rhythm', ca:488.50, pcs:18, pct:1.8, n1_ca:0.00, orl:{pcs:7,ca:210}, bou:{pcs:2,ca:46}, tou:{pcs:9,ca:232}},
+];
+
+const TOTAL_CATS_S23 = [
+  {n:'T-Shirts', ca:9977.48, pcs:314, pct:39.2, n1_ca:0.00, n1_pcs:0},
+  {n:'Shorts', ca:4033.03, pcs:78, pct:15.8, n1_ca:0.00, n1_pcs:0},
+  {n:'Chaussures', ca:2528.65, pcs:20, pct:9.9, n1_ca:0.00, n1_pcs:0},
+  {n:'Pantalons', ca:2064.00, pcs:32, pct:8.1, n1_ca:0.00, n1_pcs:0},
+  {n:'Sweats', ca:1615.90, pcs:31, pct:6.4, n1_ca:0.00, n1_pcs:0},
+  {n:'Casquettes', ca:998.60, pcs:30, pct:3.9, n1_ca:0.00, n1_pcs:0},
+  {n:'Chemises', ca:835.60, pcs:15, pct:3.3, n1_ca:0.00, n1_pcs:0},
+  {n:'Vestes', ca:782.00, pcs:10, pct:3.1, n1_ca:0.00, n1_pcs:0},
+  {n:'Chaussettes', ca:466.50, pcs:44, pct:1.8, n1_ca:0.00, n1_pcs:0},
+  {n:'T-Shirt', ca:420.00, pcs:11, pct:1.7, n1_ca:0.00, n1_pcs:0},
+];
+
+function fmtK(n){ return typeof n==='number'?n.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0}):String(n); }
+function fmtEur(n){ return fmtK(n)+' €'; }
+function eDir(v){ return v>=0?'up':'down'; }
+function ePct(cur,ref){ return ref?((cur/ref-1)*100):null; }
+function badge(pct){
+  if(pct===null) return '';
+  const d=eDir(pct), s=pct>=0?'+':'';
+  return `<span class="evol-badge ${d}">${s}${pct.toFixed(1)}%</span>`;
+}
+function n1v(val){ const s=String(val); if(s==='0'||s==='0 €'||s==='0.00'||s==='0.00 €') return `<span class="kpi-n1-val">N-1 : n/d</span>`; return `<span class="kpi-n1-val">N-1 : ${val}</span>`; }
+
+let pin='';
+function digit(n){ if(pin.length>=4)return; pin+=String(n); updateDots(); if(pin.length===4)checkPin(); }
+function del(){ pin=pin.slice(0,-1); updateDots(); document.getElementById('login-err').textContent=''; }
+function updateDots(){
+  for(let i=0;i<4;i++){
+    const d=document.getElementById('d'+i);
+    d.className='pin-dot'+(pin.length>i?' filled':'');
+    d.textContent=pin.length>i?'·':'';
+  }
+}
+function checkPin(){
+  const access=ACCESS[pin];
+  if(!access){
+    for(let i=0;i<4;i++) document.getElementById('d'+i).className='pin-dot error';
+    document.getElementById('login-err').textContent='Code incorrect';
+    setTimeout(()=>{ pin=''; updateDots(); document.getElementById('login-err').textContent=''; },900);
+    return;
+  }
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('access-lbl').textContent=access.label;
+  buildApp(access.shops);
+}
+function logout(){ location.reload(); }
+
+function buildApp(shops){
+  const tabs=document.getElementById('tabs');
+  const panel=document.getElementById('main-panel');
+  shops.forEach((id,i)=>{
+    const btn=document.createElement('button');
+    btn.className='tab-btn'+(i===0?' active':'');
+    btn.textContent=SHOP_NAMES[id];
+    btn.onclick=()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.shop-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('panel-'+id).classList.add('active');
+      animateBars('panel-'+id);
+    };
+    tabs.appendChild(btn);
+    const div=document.createElement('div');
+    div.id='panel-'+id;
+    div.className='shop-panel'+(i===0?' active':'');
+    div.innerHTML=id==='total'?buildTotal():buildShop(id);
+    panel.appendChild(div);
+  });
+  animateBars('panel-'+shops[0]);
+}
+function animateBars(pid){
+  setTimeout(()=>{ document.querySelectorAll('#'+pid+' .rank-bar-fill').forEach(el=>{ el.style.width=el.dataset.pct+'%'; }); },60);
+}
+
+function buildShop(id){
+  const d=D[id], s=STOCK[id], obj=OBJ[id]||0;
+  const evCA=ePct(d.ca,d.ca_n1), evPr=ePct(d.profit,d.profit_n1);
+  const evMarg=d.margin_pct-d.margin_n1_pct;
+  const evOrd=ePct(d.orders,d.orders_n1), evPcs=ePct(d.pcs,d.pcs_n1);
+  const evPan=ePct(d.panier,d.panier_n1), evIDV=ePct(d.idv,d.idv_n1);
+  const evObj=obj>0?ePct(d.ca,obj):null;
+  const stkEvol=((s.val/s.val_n1-1)*100).toFixed(1);
+  const uDiff=(s.units-s.units_n1).toLocaleString('fr-FR');
+
+  return `
+  <div class="shop-hd">
+    <div><div class="shop-title">${d.name} <span>${d.accent}</span></div>
+    <div class="shop-date">S29 · Lun 13 → Sam 18 Juil. 2026</div></div>
+  </div>
+  <div class="sec-label">Ligne 1 · Performance commerciale</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evCA)}">
+      <div class="kpi-big-label">CA TTC</div>
+      <div class="kpi-big-val">${fmtEur(d.ca)}</div>
+      <div class="kpi-big-n1">${badge(evCA)} ${n1v(fmtEur(d.ca_n1))}</div>
+    </div>
+    <div class="kpi-card-big ${evObj!==null?eDir(evObj):'neu'}">
+      <div class="kpi-big-label">Objectif semaine</div>
+      <div class="kpi-big-val">${fmtEur(obj)}</div>
+      <div class="kpi-big-n1">
+        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+fmtK(Math.round(d.ca-obj))+' €</span>' : '<span class="kpi-n1-val">—</span>'}
+      </div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPr)}">
+      <div class="kpi-big-label">Marge brute</div>
+      <div class="kpi-big-val">${fmtEur(d.profit)}</div>
+      <div class="kpi-big-n1">${badge(evPr)} ${n1v(fmtEur(d.profit_n1))}</div>
+    </div>
+    <div class="kpi-card-big ${evMarg>=0?'up':'down'}">
+      <div class="kpi-big-label">Taux de marge</div>
+      <div class="kpi-big-val">${d.margin_pct}%</div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${evMarg>=0?'up':'down'}">${evMarg>=0?'+':''}${evMarg.toFixed(1)} pt</span>
+        ${n1v(d.margin_n1_pct+'%')}
+      </div>
+    </div>
+  </div>
+  <div class="sec-label" style="margin-top:10px">Ligne 2 · Activité</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evOrd)}">
+      <div class="kpi-big-label">Commandes</div>
+      <div class="kpi-big-val">${d.orders}</div>
+      <div class="kpi-big-n1">${badge(evOrd)} ${n1v(d.orders_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPcs)}">
+      <div class="kpi-big-label">Articles vendus</div>
+      <div class="kpi-big-val">${d.pcs}</div>
+      <div class="kpi-big-n1">${badge(evPcs)} ${n1v(d.pcs_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPan)}">
+      <div class="kpi-big-label">Panier moyen</div>
+      <div class="kpi-big-val">${d.panier} €</div>
+      <div class="kpi-big-n1">${badge(evPan)} ${n1v(d.panier_n1+' €')}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evIDV)}">
+      <div class="kpi-big-label">Indice de vente</div>
+      <div class="kpi-big-val">${d.idv}</div>
+      <div class="kpi-big-n1">${badge(evIDV)} ${n1v(d.idv_n1)}</div>
+    </div>
+  </div>
+  <div class="sec-label" style="margin-top:10px">Ligne 3 · Niveau de stock</div>
+  <div class="stock-bar">
+    <div>
+      <div class="stock-label">Valeur 2026</div>
+      <div class="stock-val">${s.val.toLocaleString('fr-FR')} €</div>
+      <div class="stock-note">${s.units.toLocaleString('fr-FR')} unités</div>
+    </div>
+    <div style="border-left:1px solid var(--border);margin:0 20px;height:40px"></div>
+    <div>
+      <div class="stock-label">N-1 · 14 juil. 2025</div>
+      <div class="stock-val" style="font-size:16px;color:var(--muted)">${s.val_n1.toLocaleString('fr-FR')} €</div>
+      <div class="stock-note">${s.units_n1.toLocaleString('fr-FR')} unités</div>
+    </div>
+    <div style="border-left:1px solid var(--border);margin:0 20px;height:40px"></div>
+    <div>
+      <div class="stock-label">Évolution</div>
+      <div class="stock-val" style="font-size:16px;color:${s.val<s.val_n1?'var(--dn-txt)':'var(--up-txt)'}">${s.val>=s.val_n1?'+':''}${stkEvol}%</div>
+      <div class="stock-note" style="color:${s.units<s.units_n1?'var(--dn-txt)':'var(--up-txt)'}">${s.units>=s.units_n1?'+':''}${uDiff} unités</div>
+    </div>
+  </div>
+  <div class="sec-label">CA · IDV par jour vs N-1</div>
+  ${buildDailyChart(d)}
+  <div class="sec-label">Top 10 Marques · Catégories</div>
+  <div class="two-col">
+    ${buildRankBrands(d.brands)}
+    ${buildRankCats(d.cats)}
+  </div>
+  ${buildBBShop(d)}`;
+}
+
+function buildDailyChart(d){
+  const maxVal=Math.max(...d.daily_ca,...d.daily_ca_n1,1);
+  const bars=d.daily_ca.map((ca,i)=>{
+    const n1=d.daily_ca_n1[i];
+    const hC=Math.round((ca/maxVal)*100);
+    const hN=Math.round((n1/maxVal)*100);
+    const ev=n1>0&&ca>0?((ca/n1-1)*100).toFixed(0):null;
+    const idv=d.daily_idv?d.daily_idv[i]:null;
+    const idvN=d.daily_idv_n1?d.daily_idv_n1[i]:null;
+    const col=ev!==null?(parseFloat(ev)>=0?'var(--up-txt)':'var(--dn-txt)'):'var(--muted)';
+    return `<div class="day-col">
+      <div class="day-evol" style="color:${col}">${ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'—'}</div>
+      <div class="day-bar-group">
+        <div class="bar cur" style="height:${hC}px;min-height:${ca>0?2:0}px"></div>
+        <div class="bar n1"  style="height:${hN}px;min-height:${n1>0?2:0}px"></div>
+      </div>
+      <div class="day-label">${DAYS_LABELS[i]}</div>
+      <div class="day-ca">${ca>0?fmtK(Math.round(ca))+' €':'<span style="color:var(--muted)">F</span>'}</div>
+      ${idv&&idv>0?`<div class="day-idv">IDV ${idv.toFixed(2)}${idvN&&idvN>0?` <span style="color:${idv>=idvN?'var(--up-txt)':'var(--dn-txt)'};font-size:7px">${idv>=idvN?'↑':'↓'}${idvN.toFixed(2)}</span>`:''}</div>`:`<div class="day-idv" style="color:var(--muted)">—</div>`}
+    </div>`;
+  }).join('');
+  return `<div class="daily-chart-block">
+    <div class="daily-chart-hd">
+      <span class="daily-chart-title">CA & IDV journaliers</span>
+      <div class="daily-legend">
+        <div class="daily-legend-item"><div class="legend-dot cur"></div><span>S29 2026</span></div>
+        <div class="daily-legend-item"><div class="legend-dot n1"></div><span>S.A. 2025</span></div>
+      </div>
+    </div>
+    <div class="daily-chart-area"><div class="day-bars" style="grid-template-columns:repeat(${d.daily_ca.length},1fr)">${bars}</div></div>
+  </div>`;
+}
+
+function buildRankBrands(items){
+  const max=items[0].ca;
+  const rows=items.map((item,i)=>{
+    const bp=(item.ca/max*100).toFixed(1);
+    const wgt=item.pct!=null?`<span class="wgt-badge">${item.pct}%</span>`:'';
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=item.n1_ca===0;
+    const n1row=`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
+      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
+      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}${wgt}</div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div></div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  return `<div class="rank-block"><div class="rank-hd">
+    <span class="rank-hd-title">Marques</span>
+    <span class="rank-hd-sub">vs N-1 S.A.</span>
+  </div>${rows}</div>`;
+}
+
+function buildRankCats(items){
+  const max=items[0].ca;
+  const rows=items.map((item,i)=>{
+    const bp=(item.ca/max*100).toFixed(1);
+    const wgt=item.pct!=null?`<span class="wgt-badge">${item.pct}%</span>`:'';
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=item.n1_ca===0;
+    const n1row=!CATS_N1_OK?'<div class="rank-n1-row"><div></div><div class="rank-n1-label" style="font-style:italic">N-1 non disponible</div><div></div><div></div></div>':`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
+      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
+      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}${wgt}</div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div></div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  return `<div class="rank-block"><div class="rank-hd">
+    <span class="rank-hd-title">Catégories</span>
+    <span class="rank-hd-sub">vs N-1 S.A.</span>
+  </div>${rows}</div>`;
+}
+
+function buildTotalRanks(){
+  const maxB=TOTAL_BRANDS[0].ca, maxC=TOTAL_CATS_S23[0].ca;
+  const brandRows=TOTAL_BRANDS.map((item,i)=>{
+    const bp=(item.ca/maxB*100).toFixed(1);
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=!item.n1_ca||item.n1_ca===0;
+    const shopBreak=`<div class="brand-shops">
+      ${item.orl.ca>0?`<span class="bs-pill bs-orl">Orl. ${item.orl.pcs}p · ${fmtK(item.orl.ca)} €</span>`:''}
+      ${item.bou.ca>0?`<span class="bs-pill bs-bou">Bou. ${item.bou.pcs}p · ${fmtK(item.bou.ca)} €</span>`:''}
+      ${item.tou.ca>0?`<span class="bs-pill bs-tou">Tou. ${item.tou.pcs}p · ${fmtK(item.tou.ca)} €</span>`:''}
+    </div>`;
+    const n1row=`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+fmtK(item.n1_ca)+' €'}</div>
+      <div class="rank-n1-pcs"></div>
+      <div class="rank-n1-ca">${!isNew?'<span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div>
+        ${shopBreak}</div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  const catRows=TOTAL_CATS_S23.map((item,i)=>{
+    const bp=(item.ca/maxC*100).toFixed(1);
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=item.n1_ca===0;
+    const n1row=!CATS_N1_OK?'<div class="rank-n1-row"><div></div><div class="rank-n1-label" style="font-style:italic">N-1 non disponible</div><div></div><div></div></div>':`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
+      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
+      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div></div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  return `<div class="two-col">
+    <div class="rank-block"><div class="rank-hd">
+      <span class="rank-hd-title">Marques · 3 boutiques</span>
+      <span class="rank-hd-sub">vs N-1 S.A.</span>
+    </div>${brandRows}</div>
+    <div class="rank-block"><div class="rank-hd">
+      <span class="rank-hd-title">Catégories · 3 boutiques</span>
+      <span class="rank-hd-sub">vs N-1 S.A.</span>
+    </div>${catRows}</div>
+  </div>`;
+}
+
+function buildBBTop20(){
+  const D=[
+    {n:"Onze Mètres Carrés",bb:2441,mg:53.1,bb1:2776,mg1:52.3},
+    {n:"Carhartt WIP",bb:1354,mg:24.8,bb1:1979,mg1:28.1},
+    {n:"Sebago",bb:572,mg:33.0,bb1:0,mg1:0.0},
+    {n:"Deus Ex Machina",bb:491,mg:22.8,bb1:312,mg1:21.9},
+    {n:"Arte Antwerp",bb:408,mg:21.1,bb1:151,mg1:18.4},
+    {n:"Obey",bb:203,mg:16.0,bb1:342,mg1:26.3},
+    {n:"New Era",bb:130,mg:29.7,bb1:85,mg1:30.6},
+    {n:"Service Works",bb:119,mg:14.0,bb1:0,mg1:0.0},
+    {n:"RVCA",bb:91,mg:10.1,bb1:18,mg1:7.9},
+    {n:"Rains",bb:65,mg:26.9,bb1:145,mg1:36.3},
+    {n:"Take Care",bb:47,mg:47.5,bb1:0,mg1:0.0},
+    {n:"Edwin",bb:41,mg:17.2,bb1:104,mg1:15.9},
+    {n:"Don't Order",bb:37,mg:55.0,bb1:0,mg1:0.0},
+    {n:"Rhythm",bb:27,mg:6.7,bb1:0,mg1:0.0},
+    {n:"OAMC Peacemaker",bb:27,mg:14.2,bb1:0,mg1:0.0},
+    {n:"No Stress",bb:26,mg:12.7,bb1:46,mg1:52.0},
+    {n:"Mother Socker",bb:18,mg:73.6,bb1:21,mg1:54.6},
+    {n:"American Vintage",bb:18,mg:20.0,bb1:0,mg1:0.0},
+    {n:"Wooden Store",bb:16,mg:23.1,bb1:0,mg1:0.0},
+    {n:"By Parra",bb:14,mg:11.6,bb1:0,mg1:0.0},
+  ];
+  const AUTRES={n:'Autres marques (57)',bb:-55,mg:-3.2,bb1:558,mg1:9.9};
+  const TOT={n:'TOTAL \u00b7 toutes marques',bb:6089,mg:26.7,bb1:6538,mg1:28.2};
+  const vbad=o=>{
+    if(!o.bb1){return '<span class="evol-badge up">Nouv.</span>';}
+    const v=o.mg-o.mg1;
+    const disp=(v>=0?'+':'')+v.toFixed(1)+' pt';
+    return `<span class="evol-badge ${v>=0?'up':'down'}">${disp}</span>`;
+  };
+  const line=(o,i,cls)=>`<div class="tbl-row ${cls||''}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${i!=null?'<span class="bb-rk">'+(i+1)+'</span>':''}${o.n}</span></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(o.bb)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${o.mg.toFixed(1)}%</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':fmtEur(o.bb1)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':o.mg1.toFixed(1)+'%'}</div></div>
+      <div class="tbl-cell tbl-num">${vbad(o)}</div>
+    </div>`;
+  const head=`<div class="tbl-row tbl-head">
+      <div class="tbl-cell tbl-name">Marque</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut</div>
+      <div class="tbl-cell tbl-num">Taux</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut N-1</div>
+      <div class="tbl-cell tbl-num">Taux N-1</div>
+      <div class="tbl-cell tbl-num">Var.</div>
+    </div>`;
+  return `<style>
+    .bb-cmp .tbl-row{grid-template-columns:minmax(120px,1fr) 104px 60px 116px 70px 76px;min-width:600px}
+    .bb-cmp .bb-rk{color:var(--muted);font-size:11px;margin-right:8px;font-weight:400}
+    .bb-cmp .bb-n1{color:var(--muted);font-weight:400}
+    .bb-cmp .bb-autres{background:var(--off)}
+    .bb-cmp .bb-autres .tbl-shop-name{color:var(--muted);font-style:italic}
+  </style>
+  <div class="sec-label">B\u00e9n\u00e9fice brut \u00b7 Top 20 marques \u00b7 3 boutiques</div>
+  <div class="cmp-table bb-cmp">${head}${D.map((o,i)=>line(o,i)).join('')}${line(AUTRES,null,'bb-autres')}${line(TOT,null,'tbl-row-total')}</div>`;
+}
+
+function buildBBShop(d){
+  const rows=d.bbrands||[];const TOT=d.bbtotal;
+  const vbad=o=>{ if(!o.bb1){return '<span class="evol-badge up">Nouv.</span>';}
+    const v=o.mg-o.mg1;return `<span class="evol-badge ${v>=0?'up':'down'}">${(v>=0?'+':'')+v.toFixed(1)+' pt'}</span>`; };
+  const line=(o,i,cls)=>`<div class="tbl-row ${cls||''}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${i!=null?'<span class="bb-rk">'+(i+1)+'</span>':''}${o.n}</span></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(o.bb)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${o.mg.toFixed(1)}%</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':fmtEur(o.bb1)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':o.mg1.toFixed(1)+'%'}</div></div>
+      <div class="tbl-cell tbl-num">${vbad(o)}</div>
+    </div>`;
+  const head=`<div class="tbl-row tbl-head">
+      <div class="tbl-cell tbl-name">Marque</div><div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut</div>
+      <div class="tbl-cell tbl-num">Taux</div><div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut N-1</div>
+      <div class="tbl-cell tbl-num">Taux N-1</div><div class="tbl-cell tbl-num">Var.</div></div>`;
+  return `<style>
+    .bb-cmp .tbl-row{grid-template-columns:minmax(120px,1fr) 104px 60px 116px 70px 76px;min-width:600px}
+    .bb-cmp .bb-rk{color:var(--muted);font-size:11px;margin-right:8px;font-weight:400}
+    .bb-cmp .bb-n1{color:var(--muted);font-weight:400}
+  </style>
+  <div class="sec-label" style="margin-top:10px">B\u00e9n\u00e9fice brut \u00b7 Top 10 marques \u00b7 ${d.accent}</div>
+  <div class="cmp-table bb-cmp">${head}${rows.map((o,i)=>line(o,i)).join('')}${line(TOT,null,'tbl-row-total')}</div>`;
+}
+
+function buildTotal(){
+  const SL=['orleans','bourges','tours'].map(id=>({id,name:D[id].accent,isShop:true,ca:D[id].ca,ca_n1:D[id].ca_n1,orders:D[id].orders,orders_n1:D[id].orders_n1,pcs:D[id].pcs,pcs_n1:D[id].pcs_n1,profit:D[id].profit,profit_n1:D[id].profit_n1,margin_pct:D[id].margin_pct,margin_n1:D[id].margin_n1_pct}));
+  function totals(arr){
+    const ca=arr.reduce((s,r)=>s+r.ca,0), ca_n1=arr.reduce((s,r)=>s+r.ca_n1,0);
+    const ord=arr.reduce((s,r)=>s+r.orders,0), ord_n1=arr.reduce((s,r)=>s+r.orders_n1,0);
+    const pcs=arr.reduce((s,r)=>s+r.pcs,0), pcs_n1=arr.reduce((s,r)=>s+r.pcs_n1,0);
+    const prof=arr.reduce((s,r)=>s+r.profit,0), prof_n1=arr.reduce((s,r)=>s+r.profit_n1,0);
+    return {ca,ca_n1,ord,ord_n1,pcs,pcs_n1,prof,prof_n1,
+      marg:prof/(ca/1.2)*100,marg_n1:prof_n1/(ca_n1/1.2)*100,
+      idv:pcs/ord,idv_n1:pcs_n1/ord_n1,panier:ca/ord,panier_n1:ca_n1/ord_n1};
+  }
+  const T3=totals(SL);
+  const totalObj=Object.values(OBJ).reduce((s,v)=>s+v,0);
+  const evCA=ePct(T3.ca,T3.ca_n1), evObj=ePct(T3.ca,totalObj);
+  const evOrd=ePct(T3.ord,T3.ord_n1), evPcs=ePct(T3.pcs,T3.pcs_n1);
+  const evPan=ePct(T3.panier,T3.panier_n1), evIDV=ePct(T3.idv,T3.idv_n1);
+  const evPr=ePct(T3.prof,T3.prof_n1), evMarg=T3.marg-T3.marg_n1;
+  const tCa=T3.ca;
+  const tableRows=[...SL,null].map(s=>{
+    const isTot=s===null;
+    const name=isTot?'TOTAL':s.name;
+    const stk=s&&STOCK[s.id]?STOCK[s.id]:null;
+    const obj_v=!isTot&&s.isShop&&OBJ[s.id]?OBJ[s.id]:(isTot?totalObj:0);
+    const ca_r=isTot?T3.ca:s.ca, ca_n1_r=isTot?T3.ca_n1:s.ca_n1;
+    const ev_ca_r=ePct(ca_r,ca_n1_r), ev_obj_r=obj_v>0?ePct(ca_r,obj_v):null;
+    const marg_r=isTot?T3.marg:s.margin_pct, marg_n1_r=isTot?T3.marg_n1:s.margin_n1;
+    const prof_r=isTot?T3.prof:s.profit;
+    const ord_r=isTot?T3.ord:s.orders, ord_n1_r=isTot?T3.ord_n1:s.orders_n1;
+    const pcs_r=isTot?T3.pcs:s.pcs, pcs_n1_r=isTot?T3.pcs_n1:s.pcs_n1;
+    const pan_r=ca_r/ord_r, pan_n1_r=ca_n1_r/ord_n1_r;
+    const idv_r=pcs_r/ord_r, idv_n1_r=pcs_n1_r/ord_n1_r;
+    const pct_ca=(ca_r/tCa*100).toFixed(1);
+    const stkTv=stk?stk.val:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].val,0);
+    const stkTu=stk?stk.units:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].units,0);
+    const stkN1v=stk?stk.val_n1:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].val_n1,0);
+    const stkEv=((stkTv/stkN1v-1)*100).toFixed(1);
+    const stkHtml=`<div class="tbl-main">${stkTv.toLocaleString('fr-FR')} €</div>
+      <div class="tbl-sub">${stkTu.toLocaleString('fr-FR')} u.</div>
+      <div class="tbl-sub" style="color:${stkTv<stkN1v?'var(--dn-txt)':'var(--up-txt)'}">${stkTv>=stkN1v?'+':''}${stkEv}% vs N-1</div>`;
+    const rowCls=isTot?'tbl-row tbl-row-total':'tbl-row';
+    return `<div class="${rowCls}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${name}</span>${!isTot?`<span class="tbl-pct-badge">${pct_ca}%</span>`:''}</div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(ca_r)}</div><div class="tbl-sub">${n1v(fmtEur(ca_n1_r))}</div></div>
+      <div class="tbl-cell tbl-num">${obj_v>0?`<div class="tbl-main">${fmtEur(obj_v)}</div><div class="tbl-sub"><span class="evol-badge ${ev_obj_r>=0?'up':'dn'}" style="font-size:9px;padding:1px 5px">${ev_obj_r>=0?'+':''}${ev_obj_r.toFixed(1)}%</span></div>`:'<div class="tbl-main" style="color:var(--muted)">—</div>'}</div>
+      <div class="tbl-cell tbl-num"><span class="evol-badge ${ev_ca_r>=0?'up':'dn'}">${ev_ca_r>=0?'+':''}${ev_ca_r.toFixed(1)}%</span></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(Math.round(prof_r))}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${marg_r.toFixed(1)}%</div><div class="tbl-sub">${n1v(marg_n1_r.toFixed(1)+'%')}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${ord_r}</div><div class="tbl-sub">${n1v(ord_n1_r)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${pcs_r}</div><div class="tbl-sub">${n1v(pcs_n1_r)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${pan_r.toFixed(0)} €</div><div class="tbl-sub">${n1v(pan_n1_r.toFixed(0)+' €')}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${idv_r.toFixed(2)}</div><div class="tbl-sub">${n1v(idv_n1_r.toFixed(2))}</div></div>
+      <div class="tbl-cell tbl-num">${stkHtml}</div>
+    </div>`;
+  }).join('');
+  const tableHead=`<div class="tbl-row tbl-head">
+    <div class="tbl-cell tbl-name">Boutique</div><div class="tbl-cell tbl-num">CA TTC</div>
+    <div class="tbl-cell tbl-num">Objectif</div><div class="tbl-cell tbl-num">vs N-1</div>
+    <div class="tbl-cell tbl-num">Marge</div><div class="tbl-cell tbl-num">Taux</div>
+    <div class="tbl-cell tbl-num">Cmd.</div><div class="tbl-cell tbl-num">Articles</div>
+    <div class="tbl-cell tbl-num">Panier</div><div class="tbl-cell tbl-num">IDV</div>
+    <div class="tbl-cell tbl-num">Stock</div>
+  </div>`;
+  const dtCA=[0,1,2,3,4,5].map(i=>SL.reduce((s,r)=>s+(D[r.id].daily_ca[i]||0),0));
+  const dtN1=[0,1,2,3,4,5].map(i=>SL.reduce((s,r)=>s+(D[r.id].daily_ca_n1[i]||0),0));
+  return `
+  <div class="shop-hd">
+    <div><div class="shop-title">Total <span>Tous canaux</span></div>
+    <div class="shop-date">S29 · Lun 13 → Sam 18 Juil. 2026</div></div>
+  </div>
+  <div class="sec-label">Ligne 1 · Performance commerciale — 3 boutiques</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evCA)}">
+      <div class="kpi-big-label">CA TTC</div>
+      <div class="kpi-big-val">${fmtEur(Math.round(T3.ca))}</div>
+      <div class="kpi-big-n1">${badge(evCA)} ${n1v(fmtEur(Math.round(T3.ca_n1)))}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evObj)}">
+      <div class="kpi-big-label">Objectif semaine</div>
+      <div class="kpi-big-val">${fmtEur(totalObj)}</div>
+      <div class="kpi-big-n1">${badge(evObj)} <span class="kpi-n1-val">Écart : ${evObj>=0?'+':''}${fmtK(Math.round(T3.ca-totalObj))} €</span></div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPr)}">
+      <div class="kpi-big-label">Marge brute</div>
+      <div class="kpi-big-val">${fmtEur(Math.round(T3.prof))}</div>
+      <div class="kpi-big-n1">${badge(evPr)} ${n1v(fmtEur(Math.round(T3.prof_n1)))}</div>
+    </div>
+    <div class="kpi-card-big ${evMarg>=0?'up':'down'}">
+      <div class="kpi-big-label">Taux de marge</div>
+      <div class="kpi-big-val">${T3.marg.toFixed(1)}%</div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${evMarg>=0?'up':'down'}">${evMarg>=0?'+':''}${evMarg.toFixed(1)} pt</span>
+        ${n1v(T3.marg_n1.toFixed(1)+'%')}
+      </div>
+    </div>
+  </div>
+  <div class="sec-label" style="margin-top:10px">Ligne 2 · Activité</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evOrd)}">
+      <div class="kpi-big-label">Commandes</div>
+      <div class="kpi-big-val">${T3.ord}</div>
+      <div class="kpi-big-n1">${badge(evOrd)} ${n1v(T3.ord_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPcs)}">
+      <div class="kpi-big-label">Articles vendus</div>
+      <div class="kpi-big-val">${T3.pcs}</div>
+      <div class="kpi-big-n1">${badge(evPcs)} ${n1v(T3.pcs_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPan)}">
+      <div class="kpi-big-label">Panier moyen</div>
+      <div class="kpi-big-val">${T3.panier.toFixed(0)} €</div>
+      <div class="kpi-big-n1">${badge(evPan)} ${n1v(T3.panier_n1.toFixed(0)+' €')}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evIDV)}">
+      <div class="kpi-big-label">Indice de vente</div>
+      <div class="kpi-big-val">${T3.idv.toFixed(2)}</div>
+      <div class="kpi-big-n1">${badge(evIDV)} ${n1v(T3.idv_n1.toFixed(2))}</div>
+    </div>
+  </div>
+  <div class="sec-label">Tableau comparatif par canal</div>
+  <div class="cmp-table">${tableHead}${tableRows}</div>
+  <div class="sec-label">Top 10 Marques · Catégories · 3 boutiques</div>
+  ${buildTotalRanks()}
+  ${buildBBTop20()}
+  <div class="sec-label">CA journalier consolidé vs N-1</div>
+  ${buildDailyChart({daily_ca:dtCA,daily_ca_n1:dtN1,daily_idv:null,daily_idv_n1:null})}`;
+}
+
+
+
+// Auto-déverrouillage si chargé depuis le hub (#code=XXXX)
+function __autoUnlock(){
+  var h = window.location.hash || '';
+  var m = h.match(/code=(\d{4})/);
+  if(m && typeof ACCESS !== 'undefined' && ACCESS[m[1]]){
+    pin = m[1];
+    checkPin();
+  }
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', __autoUnlock);
+} else {
+  __autoUnlock();
+}
+
+</script>
+</body>
+</html>
