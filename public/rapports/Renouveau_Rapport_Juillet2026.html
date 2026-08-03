@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapport Mensuel — Juillet 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white: #ffffff;
+  --off:   #f7f6f3;
+  --light: #eeece8;
+  --border:#d8d5ce;
+  --muted: #9a9690;
+  --ink:   #1a1916;
+  --mid:   #5a5750;
+  --blue:  #1a56db;
+  --up-bg:   #eaf7ef;
+  --up-bord: #b6e5c8;
+  --up-txt:  #1a6638;
+  --dn-bg:   #fdf0ef;
+  --dn-bord: #f2c0bb;
+  --dn-txt:  #9b2318;
+  --neu-bg:  #f2f1ed;
+  --neu-bord:#d8d5ce;
+  --neu-txt: #5a5750;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--off);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════
+   LOGIN
+══════════════════════════════ */
+#login-screen {
+  position: fixed; inset: 0;
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.login-inner {
+  width: 340px;
+  text-align: center;
+}
+.login-wordmark {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 56px;
+}
+.login-head {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.login-sub {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+.pin-dots {
+  display: flex; gap: 10px; justify-content: center;
+  margin-bottom: 32px;
+}
+.pin-dot {
+  width: 48px; height: 48px;
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
+  transition: all 0.15s;
+  background: var(--white);
+}
+.pin-dot.filled { border-color: var(--ink); background: var(--ink); color: var(--white); }
+.pin-dot.error  { border-color: var(--dn-txt); background: var(--dn-bg); color: var(--dn-txt); animation: shake .3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+.numpad {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  max-width: 240px; margin: 0 auto 16px;
+}
+.num-btn {
+  height: 52px; border: 1.5px solid var(--border);
+  background: var(--white); color: var(--ink);
+  font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 400;
+  cursor: pointer; transition: all .12s;
+  display: flex; align-items: center; justify-content: center;
+}
+.num-btn:hover { background: var(--off); border-color: var(--ink); }
+.num-btn:active { background: var(--ink); color: var(--white); }
+.num-btn.del { font-size: 12px; font-weight: 500; color: var(--muted); }
+.num-btn.zero { grid-column: 2; }
+.login-err {
+  font-size: 11px; color: var(--dn-txt);
+  letter-spacing: 0.05em; height: 18px;
+  font-weight: 500;
+}
+
+/* ══════════════════════════════
+   APP
+══════════════════════════════ */
+#app { display: none; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar-brand {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 10px; font-weight: 400;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--ink);
+}
+.topbar-period {
+  font-size: 12px; color: var(--muted); font-weight: 300;
+  letter-spacing: 0.05em;
+}
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.access-pill {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.05em;
+  padding: 4px 12px; border: 1px solid var(--border);
+  color: var(--mid); background: var(--off);
+}
+.logout-btn {
+  font-size: 11px; font-weight: 400; letter-spacing: 0.05em;
+  padding: 4px 12px; border: 1px solid var(--border);
+  background: var(--white); color: var(--mid);
+  cursor: pointer; transition: all .12s;
+}
+.logout-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ── TABS ── */
+.tabs-strip {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex; gap: 0; overflow-x: auto;
+}
+.tab-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 14px 20px;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--muted); cursor: pointer; white-space: nowrap;
+  transition: all .15s;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ── MAIN ── */
+.main { padding: 40px; max-width: 1280px; margin: 0 auto; }
+
+/* ── PANEL ── */
+.shop-panel { display: none; }
+.shop-panel.active { display: block; animation: fadeUp .2s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── SHOP HEADER ── */
+.shop-hd {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.shop-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 26px; font-weight: 600;
+  letter-spacing: -0.02em; color: var(--ink);
+}
+.shop-title span { color: var(--blue); }
+.shop-date { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 9px; font-weight: 400;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px; margin-top: 36px;
+}
+.sec-label:first-child { margin-top: 0; }
+
+/* ── ALERTS ── */
+.alerts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.alert {
+  font-size: 11.5px; font-weight: 400;
+  padding: 6px 12px; border-left: 3px solid;
+}
+.alert.down { background: var(--dn-bg); border-color: var(--dn-txt); color: var(--dn-txt); }
+.alert.up   { background: var(--up-bg); border-color: var(--up-txt); color: var(--up-txt); }
+.alert.warn { background: #fefbe8; border-color: #b45309; color: #78350f; }
+
+/* ══════════════════════════════
+   KPI CARDS — BIG 3
+══════════════════════════════ */
+.kpi-big {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px; margin-bottom: 16px;
+}
+.kpi-card-big {
+  padding: 24px 22px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  position: relative;
+  transition: border-color .15s;
+}
+.kpi-card-big.up   { background: var(--up-bg); border-color: var(--up-bord); }
+.kpi-card-big.down { background: var(--dn-bg); border-color: var(--dn-bord); }
+.kpi-card-big.neu  { background: var(--white); }
+
+.kpi-big-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 8.5px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+}
+.kpi-big-val {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 30px; font-weight: 600;
+  letter-spacing: -0.03em; line-height: 1;
+  color: var(--ink);
+}
+.kpi-card-big.up   .kpi-big-val { color: var(--up-txt); }
+.kpi-card-big.down .kpi-big-val { color: var(--dn-txt); }
+.kpi-big-unit { font-size: 15px; font-weight: 300; margin-left: 2px; }
+
+.kpi-big-n1 {
+  margin-top: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.kpi-big-n1-val { font-size: 12px; color: var(--muted); font-weight: 300; }
+.evol-badge {
+  font-size: 11px; font-weight: 600;
+  padding: 2px 8px;
+}
+.evol-badge.up   { background: var(--up-bg); color: var(--up-txt); border: 1px solid var(--up-bord); }
+.evol-badge.down { background: var(--dn-bg); color: var(--dn-txt); border: 1px solid var(--dn-bord); }
+.evol-badge.neu  { background: var(--neu-bg); color: var(--neu-txt); border: 1px solid var(--neu-bord); }
+
+/* ══════════════════════════════
+   KPI CARDS — SMALL ROW
+══════════════════════════════ */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px; margin-bottom: 8px;
+}
+.kpi-card-sm {
+  padding: 16px 16px 14px;
+  border: 1px solid var(--border);
+  background: var(--white);
+}
+.kpi-card-sm.up   { background: var(--up-bg); border-color: var(--up-bord); }
+.kpi-card-sm.down { background: var(--dn-bg); border-color: var(--dn-bord); }
+
+.kpi-sm-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 7.5px; font-weight: 400;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.kpi-sm-val {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 18px; font-weight: 600;
+  letter-spacing: -0.02em; color: var(--ink);
+}
+.kpi-card-sm.up   .kpi-sm-val { color: var(--up-txt); }
+.kpi-card-sm.down .kpi-sm-val { color: var(--dn-txt); }
+.kpi-sm-n1 {
+  margin-top: 6px; display: flex; align-items: center; gap: 6px;
+}
+.kpi-sm-n1-val { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+/* ══════════════════════════════
+   TOP 5
+══════════════════════════════ */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:860px){ .two-col{grid-template-columns:1fr;} }
+
+.rank-block {
+  border: 1px solid var(--border);
+  background: var(--white);
+  overflow: hidden;
+}
+.rank-hd {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.rank-hd-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 9px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink);
+}
+.rank-hd-sub { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+.rank-row {
+  display: grid; grid-template-columns: 28px 1fr 60px 88px;
+  align-items: center; gap: 10px;
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--light);
+  transition: background .1s;
+}
+.rank-row:last-child { border-bottom: none; }
+.rank-row:hover { background: var(--off); }
+.rank-num {
+  font-family: 'Unbounded', sans-serif; font-size: 10px;
+  font-weight: 300; color: var(--muted); text-align: center;
+}
+.rank-num.n1 { color: var(--ink); font-weight: 600; }
+.rank-name { font-size: 12.5px; font-weight: 400; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-bar-wrap { }
+.rank-bar-bg { height: 2px; background: var(--light); }
+.rank-bar-fill { height: 2px; background: var(--ink); width: 0; transition: width .7s cubic-bezier(.25,.46,.45,.94); }
+.rank-pcs { font-size: 11px; color: var(--muted); text-align: right; font-weight: 300; }
+.rank-ca { font-size: 12px; font-weight: 500; color: var(--ink); text-align: right; }
+
+/* N-1 comparison rows inside top5 */
+.rank-n1-row {
+  display: grid; grid-template-columns: 28px 1fr 60px 88px;
+  align-items: center; gap: 10px;
+  padding: 7px 18px 11px;
+  border-bottom: 1px solid var(--light);
+  background: var(--off);
+}
+.rank-n1-row:last-child { border-bottom: none; }
+.rank-n1-label { font-size: 10px; color: var(--muted); font-weight: 300; font-style: italic; }
+.rank-n1-pcs { font-size: 10px; color: var(--muted); text-align: right; }
+.rank-n1-ca { font-size: 11px; color: var(--muted); text-align: right; font-weight: 300; }
+.rank-n1-evol { font-size: 10px; font-weight: 600; }
+.rank-n1-evol.up { color: var(--up-txt); }
+.rank-n1-evol.dn { color: var(--dn-txt); }
+
+/* ══════════════════════════════
+   CARTES CADEAUX
+══════════════════════════════ */
+.gc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.gc-card {
+  border: 1px solid var(--border); background: var(--white);
+  padding: 20px;
+}
+.gc-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 7.5px; font-weight: 400; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+}
+.gc-val {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink);
+}
+.gc-note { font-size: 11px; color: var(--muted); font-weight: 300; margin-top: 6px; }
+
+/* ══════════════════════════════
+   HISTORY
+══════════════════════════════ */
+.hist-block {
+  border: 1px solid var(--border); background: var(--white); overflow: hidden;
+}
+.hist-top {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+}
+.hist-title {
+  font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink);
+}
+.htabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.htab {
+  font-size: 11px; font-weight: 400; padding: 5px 12px;
+  border: 1px solid var(--border); background: none;
+  color: var(--muted); cursor: pointer; transition: all .12s;
+}
+.htab:hover { color: var(--ink); border-color: var(--ink); }
+.htab.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+.hist-content { display: none; }
+.hist-content.active { display: block; overflow-x: auto; }
+
+table.htable { width: 100%; border-collapse: collapse; }
+table.htable th {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 7.5px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); padding: 10px 14px; text-align: right;
+  border-bottom: 1px solid var(--border); background: var(--off);
+  white-space: nowrap;
+}
+table.htable th:first-child { text-align: left; }
+table.htable td {
+  font-size: 12px; font-weight: 300; padding: 9px 14px; text-align: right;
+  border-bottom: 1px solid var(--light); color: var(--ink);
+  white-space: nowrap;
+}
+table.htable td:first-child { text-align: left; font-weight: 500; }
+table.htable tr.y26 td { background: #f9f8f5; }
+table.htable tr:last-child td { border-bottom: none; }
+.ep  { color: var(--up-txt) !important; font-weight: 600; }
+.en  { color: var(--dn-txt) !important; font-weight: 600; }
+.em  { color: var(--muted) !important; }
+
+/* ══════════════════════════════
+   WEB NOTICE
+══════════════════════════════ */
+.web-notice {
+  font-size: 12px; font-weight: 300; color: var(--blue);
+  padding: 10px 16px; border: 1px solid #c3d8f8; background: #eef4fd;
+  margin-bottom: 24px;
+}
+
+/* ══════════════════════════════
+   TOTAL PANEL SPECIFICS
+══════════════════════════════ */
+.total-shops-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;
+}
+.total-shop-card {
+  border: 1px solid var(--border); background: var(--white); padding: 18px 16px;
+}
+.total-shop-name {
+  font-family: 'Unbounded', sans-serif; font-size: 8.5px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+}
+.total-shop-ca {
+  font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 600;
+  letter-spacing: -0.02em; color: var(--ink);
+}
+.total-shop-evol {
+  font-size: 11px; font-weight: 600; margin-top: 6px;
+}
+.total-shop-evol.up { color: var(--up-txt); }
+.total-shop-evol.dn { color: var(--dn-txt); }
+
+/* ── OBJECTIVE CARD ── */
+.obj-card {
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  padding: 18px 22px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.obj-card-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 8.5px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted);
+}
+.obj-card-val {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 22px; font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.obj-card-evol {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px; font-weight: 600;
+  padding: 5px 14px;
+}
+.obj-card.ok  { background: var(--up-bg); border-color: var(--up-bord); }
+.obj-card.ok  .obj-card-val  { color: var(--up-txt); }
+.obj-card.ok  .obj-card-evol { background: var(--up-bg); color: var(--up-txt); border: 1px solid var(--up-bord); }
+.obj-card.miss { background: var(--dn-bg); border-color: var(--dn-bord); }
+.obj-card.miss .obj-card-val  { color: var(--dn-txt); }
+.obj-card.miss .obj-card-evol { background: var(--dn-bg); color: var(--dn-txt); border: 1px solid var(--dn-bord); }
+
+/* ── RANK WRAP (2 columns side by side) ── */
+.rank-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media(max-width:900px){ .rank-wrap{grid-template-columns:1fr;} }
+
+/* ── OMC FOCUS BLOCK ── */
+.omc-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; margin-bottom: 16px; }
+.omc-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--off);
+}
+.omc-title { font-family:'Unbounded',sans-serif; font-size:11px; font-weight:400; letter-spacing:0.1em; }
+.omc-sub   { font-size:11px; color:var(--muted); font-weight:300; margin-top:3px; }
+.omc-total-wrap { display:flex; align-items:center; gap:10px; }
+.omc-total-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; }
+.omc-total-val { font-family:'Unbounded',sans-serif; font-size:18px; font-weight:600; }
+.omc-col-hd {
+  display:grid; grid-template-columns:1fr 80px 70px 100px 70px;
+  padding:8px 20px; border-bottom:1px solid var(--border);
+  font-size:10px; color:var(--muted); font-weight:300; letter-spacing:0.05em;
+}
+.omc-row {
+  display:grid; grid-template-columns:1fr 80px 70px 100px 70px;
+  padding:12px 20px; border-bottom:1px solid var(--light); align-items:center;
+}
+.omc-row:last-child { border-bottom:none; }
+.omc-loc { font-size:13px; font-weight:500; }
+.omc-pcs { font-size:12px; color:var(--muted); text-align:right; }
+.omc-pct-badge {
+  font-family:'Unbounded',sans-serif; font-size:9px; font-weight:600;
+  background:var(--off); border:1px solid var(--border);
+  padding:3px 7px; text-align:center; justify-self:end;
+}
+.omc-ca   { font-size:13px; font-weight:500; text-align:right; }
+.omc-evol { font-size:11px; font-weight:600; text-align:right; }
+.omc-evol.up { color:var(--up-txt); }
+.omc-evol.dn { color:var(--dn-txt); }
+.hours-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 8px; }
+@media(max-width:900px){ .hours-grid{grid-template-columns:1fr;} }
+.hours-shop-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; }
+.hours-shop-title {
+  font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  color: var(--ink); background: var(--off);
+}
+.hours-person-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 16px; border-bottom: 1px solid var(--light);
+}
+.hours-person-row:last-child { border-bottom: none; }
+.hours-name { font-size: 12px; font-weight: 400; color: var(--ink); }
+.hours-name small { font-size: 10px; color: var(--muted); font-weight: 300; margin-left: 4px; }
+.hours-val { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 600; color: var(--ink); }
+.hours-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 16px; background: var(--ink);
+}
+.hours-total-label {
+  font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400;
+  letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.6);
+}
+.hours-total-val { font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 600; color: #fff; }
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+.footer {
+  border-top: 1px solid var(--border); background: var(--white);
+  padding: 16px 40px;
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--muted); font-weight: 300;
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--off); }
+::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ══════════════════════════════
+   RESPONSIVE MOBILE
+══════════════════════════════ */
+@media (max-width: 680px) {
+
+  /* Login */
+  .login-wrap { padding: 48px 24px 32px; }
+  .login-head { font-size: 18px; }
+
+  /* Topbar */
+  .topbar { padding: 0 16px; height: 48px; }
+  .topbar-period { display: none; }
+  .topbar-brand { font-size: 8px; letter-spacing: 0.2em; }
+  .access-pill { display: none; }
+  .logout-btn { font-size: 10px; padding: 3px 8px; }
+
+  /* Tabs */
+  .tabs-strip { padding: 0 8px; }
+  .tab-btn { font-size: 11px; padding: 12px 12px; }
+
+  /* Main padding */
+  .main { padding: 20px 16px; }
+
+  /* Shop header */
+  .shop-hd { margin-bottom: 20px; padding-bottom: 16px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .shop-title { font-size: 20px; }
+
+  /* Section label */
+  .sec-label { margin-top: 28px; font-size: 8px; }
+
+  /* Alerts — stack vertically */
+  .alerts { flex-direction: column; gap: 6px; margin-bottom: 20px; }
+  .alert { font-size: 11px; }
+
+  /* KPI BIG — 2 columns on mobile */
+  .kpi-big { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .kpi-card-big { padding: 16px 14px; }
+  .kpi-big-label { font-size: 7px; letter-spacing: 0.12em; margin-bottom: 8px; }
+  .kpi-big-val { font-size: 20px; }
+  .kpi-big-n1 { margin-top: 8px; flex-wrap: wrap; gap: 4px; }
+  .kpi-big-n1-val { font-size: 10px; }
+  .evol-badge { font-size: 10px; padding: 1px 6px; }
+
+  /* Objective card */
+  .obj-card { padding: 12px 14px; }
+  .obj-card-val { font-size: 18px; }
+  .obj-card-label { font-size: 8px; }
+  .obj-card-evol { font-size: 10px; padding: 4px 10px; }
+
+  /* KPI SMALL — 2 columns */
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi-card-sm { padding: 12px 12px 10px; }
+  .kpi-sm-label { font-size: 7px; }
+  .kpi-sm-val { font-size: 15px; }
+  .kpi-sm-n1-val { font-size: 10px; }
+
+  /* TOP — single column */
+  .two-col { grid-template-columns: 1fr; gap: 12px; }
+  .rank-wrap { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Rank block */
+  .rank-hd { padding: 12px 14px; }
+  .rank-hd-title { font-size: 10px; }
+  .rank-row { grid-template-columns: 28px 1fr 44px 70px; padding: 10px 14px; gap: 6px; }
+  .rank-n1-row { grid-template-columns: 28px 1fr 44px 70px; padding: 6px 14px; }
+  .rank-name { font-size: 11px; }
+  .rank-num { font-size: 10px; width: 20px; height: 20px; }
+  .rank-pcs { font-size: 10px; }
+  .rank-ca { font-size: 11px; }
+  .rank-n1-label { font-size: 9px; }
+  .rank-n1-pcs { font-size: 9px; }
+  .rank-n1-ca { font-size: 10px; }
+  /* Weight badge inline — shrink */
+  .rank-name span[style*="font-family"] { display: none; }
+
+  /* GC (Gift cards) */
+  .gc-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .gc-card { padding: 14px 12px; }
+  .gc-val { font-size: 18px; }
+
+  /* History tabs */
+  .hist-tabs { padding: 0 10px; }
+  .hist-tab-btn { font-size: 10px; padding: 10px 12px; }
+  .hist-chart-area { padding: 16px 10px 10px; }
+
+  /* Hours grid */
+  .hours-grid { grid-template-columns: 1fr; gap: 12px; }
+  .hours-shop-title { font-size: 8px; padding: 10px 14px; }
+  .hours-person-row { padding: 8px 14px; }
+  .hours-name { font-size: 11px; }
+  .hours-val { font-size: 11px; }
+  .hours-total-row { padding: 8px 14px; }
+  .hours-total-val { font-size: 12px; }
+
+  /* Total shop rows */
+  .total-shop-row { padding: 12px 14px; }
+  .total-shop-name { font-size: 12px; }
+  .total-shop-ca { font-size: 14px; }
+
+  /* OMC block */
+  .omc-header { flex-direction: column; align-items: flex-start; gap: 12px; padding: 14px 14px; }
+  .omc-col-hd { grid-template-columns: 1fr 50px 50px 80px 60px; padding: 6px 14px; font-size: 9px; }
+  .omc-row { grid-template-columns: 1fr 50px 50px 80px 60px; padding: 10px 14px; }
+  .omc-ca { font-size: 12px; }
+  .omc-loc { font-size: 11px; }
+  .omc-pcs { font-size: 10px; }
+
+  /* Footer */
+  .footer { padding: 12px 16px; flex-direction: column; gap: 4px; font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-inner">
+    <div class="login-wordmark">Renouveau — Rapport interne</div>
+    <div class="login-head">Juillet 2026</div>
+    <div class="login-sub">Saisir le code d'accès</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="numpad">
+      <button class="num-btn" onclick="addD('1')">1</button>
+      <button class="num-btn" onclick="addD('2')">2</button>
+      <button class="num-btn" onclick="addD('3')">3</button>
+      <button class="num-btn" onclick="addD('4')">4</button>
+      <button class="num-btn" onclick="addD('5')">5</button>
+      <button class="num-btn" onclick="addD('6')">6</button>
+      <button class="num-btn" onclick="addD('7')">7</button>
+      <button class="num-btn" onclick="addD('8')">8</button>
+      <button class="num-btn" onclick="addD('9')">9</button>
+      <button class="num-btn del" onclick="delD()">⌫</button>
+      <button class="num-btn zero" onclick="addD('0')">0</button>
+      <div></div>
+    </div>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header class="topbar">
+    <div class="topbar-brand">Renouveau — Rapport Mensuel</div>
+    <div class="topbar-period">Juillet 2026 · 01 → 30</div>
+    <div class="topbar-right">
+      <div class="access-pill" id="access-lbl"></div>
+      <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </div>
+  </header>
+  <nav class="tabs-strip" id="tabs-nav"></nav>
+  <main class="main" id="app-main"></main>
+  <footer class="footer">
+    <span>Données Shopify POS · Juillet 2026</span>
+    <span>Document confidentiel — usage interne</span>
+  </footer>
+</div>
+
+<script>
+/* ════════════════════════════
+   ACCESS
+════════════════════════════ */
+const CODES = {
+  '4501': { label:'Orléans + Web', shops:['orleans','rnvweb'] },
+  '9937': { label:'Tours',          shops:['tours'] },
+  '1827': { label:'Bourges',        shops:['bourges'] },
+  '2201': { label:'Accès complet',  shops:['total','orleans','bourges','tours','rnvweb','omcweb','focusomc'] },
+};
+
+let pin='', access=null;
+
+function addD(d){
+  if(pin.length>=4) return;
+  pin+=d; paintDots();
+  if(pin.length===4) setTimeout(checkPin,120);
+}
+function delD(){
+  pin=pin.slice(0,-1); paintDots();
+  document.getElementById('login-err').textContent='';
+}
+function paintDots(){
+  for(let i=0;i<4;i++){
+    const el=document.getElementById('d'+i);
+    el.classList.remove('filled','error');
+    el.textContent = i<pin.length ? pin[i] : '';
+    if(i<pin.length) el.classList.add('filled');
+  }
+}
+function checkPin(){
+  if(CODES[pin]){
+    access=CODES[pin];
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    document.getElementById('access-lbl').textContent=access.label;
+    buildApp(access.shops);
+  } else {
+    for(let i=0;i<4;i++) document.getElementById('d'+i).classList.replace('filled','error');
+    document.getElementById('login-err').textContent='Code incorrect';
+    setTimeout(()=>{ pin=''; paintDots(); document.getElementById('login-err').textContent=''; },900);
+  }
+}
+function logout(){
+  pin=''; access=null;
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  paintDots();
+}
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('login-screen').style.display==='none') return;
+  if(e.key>='0'&&e.key<='9') addD(e.key);
+  if(e.key==='Backspace') delD();
+});
+
+/* ════════════════════════════
+   DATA
+════════════════════════════ */
+const D = {
+  orleans:{
+    name:'Renouveau', accent:'Orléans',
+    alerts:[
+      {t:'down', msg:'↓ CA TTC -3,6% vs N-1'},
+      {t:'up', msg:'↑ Commandes +3,1% vs N-1'},
+      {t:'up',   msg:'↑ Taux de marge +5,0 pt · 32,1%'},
+    ],
+    big:[
+      {label:'CA TTC',      val:'102 450 €', evol:'-3,6%', dir:'down', n1:'N-1 : 106 269 €', obj:'Obj. : 94 300 €', objdir:'up'},
+      {label:'Taux marge',  val:'32,1%',    evol:'+5,0 pt',dir:'up',  n1:'N-1 : 27,0%'},
+      {label:'Marge brute', val:'27 375 €', evol:'+14,4%', dir:'up', n1:'N-1 : 23 925 €'},
+    ],
+    small:[
+      {label:'Commandes',     val:'1 409',   evol:'+3,1%', dir:'up', n1:'N-1 : 1 366'},
+      {label:'Produits vendus',val:'2 634',  evol:'+7,6%', dir:'up', n1:'N-1 : 2 447'},
+      {label:'Indice de vente',val:'1,87',   evol:'+4,4%', dir:'up',   n1:'N-1 : 1,79'},
+      {label:'Panier moyen',  val:'72,71 €', evol:'-6,5%', dir:'down', n1:'N-1 : 77,80 €'},
+    ],
+    brands26:[ {n:'Onze Mètres Carrés',pcs:1066,ca:30806.82,pct:30.1},{n:'Carhartt WIP',pcs:499,ca:25892.16,pct:25.3},{n:'Sebago',pcs:43,ca:5905.77,pct:5.8},{n:'Arte Antwerp',pcs:111,ca:5752.25,pct:5.6},{n:'Deus Ex Machina',pcs:113,ca:5603.13,pct:5.5},{n:'Obey',pcs:130,ca:5582.60,pct:5.4},{n:'RVCA',pcs:65,ca:1962.50,pct:1.9},{n:'New Era',pcs:69,ca:1810.70,pct:1.8},{n:'Rains',pcs:29,ca:1678.32,pct:1.6},{n:'Edwin',pcs:42,ca:1645.00,pct:1.6} ],
+    brands25:[ {n:'Onze Mètres Carrés',pcs:812,ca:28341.46},{n:'Carhartt WIP',pcs:594,ca:30704.48},{n:'Sebago',pcs:0,ca:0.00},{n:'Arte Antwerp',pcs:49,ca:3090.00},{n:'Deus Ex Machina',pcs:108,ca:4910.60},{n:'Obey',pcs:98,ca:4579.00},{n:'RVCA',pcs:21,ca:591.50},{n:'New Era',pcs:23,ca:780.50},{n:'Rains',pcs:55,ca:3116.30},{n:'Edwin',pcs:52,ca:2594.60} ],
+    cats26:[ {n:'T-Shirts',pcs:1160,ca:37744.04,pct:39.9},{n:'Shorts',pcs:223,ca:12473.31,pct:13.2},{n:'Sweats',pcs:138,ca:7506.30,pct:7.9},{n:'Chaussures',pcs:58,ca:7246.90,pct:7.7},{n:'Pantalons',pcs:84,ca:6274.16,pct:6.6},{n:'Chemises',pcs:99,ca:5963.70,pct:6.3},{n:'Casquettes',pcs:99,ca:2768.79,pct:2.9},{n:'Vestes',pcs:29,ca:2760.40,pct:2.9},{n:'Sacs',pcs:53,ca:2519.01,pct:2.7},{n:'Chaussettes',pcs:161,ca:1918.32,pct:2.0} ],
+    cats25:[ {n:'T-Shirts',pcs:1200,ca:40832.06},{n:'Shorts',pcs:184,ca:10649.78},{n:'Sweats',pcs:180,ca:10901.14},{n:'Chaussures',pcs:83,ca:6176.51},{n:'Pantalons',pcs:130,ca:9687.20},{n:'Chemises',pcs:82,ca:5210.20},{n:'Casquettes',pcs:71,ca:2172.20},{n:'Vestes',pcs:88,ca:8628.90},{n:'Sacs',pcs:79,ca:3415.00},{n:'Chaussettes',pcs:63,ca:817.20} ],
+    gc:{vendues:10, emis:579, depenses:579, note:'Cartes-cadeaux vendues : 579 €'},
+    hist:{
+      ca:[
+        {yr:'2026',j:75653,f:82907,m:102754,a:102450,cum:363764,evol:'—'},
+        {yr:'2025',j:83144,f:94861,m:104900,a:106269,cum:389174,evol:'-6,5%',dir:'n'},
+      ],
+      cmd:[
+        {yr:'2026',j:827,f:1060,m:1349,a:1409,cum:4645,evol:'—'},
+        {yr:'2025',j:902,f:1183,m:1308,a:1366,cum:4759,evol:'-2,4%',dir:'n'},
+      ],
+      idv:[
+        {yr:'2026',j:'1,67',f:'1,68',m:'1,84',a:'1,87',evol:'—'},
+        {yr:'2025',j:'1,60',f:'1,60',m:'1,68',a:'1,79',evol:'+4,5%',dir:'p'},
+      ],
+      pm:[
+        {yr:'2026',j:'91,48',f:'78,21',m:'76,17',a:'72,71',evol:'—'},
+        {yr:'2025',j:'92,18',f:'80,19',m:'80,20',a:'77,80',evol:'-6,5%',dir:'n'},
+      ],
+      mg:[
+        {yr:'2026',j:28210,f:31769,m:32696,a:27375,cum:120050,tx:'32,1%'},
+        {yr:'2025',j:29405,f:31897,m:30948,a:23925,cum:116175,tx:'27,0%'},
+      ],
+    }
+  },
+
+  bourges:{
+    name:'Renouveau', accent:'Bourges',
+    alerts:[
+      {t:'up', msg:'↑ CA TTC +5,9% vs N-1'},
+      {t:'down', msg:'↓ Commandes -1,7% vs N-1'},
+      {t:'up',   msg:'↑ Taux de marge +3,0 pt · 31,4%'},
+    ],
+    big:[
+      {label:'CA TTC',      val:'22 242 €', evol:'+5,9%', dir:'up', n1:'N-1 : 21 011 €', obj:'Obj. : 19 250 €', objdir:'up'},
+      {label:'Taux marge',  val:'31,4%',    evol:'+3,0 pt',dir:'up',  n1:'N-1 : 28,4%'},
+      {label:'Marge brute', val:'5 823 €', evol:'+17,2%', dir:'up', n1:'N-1 : 4 968 €'},
+    ],
+    small:[
+      {label:'Commandes',     val:'284',   evol:'-1,7%', dir:'down', n1:'N-1 : 289'},
+      {label:'Produits vendus',val:'541',  evol:'+0,4%', dir:'up', n1:'N-1 : 539'},
+      {label:'Indice de vente',val:'1,90',   evol:'+2,1%', dir:'up',   n1:'N-1 : 1,87'},
+      {label:'Panier moyen',  val:'78,32 €', evol:'+7,7%', dir:'up', n1:'N-1 : 72,70 €'},
+    ],
+    brands26:[ {n:'Carhartt WIP',pcs:185,ca:9699.50,pct:43.6},{n:'Arte Antwerp',pcs:87,ca:4211.50,pct:18.9},{n:'Onze Mètres Carrés',pcs:65,ca:1622.10,pct:7.3},{n:'Obey',pcs:39,ca:1620.00,pct:7.3},{n:'Deus Ex Machina',pcs:25,ca:1251.30,pct:5.6},{n:'RVCA',pcs:32,ca:972.50,pct:4.4},{n:'Rhythm',pcs:26,ca:724.00,pct:3.3},{n:'Service Works',pcs:15,ca:527.10,pct:2.4},{n:'No Stress',pcs:14,ca:456.50,pct:2.1},{n:'Volcom',pcs:11,ca:430.00,pct:1.9} ],
+    brands25:[ {n:'Carhartt WIP',pcs:257,ca:11837.00},{n:'Arte Antwerp',pcs:6,ca:380.50},{n:'Onze Mètres Carrés',pcs:97,ca:2988.90},{n:'Obey',pcs:39,ca:1707.50},{n:'Deus Ex Machina',pcs:31,ca:1315.60},{n:'RVCA',pcs:7,ca:163.00},{n:'Rhythm',pcs:0,ca:0.00},{n:'Service Works',pcs:0,ca:0.00},{n:'No Stress',pcs:0,ca:0.00},{n:'Volcom',pcs:22,ca:546.00} ],
+    cats26:[ {n:'T-Shirts',pcs:282,ca:9675.00,pct:45.3},{n:'Shorts',pcs:57,ca:3624.20,pct:17.0},{n:'Pantalons',pcs:37,ca:2983.70,pct:14.0},{n:'Sweats',pcs:27,ca:1435.90,pct:6.7},{n:'Chemises',pcs:20,ca:998.80,pct:4.7},{n:'Sacs',pcs:8,ca:526.89,pct:2.5},{n:'Maillots de Bain',pcs:10,ca:433.40,pct:2.0},{n:'Casquettes',pcs:12,ca:410.40,pct:1.9},{n:'Chaussettes',pcs:30,ca:358.30,pct:1.7},{n:'Hauts',pcs:5,ca:281.40,pct:1.3} ],
+    cats25:[ {n:'T-Shirts',pcs:284,ca:8705.70},{n:'Shorts',pcs:30,ca:2059.70},{n:'Pantalons',pcs:40,ca:3022.40},{n:'Sweats',pcs:49,ca:2798.30},{n:'Chemises',pcs:14,ca:855.60},{n:'Sacs',pcs:16,ca:656.50},{n:'Maillots de Bain',pcs:6,ca:370.60},{n:'Casquettes',pcs:11,ca:389.60},{n:'Chaussettes',pcs:37,ca:434.50},{n:'Hauts',pcs:3,ca:248.00} ],
+    gc:{vendues:7, emis:565, depenses:565, note:'Cartes-cadeaux vendues : 565 €'},
+    hist:{
+      ca:[
+        {yr:'2026',j:15073,f:16460,m:15721,a:22242,cum:69496,evol:'—'},
+        {yr:'2025',j:21820,f:20771,m:20313,a:21011,cum:83915,evol:'-17,2%',dir:'n'},
+      ],
+      cmd:[
+        {yr:'2026',j:132,f:181,m:178,a:284,cum:775,evol:'—'},
+        {yr:'2025',j:194,f:238,m:255,a:289,cum:976,evol:'-20,6%',dir:'n'},
+      ],
+      idv:[
+        {yr:'2026',j:'1,56',f:'1,52',m:'1,74',a:'1,90',evol:'—'},
+        {yr:'2025',j:'1,57',f:'1,47',m:'1,64',a:'1,87',evol:'+1,6%',dir:'p'},
+      ],
+      pm:[
+        {yr:'2026',j:'114,19',f:'90,94',m:'88,32',a:'78,32',evol:'—'},
+        {yr:'2025',j:'112,47',f:'87,27',m:'79,66',a:'72,70',evol:'+7,7%',dir:'p'},
+      ],
+      mg:[
+        {yr:'2026',j:6336,f:6956,m:5668,a:5823,cum:24783,tx:'31,4%'},
+        {yr:'2025',j:9096,f:8307,m:6796,a:4968,cum:29167,tx:'28,4%'},
+      ],
+    }
+  },
+
+  tours:{
+    name:'Renouveau', accent:'Tours',
+    alerts:[
+      {t:'down', msg:'↓ CA TTC -0,1% vs N-1'},
+      {t:'up', msg:'↑ Commandes +3,1% vs N-1'},
+      {t:'down',   msg:'↓ Taux de marge -3,4 pt · 20,6%'},
+    ],
+    big:[
+      {label:'CA TTC',      val:'23 670 €', evol:'-0,1%', dir:'down', n1:'N-1 : 23 688 €', obj:'Obj. : 18 950 €', objdir:'up'},
+      {label:'Taux marge',  val:'20,6%',    evol:'-3,4 pt',dir:'down',  n1:'N-1 : 24,0%'},
+      {label:'Marge brute', val:'4 058 €', evol:'-14,3%', dir:'down', n1:'N-1 : 4 734 €'},
+    ],
+    small:[
+      {label:'Commandes',     val:'296',   evol:'+3,1%', dir:'up', n1:'N-1 : 287'},
+      {label:'Produits vendus',val:'553',  evol:'+7,4%', dir:'up', n1:'N-1 : 515'},
+      {label:'Indice de vente',val:'1,87',   evol:'+4,1%', dir:'up',   n1:'N-1 : 1,79'},
+      {label:'Panier moyen',  val:'79,97 €', evol:'-3,1%', dir:'down', n1:'N-1 : 82,54 €'},
+    ],
+    brands26:[ {n:'Arte Antwerp',pcs:99,ca:4664.90,pct:19.7},{n:'Obey',pcs:64,ca:3150.00,pct:13.3},{n:'Deus Ex Machina',pcs:49,ca:2263.90,pct:9.6},{n:'Service Works',pcs:33,ca:1649.10,pct:7.0},{n:'Sebago',pcs:12,ca:1635.48,pct:6.9},{n:'RVCA',pcs:46,ca:1415.50,pct:6.0},{n:'Onze Mètres Carrés',pcs:63,ca:1360.60,pct:5.7},{n:'Rhythm',pcs:33,ca:1060.20,pct:4.5},{n:'OAS Company',pcs:12,ca:597.00,pct:2.5},{n:'Edwin',pcs:14,ca:550.50,pct:2.3} ],
+    brands25:[ {n:'Arte Antwerp',pcs:24,ca:1554.80},{n:'Obey',pcs:44,ca:2633.70},{n:'Deus Ex Machina',pcs:68,ca:3202.90},{n:'Service Works',pcs:0,ca:0.00},{n:'Sebago',pcs:0,ca:0.00},{n:'RVCA',pcs:24,ca:585.00},{n:'Onze Mètres Carrés',pcs:85,ca:2294.60},{n:'Rhythm',pcs:0,ca:0.00},{n:'OAS Company',pcs:15,ca:885.00},{n:'Edwin',pcs:40,ca:2227.40} ],
+    cats26:[ {n:'T-Shirts',pcs:217,ca:7544.80,pct:32.4},{n:'Shorts',pcs:70,ca:3337.40,pct:14.3},{n:'Pantalons',pcs:53,ca:2956.83,pct:12.7},{n:'Chaussures',pcs:19,ca:2232.21,pct:9.6},{n:'Sweats',pcs:27,ca:1621.40,pct:7.0},{n:'Vestes',pcs:17,ca:1604.61,pct:6.9},{n:'Chemises',pcs:20,ca:1079.80,pct:4.6},{n:'Casquettes',pcs:22,ca:767.60,pct:3.3},{n:'Chaussettes',pcs:47,ca:521.70,pct:2.2},{n:'Sacs',pcs:11,ca:503.58,pct:2.2} ],
+    cats25:[ {n:'T-Shirts',pcs:231,ca:7515.13},{n:'Shorts',pcs:41,ca:2719.40},{n:'Pantalons',pcs:49,ca:4301.40},{n:'Chaussures',pcs:9,ca:850.00},{n:'Sweats',pcs:37,ca:2281.30},{n:'Vestes',pcs:12,ca:1067.40},{n:'Chemises',pcs:33,ca:2079.13},{n:'Casquettes',pcs:15,ca:437.00},{n:'Chaussettes',pcs:16,ca:160.80},{n:'Sacs',pcs:33,ca:1181.80} ],
+    gc:{vendues:3, emis:119, depenses:119, note:'Cartes-cadeaux vendues : 119 €'},
+    hist:{
+      ca:[
+        {yr:'2026',j:21863,f:13373,m:21902,a:23670,cum:80808,evol:'—'},
+        {yr:'2025',j:16604,f:24100,m:19529,a:23688,cum:83921,evol:'-3,7%',dir:'n'},
+      ],
+      cmd:[
+        {yr:'2026',j:257,f:158,m:239,a:296,cum:950,evol:'—'},
+        {yr:'2025',j:187,f:215,m:225,a:287,cum:914,evol:'+3,9%',dir:'p'},
+      ],
+      idv:[
+        {yr:'2026',j:'1,74',f:'1,56',m:'1,91',a:'1,87',evol:'—'},
+        {yr:'2025',j:'1,49',f:'1,58',m:'1,62',a:'1,79',evol:'+4,5%',dir:'p'},
+      ],
+      pm:[
+        {yr:'2026',j:'85,07',f:'84,64',m:'91,64',a:'79,97',evol:'—'},
+        {yr:'2025',j:'88,79',f:'112,09',m:'86,79',a:'82,54',evol:'-3,1%',dir:'n'},
+      ],
+      mg:[
+        {yr:'2026',j:2572,f:4852,m:6724,a:4058,cum:18206,tx:'20,6%'},
+        {yr:'2025',j:5518,f:8994,m:5651,a:4734,cum:24897,tx:'24,0%'},
+      ],
+    }
+  }
+};
+
+/* TOTAL AGGREGATED DATA */
+const TOTAL = {
+  ca26: 102450 + 22242 + 23670 + 4440 + 4083,
+  ca25: 106269 + 21011 + 23688 + 4252 + 3821,
+  mg26: 27375 + 5823 + 4058 + 774 + 2041,
+  mg25: 23925 + 4968 + 4734 + 1093 + 1910,
+  byShop:[
+    {name:'Orléans', ca26:102450, ca25:106269},
+    {name:'Bourges', ca26:22242,  ca25:21011},
+    {name:'Tours',   ca26:23670,  ca25:23688},
+    {name:'Rnv. Web',ca26:4440,   ca25:4252},
+    {name:'OMC Web', ca26:4083,   ca25:3821},
+  ],
+  gc:{
+    venduesTot:10+7+3+2,
+    emisTot:1443,
+    depensesTot:1443,
+  },
+  hist:{
+    ca:[
+      {yr:'2026',j:119737, f:120343, m:148579, a:156885, cum:0, evol:'—'},
+      {yr:'2025',j:130651, f:151467, m:155211, a:159041, cum:0, evol:'—'},
+    ],
+    mg:[
+      {yr:'2026',j:37616, f:44001, m:45560, a:38030, cum:0, tx:''},
+      {yr:'2025',j:45286, f:50283, m:44584, a:34720, cum:0, tx:''},
+    ],
+  }
+};
+TOTAL.hist.ca.forEach(r=>{ r.cum=r.j+r.f+r.m+r.a; });
+TOTAL.hist.mg.forEach(r=>{ r.cum=r.j+r.f+r.m+r.a; });
+TOTAL.hist.mg[0].tx = (TOTAL.mg26/(TOTAL.ca26/1.2)*100).toFixed(1)+'%';
+TOTAL.hist.mg[1].tx = (TOTAL.mg25/(TOTAL.ca25/1.2)*100).toFixed(1)+'%';
+
+/* ════════════════════════════
+   BUILD
+════════════════════════════ */
+const SHOP_NAMES = { total:'Total', orleans:'Orléans', bourges:'Bourges', tours:'Tours', rnvweb:'Rnv. Web', omcweb:'OMC Web', focusomc:'Focus OMC' };
+
+function buildApp(shops){
+  const nav = document.getElementById('tabs-nav');
+  const main = document.getElementById('app-main');
+  nav.innerHTML=''; main.innerHTML='';
+  shops.forEach((id,i)=>{
+    const btn=document.createElement('button');
+    btn.className='tab-btn'+(i===0?' active':'');
+    btn.textContent=SHOP_NAMES[id];
+    btn.onclick=()=>showShop(id,btn);
+    nav.appendChild(btn);
+    const panel=document.createElement('div');
+    panel.className='shop-panel'+(i===0?' active':'');
+    panel.id='panel-'+id;
+    panel.innerHTML = id==='total' ? buildTotal() : id==='focusomc' ? buildFocusOMC() : buildShop(id);
+    main.appendChild(panel);
+  });
+  setTimeout(animBars,150);
+}
+
+function showShop(id,btn){
+  document.querySelectorAll('.shop-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+  setTimeout(animBars,100);
+}
+
+function showHist(shop,metric,btn){
+  const block=btn.closest('.hist-block');
+  block.querySelectorAll('.hist-content').forEach(c=>c.classList.remove('active'));
+  block.querySelectorAll('.htab').forEach(b=>b.classList.remove('active'));
+  const t=document.getElementById(shop+'-'+metric);
+  if(t) t.classList.add('active');
+  btn.classList.add('active');
+}
+
+function animBars(){
+  document.querySelectorAll('.rank-bar-fill[data-pct]').forEach(el=>{
+    el.style.width=el.dataset.pct+'%';
+  });
+}
+
+/* ════════════════════════════
+   BUILD TOTAL PANEL
+════════════════════════════ */
+function buildTotal(){
+  const ca26 = TOTAL.ca26;
+  const ca25 = TOTAL.ca25;
+  const mg26 = TOTAL.mg26;
+  const mg25 = TOTAL.mg25;
+  const evolCa = ((ca26/ca25-1)*100).toFixed(1);
+  const evolMg = ((mg26/mg25-1)*100).toFixed(1);
+  const caDir = ca26>=ca25?'up':'down';
+  const mgDir = mg26>=mg25?'up':'down';
+  const evolSign = (v)=> parseFloat(v)>=0 ? '+'+v+'%' : v+'%';
+
+  let html = `
+  <div class="shop-hd">
+    <div>
+      <div class="shop-title">Vue <span>Globale</span></div>
+      <div class="shop-date">Consolidé tous canaux · Juillet 2026</div>
+    </div>
+  </div>
+
+  <div class="sec-label">CA consolidé par boutique</div>
+  <div class="total-shops-grid">`;
+
+  TOTAL.byShop.forEach(s=>{
+    const ev = ((s.ca26/s.ca25-1)*100).toFixed(1);
+    const dir = s.ca26>=s.ca25?'up':'dn';
+    html+=`<div class="total-shop-card">
+      <div class="total-shop-name">${s.name}</div>
+      <div class="total-shop-ca">${fmt(s.ca26)} €</div>
+      <div class="total-shop-evol ${dir}">${evolSign(ev)} vs N-1 <span style="font-weight:300;color:var(--muted)">(${fmt(s.ca25)} €)</span></div>
+    </div>`;
+  });
+
+  const tx26 = (mg26/((102754+15721+21902+3716+4486)/1.2)*100).toFixed(1);
+  const tx25 = (mg25/((104900+20313+19529+4933+5536)/1.2)*100).toFixed(1);
+  const txDir = parseFloat(tx26)>=parseFloat(tx25)?'up':'down';
+
+  html += `</div>
+
+  <div class="kpi-big" style="margin-top:36px;">
+    <div class="kpi-card-big ${caDir}">
+      <div class="kpi-big-label">CA TTC Total</div>
+      <div class="kpi-big-val">${fmt(ca26)}<span class="kpi-big-unit">€</span></div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${caDir}">${evolSign(evolCa)}</span>
+        <span class="kpi-big-n1-val">N-1 : ${fmt(ca25)} €</span>
+      </div>
+    </div>
+    <div class="kpi-card-big ${mgDir}">
+      <div class="kpi-big-label">Marge brute Totale</div>
+      <div class="kpi-big-val">${fmt(mg26)}<span class="kpi-big-unit">€</span></div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${mgDir}">${evolSign(evolMg)}</span>
+        <span class="kpi-big-n1-val">N-1 : ${fmt(mg25)} €</span>
+      </div>
+    </div>
+    <div class="kpi-card-big ${txDir}">
+      <div class="kpi-big-label">Taux de marge moyen</div>
+      <div class="kpi-big-val">${tx26}<span class="kpi-big-unit">%</span></div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${txDir}">${parseFloat(tx26)>=parseFloat(tx25)?'+':''} ${(parseFloat(tx26)-parseFloat(tx25)).toFixed(1)} pt</span>
+        <span class="kpi-big-n1-val">N-1 : ${tx25}%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-label">Cartes cadeaux — Consolidé</div>
+  <div class="gc-grid">
+    <div class="gc-card">
+      <div class="gc-label">Cartes vendues (total)</div>
+      <div class="gc-val">${TOTAL.gc.venduesTot}</div>
+      <div class="gc-note">Montant total : ${fmt(TOTAL.gc.emisTot)} €</div>
+    </div>
+    <div class="gc-card">
+      <div class="gc-label">Montant vendu (total)</div>
+      <div class="gc-val">${fmt(TOTAL.gc.depensesTot)} €</div>
+      <div class="gc-note">Orléans 1 253 € · Bourges 171 € · Tours 465 € · Web 30 €</div>
+    </div>
+  </div>
+
+  <div class="sec-label">Historique mensuel consolidé</div>
+  ${buildTotalHist()}
+
+  <div class="sec-label">Top 10 Marques · 3 boutiques</div>
+  <div class="rank-wrap">
+    ${buildRank('total', 'Marques', TOTAL_BRANDS26, TOTAL_BRANDS25)}
+    ${buildRank('total', 'Catégories', TOTAL_CATS26, TOTAL_CATS25)}
+  </div>
+
+`;
+
+  return html;
+}
+
+// ── TOTAL 3 SHOPS DATA ──
+const TOTAL_BRANDS26 = [
+  {n:'Carhartt WIP',pcs:684,ca:35591.66,pct:24.0},
+  {n:'Onze Mètres Carrés',pcs:1194,ca:33789.52,pct:22.8},
+  {n:'Arte Antwerp',pcs:297,ca:14628.65,pct:9.9},
+  {n:'Obey',pcs:233,ca:10352.60,pct:7.0},
+  {n:'Deus Ex Machina',pcs:187,ca:9118.33,pct:6.1},
+  {n:'Sebago',pcs:55,ca:7541.25,pct:5.1},
+  {n:'RVCA',pcs:143,ca:4350.50,pct:2.9},
+  {n:'Service Works',pcs:72,ca:3300.06,pct:2.2},
+  {n:'Rhythm',pcs:99,ca:3076.70,pct:2.1},
+  {n:'New Era',pcs:84,ca:2292.40,pct:1.5},
+];
+const TOTAL_BRANDS25 = [
+  {n:'Carhartt WIP',pcs:890,ca:44964.68},
+  {n:'Onze Mètres Carrés',pcs:994,ca:33624.96},
+  {n:'Arte Antwerp',pcs:79,ca:5025.30},
+  {n:'Obey',pcs:181,ca:8920.20},
+  {n:'Deus Ex Machina',pcs:207,ca:9429.10},
+  {n:'Sebago',pcs:0,ca:0.00},
+  {n:'RVCA',pcs:52,ca:1339.50},
+  {n:'Service Works',pcs:6,ca:277.10},
+  {n:'Rhythm',pcs:0,ca:0.00},
+  {n:'New Era',pcs:35,ca:1173.10},
+];
+const TOTAL_CATS26 = [
+  {n:'T-Shirts',pcs:1659,ca:54963.84,pct:39.5},
+  {n:'Shorts',pcs:350,ca:19434.91,pct:14.0},
+  {n:'Pantalons',pcs:174,ca:12214.69,pct:8.8},
+  {n:'Sweats',pcs:192,ca:10563.60,pct:7.6},
+  {n:'Chaussures',pcs:77,ca:9479.11,pct:6.8},
+  {n:'Chemises',pcs:139,ca:8042.30,pct:5.8},
+  {n:'Vestes',pcs:48,ca:4608.61,pct:3.3},
+  {n:'Casquettes',pcs:133,ca:3946.79,pct:2.8},
+  {n:'Sacs',pcs:72,ca:3549.48,pct:2.5},
+  {n:'Chaussettes',pcs:238,ca:2798.32,pct:2.0},
+];
+const TOTAL_CATS25 = [
+  {n:'T-Shirts',pcs:1715,ca:57052.89},
+  {n:'Shorts',pcs:255,ca:15428.88},
+  {n:'Pantalons',pcs:219,ca:17011.00},
+  {n:'Sweats',pcs:266,ca:15980.74},
+  {n:'Chaussures',pcs:98,ca:7501.01},
+  {n:'Chemises',pcs:129,ca:8144.93},
+  {n:'Vestes',pcs:104,ca:10136.80},
+  {n:'Casquettes',pcs:97,ca:2998.80},
+  {n:'Sacs',pcs:128,ca:5253.30},
+  {n:'Chaussettes',pcs:116,ca:1412.50},
+];
+
+function buildFocusOMC(){
+  // ── Récap par shop ──
+  const SHOPS_OMC = [
+    {loc:'Orléans',    pcs:1066, ca:30806.82, ca25:28341.46, pcs25:812},
+    {loc:'Bourges',    pcs:65,   ca:1622.10,  ca25:2988.90,  pcs25:97},
+    {loc:'Tours',      pcs:63,   ca:1360.60,  ca25:2294.60,  pcs25:85},
+    {loc:'OMC Web',    pcs:106,  ca:4082.60,  ca25:3820.75,  pcs25:85},
+  ];
+  const total26 = SHOPS_OMC.reduce((s,r)=>s+r.ca,0);
+  const total25 = SHOPS_OMC.reduce((s,r)=>s+(r.ca25||0),0);
+  const totalEvol = ((total26/total25-1)*100).toFixed(1);
+  const totalEvolDir = parseFloat(totalEvol)>=0?'up':'down';
+  const totalSign = parseFloat(totalEvol)>=0?'+':'';
+
+  const recapRows = SHOPS_OMC.map(r=>{
+    const pct = (r.ca/total26*100).toFixed(1);
+    const evolCa = r.ca25 ? ((r.ca/r.ca25-1)*100).toFixed(1) : null;
+    const eDir = evolCa!==null?(parseFloat(evolCa)>=0?'up':'dn'):'';
+    const eStr = evolCa!==null?((parseFloat(evolCa)>=0?'+':'')+evolCa+'%'):'N/D';
+    const n1str = r.ca25 ? `${fmtEur(r.ca25)} · ${r.pcs25} pcs` : '—';
+    return `<div class="omc-row">
+      <div class="omc-loc">${r.loc}</div>
+      <div class="omc-pcs">${r.pcs} pcs</div>
+      <div class="omc-pct-badge">${pct}%</div>
+      <div class="omc-ca">${fmtEur(r.ca)}</div>
+      <div class="omc-evol ${eDir}">${eStr}</div>
+    </div>`;
+  }).join('');
+
+  // ── Top 20 références (shops + web combinés) ──
+  const TOP20 = [
+    {n:"T-Shirt OMC x Sautereau Tortoise / Off White", pcs:48, ca:1695.50, pct:4.5},
+    {n:"T-Shirt Flower Heart Pink/Blue White", pcs:36, ca:1344.10, pct:3.6},
+    {n:"T-Shirt Flower Pink/Blue White", pcs:36, ca:1296.00, pct:3.4},
+    {n:"T-Shirt La Cachette - Carte White", pcs:34, ca:1183.00, pct:3.1},
+    {n:"T-Shirt La Cachette - Flower White", pcs:33, ca:1155.00, pct:3.1},
+    {n:"T-Shirt OMC x Sautereau Tortoise / Black", pcs:28, ca:985.20, pct:2.6},
+    {n:"T-Shirt Cassette Brown", pcs:24, ca:901.10, pct:2.4},
+    {n:"T-Shirt Archives Navy/ Off White", pcs:22, ca:849.10, pct:2.3},
+    {n:"T-Shirt ISC White", pcs:41, ca:816.50, pct:2.2},
+    {n:"T-Shirt Flower Classic White / Pink", pcs:21, ca:800.00, pct:2.1},
+    {n:"T-Shirt Louis Granet Heart White", pcs:23, ca:784.00, pct:2.1},
+    {n:"T-Shirt Cassette Black", pcs:19, ca:709.40, pct:1.9},
+    {n:"T-Shirt Flower Biarritz Navy / Off White", pcs:18, ca:690.00, pct:1.8},
+    {n:"T-Shirt Flower Pink/Blue Black", pcs:18, ca:686.00, pct:1.8},
+    {n:"T-shirt Navy Archives", pcs:15, ca:585.00, pct:1.6},
+    {n:"T-Shirt Bouquet Off White", pcs:15, ca:581.00, pct:1.5},
+    {n:"Hoodie Zippé Flower Black / Pink", pcs:6, ca:510.00, pct:1.4},
+    {n:"T-Shirt White Finals San Antonio", pcs:13, ca:499.00, pct:1.3},
+    {n:"T-Shirt Circuit Bubble Pink", pcs:12, ca:468.00, pct:1.2},
+    {n:"T-Shirt Flower Lakers SS26", pcs:12, ca:464.00, pct:1.2},
+  ];
+  const maxCa = TOP20[0].ca;
+
+  const top20rows = TOP20.map((item,i)=>{
+    const barPct = (item.ca/maxCa*100).toFixed(1);
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div>
+        <div class="rank-name">${item.n}<span style="font-family:'Unbounded',sans-serif;font-size:8px;font-weight:600;background:var(--off);border:1px solid var(--border);padding:2px 6px;margin-left:6px;color:var(--muted)">${item.pct}% du CA</span></div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${barPct}" style="width:0"></div></div>
+      </div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtEur(item.ca)}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="shop-hd">
+    <div>
+      <div class="shop-title">Focus <span>Onze Mètres Carrés</span></div>
+      <div class="shop-date">Juillet 2026 · Shops + OMC Web</div>
+    </div>
+  </div>
+
+  <div class="sec-label">Répartition par canal de vente</div>
+  <div class="omc-block">
+    <div class="omc-header">
+      <div>
+        <div class="omc-title">Onze Mètres Carrés · All Channels</div>
+        <div class="omc-sub">Shops (Orléans, Bourges, Tours) + OMC Web</div>
+      </div>
+      <div class="omc-total-wrap">
+        <div class="omc-total-label">Total 2026</div>
+        <div class="omc-total-val">${fmtEur(total26)}</div>
+        <span class="evol-badge ${totalEvolDir}">${totalSign}${totalEvol}%</span>
+      </div>
+    </div>
+    <div class="omc-col-hd">
+      <div>Canal</div><div style="text-align:right">Pcs</div>
+      <div style="text-align:right">Poids</div>
+      <div style="text-align:right">CA TTC</div>
+      <div style="text-align:right">vs N-1</div>
+    </div>
+    ${recapRows}
+  </div>
+
+  <div class="sec-label">Top 20 références · Shops + OMC Web</div>
+  <div class="rank-block">
+    <div class="rank-hd">
+      <span class="rank-hd-title">Onze Mètres Carrés · Top 20 produits</span>
+      <span class="rank-hd-sub">CA TTC · pcs · % du CA OMC</span>
+    </div>
+    ${top20rows}
+  </div>`;
+}
+
+function buildOMCFocus(){
+  // OMC 2026 : shops + OMC Web
+  const rows26 = [
+    {loc:'Orléans',    pcs:629, ca:22035.69},
+    {loc:'Bourges',    pcs:44,  ca:1341.49},
+    {loc:'Tours',      pcs:30,  ca:835.00},
+    {loc:'OMC Web',    pcs:null, ca:4002.00},
+  ];
+  const rows25 = [
+    {loc:'Orléans',    pcs:561, ca:20320.60},
+    {loc:'Bourges',    pcs:116, ca:4019.50},
+    {loc:'Tours',      pcs:41,  ca:1439.50},
+    {loc:'OMC Web',    pcs:null, ca:null},
+  ];
+  const total26 = rows26.reduce((s,r)=>s+r.ca,0);
+  const total25 = rows25.reduce((s,r)=>s+(r.ca||0),0);
+  const evolTotal = ((total26/total25-1)*100).toFixed(1);
+  const evolDir = parseFloat(evolTotal)>=0?'up':'down';
+  const evolSign = parseFloat(evolTotal)>=0?'+':'';
+
+  const n1map = {};
+  rows25.forEach(r=>{ n1map[r.loc]=r; });
+
+  const rowsHtml = rows26.map(r=>{
+    const pct = (r.ca/total26*100).toFixed(1);
+    const n1 = n1map[r.loc];
+    const evolCa = n1&&n1.ca ? ((r.ca/n1.ca-1)*100).toFixed(1) : null;
+    const eDir = evolCa!==null?(parseFloat(evolCa)>=0?'up':'dn'):'';
+    const eStr = evolCa!==null?((parseFloat(evolCa)>=0?'+':'')+evolCa+'%'):'N/D';
+    return `<div class="omc-row">
+      <div class="omc-loc">${r.loc}</div>
+      <div class="omc-pcs">${r.pcs!=null?r.pcs+' pcs':'—'}</div>
+      <div class="omc-pct-badge">${pct}%</div>
+      <div class="omc-ca">${fmtEur(r.ca)}</div>
+      <div class="omc-evol ${eDir}">${eStr}</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="omc-block">
+    <div class="omc-header">
+      <div>
+        <div class="omc-title">Onze Mètres Carrés · Juillet 2026</div>
+        <div class="omc-sub">Shops + OMC Web</div>
+      </div>
+      <div class="omc-total-wrap">
+        <div class="omc-total-label">Total</div>
+        <div class="omc-total-val">${fmtEur(total26)}</div>
+        <span class="evol-badge ${evolDir}">${evolSign}${evolTotal}%</span>
+      </div>
+    </div>
+    <div class="omc-col-hd">
+      <div></div><div style="text-align:right">Pcs</div>
+      <div style="text-align:right">Poids</div>
+      <div style="text-align:right">CA TTC</div>
+      <div style="text-align:right">vs N-1</div>
+    </div>
+    ${rowsHtml}
+  </div>`;
+}
+
+function buildHoursSection(){
+  const HOURS = {
+    orleans: [
+      { name:'Guillaume', h:177.0 },
+      { name:'Tiphaine',  h:162.5 },
+      { name:'Raouf',     h:191.5 },
+      { name:'Nino',      h:171.0 },
+      { name:'Tom',       h:77.0 },
+      { name:'Allan',     h:33.0 },
+      { name:'Laurent',   h:170.0 },
+    ],
+    tours: [
+      { name:'Donatien',            h:176.0 },
+      { name:'Pierre', note:'stagiaire', h:168.0 },
+    ],
+    bourges: [
+      { name:'Héloïse', h:161.5 },
+      { name:'Jérémy',  h:66.5 },
+    ],
+    comms: [
+      { name:'Mathias', note:'communication', h:null },
+    ],
+  };
+
+  const totalOrl = HOURS.orleans.reduce((s,p)=>s+(p.h||0),0);
+  const totalTou = HOURS.tours.reduce((s,p)=>s+(p.h||0),0);
+  const totalBou = HOURS.bourges.reduce((s,p)=>s+(p.h||0),0);
+
+  const block = (title, people, total) => {
+    const rows = people.map(p => `<div class="hours-person-row">
+      <div class="hours-name">${p.name}${p.note?`<small>(${p.note})</small>`:''}</div>
+      <div class="hours-val">${p.h != null ? p.h+'h' : '—'}</div>
+    </div>`).join('');
+    const tot = total ? `<div class="hours-total-row"><div class="hours-total-label">Total</div><div class="hours-total-val">${total.toFixed(0)}h</div></div>` : '';
+    return `<div class="hours-shop-block">
+      <div class="hours-shop-title">${title}</div>
+      ${rows}${tot}
+    </div>`;
+  };
+
+  return `<div class="hours-grid">
+    ${block('Renouveau Orléans', HOURS.orleans, totalOrl)}
+    <div>
+      ${block('Renouveau Tours', HOURS.tours, totalTou)}
+      <div style="height:16px"></div>
+      ${block('Renouveau Bourges', HOURS.bourges, totalBou)}
+    </div>
+    ${block('Communication', HOURS.comms, null)}
+  </div>`;
+}
+
+function buildTotalHist(){
+  const tabs=['ca','mg'];
+  const labels=['CA TTC','Marge HT'];
+  const active=['active',''];
+
+  const mkTabBtns = tabs.map((t,i)=>
+    `<button class="htab${i===0?' active':''}" onclick="showHist('total','${t}',this)">${labels[i]}</button>`
+  ).join('');
+
+  const mkCa = ()=>{
+    let rows='';
+    TOTAL.hist.ca.forEach((r,i)=>{
+      const cls=i===0?'y26':'';
+      const evolHtml = r.evol==='—'
+        ? `<td class="em">—</td>`
+        : (()=>{
+            const dir = TOTAL.hist.ca[0].cum >= TOTAL.hist.ca[1]?.cum ? 'p':'n';
+            return `<td class="${dir==='p'?'ep':'en'}">${r.evol}</td>`;
+          })();
+      rows+=`<tr class="${cls}"><td>${r.yr}</td><td>${fmt(r.j)} €</td><td>${fmt(r.f)} €</td><td>${fmt(r.m)} €</td><td>${fmt(r.a)} €</td><td>${fmt(r.cum)} €</td>${evolHtml}</tr>`;
+    });
+    return `<table class="htable"><thead><tr><th>Année</th><th>Avril</th><th>Mai</th><th>Juin</th><th>Juillet</th><th>Cum. 4M</th><th>Évol. cum.</th></tr></thead><tbody>${rows}</tbody></table>`;
+  };
+
+  const mkMg = ()=>{
+    let rows='';
+    TOTAL.hist.mg.forEach((r,i)=>{
+      const cls=i===0?'y26':'';
+      rows+=`<tr class="${cls}"><td>${r.yr}</td><td>${fmt(r.j)} €</td><td>${fmt(r.f)} €</td><td>${fmt(r.m)} €</td><td>${fmt(r.a)} €</td><td>${fmt(r.cum)} €</td><td>${r.tx}</td></tr>`;
+    });
+    return `<table class="htable"><thead><tr><th>Année</th><th>Avril</th><th>Mai</th><th>Juin</th><th>Juillet</th><th>Cum. 4M</th><th>Taux marge</th></tr></thead><tbody>${rows}</tbody></table>`;
+  };
+
+  return `<div class="hist-block">
+    <div class="hist-top">
+      <span class="hist-title">Évolution des indicateurs</span>
+      <div class="htabs">${mkTabBtns}</div>
+    </div>
+    <div class="hist-content active" id="total-ca">${mkCa()}</div>
+    <div class="hist-content" id="total-mg">${mkMg()}</div>
+  </div>`;
+}
+
+/* ════════════════════════════
+   BUILD SHOP PANEL
+════════════════════════════ */
+function buildShop(id){
+  const d = D[id];
+  let html='';
+
+  // Header
+  html+=`<div class="shop-hd">
+    <div>
+      <div class="shop-title">${d.name} <span>${d.accent}</span></div>
+      <div class="shop-date">Juillet 2026 · 01 → 30</div>
+    </div>
+  </div>`;
+
+  // Web notice
+  if(d.isWeb) html+=`<div class="web-notice">↗ ${d.webNote}</div>`;
+
+  // Alerts
+  html+=`<div class="alerts">`;
+  d.alerts.forEach(a=>{ html+=`<div class="alert ${a.t}">${a.msg}</div>`; });
+  html+=`</div>`;
+
+  // Big 3 + Objectif : CA / Objectif / Taux marge / Marge brute
+  html+=`<div class="sec-label">Indicateurs clés</div>
+  <div class="kpi-big">`;
+
+  // Build objective card HTML if applicable
+  const caKpi = d.big.find(k=>k.obj);
+  let objCardHtml = '';
+  if(caKpi){
+    const realVal = parseFloat(caKpi.val.replace(/[^\d]/g,''));
+    const objVal  = parseFloat(caKpi.obj.replace(/[^\d]/g,''));
+    const diff    = realVal - objVal;
+    const pct     = ((realVal/objVal-1)*100).toFixed(1);
+    const cls     = caKpi.objdir==='up' ? 'up' : 'down';
+    const sign    = diff >= 0 ? '+' : '';
+    objCardHtml = `<div class="kpi-card-big ${cls}">
+      <div class="kpi-big-label">Objectif mensuel</div>
+      <div class="kpi-big-val">${caKpi.obj.replace('Obj. : ','')}</div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${cls}">${sign}${pct}%</span>
+        <span class="kpi-big-n1-val">Écart : ${sign}${diff.toLocaleString('fr-FR')} €</span>
+      </div>
+    </div>`;
+  }
+
+  d.big.forEach((k, idx)=>{
+    const dir = k.dir==='up'?'up': k.dir==='down'?'down':'neu';
+    html+=`<div class="kpi-card-big ${dir}">
+      <div class="kpi-big-label">${k.label}</div>
+      <div class="kpi-big-val">${k.val}</div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${dir}">${k.evol}</span>
+        <span class="kpi-big-n1-val">${k.n1}</span>
+      </div>
+    </div>`;
+    // Insert objective card right after CA (index 0)
+    if(idx === 0 && objCardHtml) html += objCardHtml;
+  });
+  html+=`</div>`;
+
+  // Small row
+  html+=`<div class="kpi-row">`;
+  d.small.forEach(k=>{
+    const dir = k.dir==='up'?'up': k.dir==='down'?'down':'neu';
+    html+=`<div class="kpi-card-sm ${dir}">
+      <div class="kpi-sm-label">${k.label}</div>
+      <div class="kpi-sm-val">${k.val}</div>
+      <div class="kpi-sm-n1">
+        <span class="evol-badge ${dir}">${k.evol}</span>
+        <span class="kpi-sm-n1-val">${k.n1}</span>
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
+
+  // Top 5 (POS only)
+  if(!d.isWeb){
+    html+=`<div class="sec-label">Top 5 — Juillet 2026 vs N-1</div>
+    <div class="two-col">
+      ${buildRank(id+'-br', 'Marques', d.brands26, d.brands25)}
+      ${buildRank(id+'-ca', 'Catégories', d.cats26, d.cats25)}
+    </div>`;
+  }
+
+  // Gift cards
+  html+=buildGC(id, d.gc);
+
+  // History
+  html+=buildHistory(id, d.hist, d.isWeb);
+
+  return html;
+}
+
+function buildRank(cid, title, items26, items25){
+  const max = items26[0].ca;
+  const n1map = {};
+  if(items25) items25.forEach(x=>{ n1map[x.n]=x; });
+
+  let rows = items26.map((item,i)=>{
+    const barPct = (item.ca/max*100).toFixed(1);
+    const n1 = n1map[item.n];
+    const evolCa = n1 ? ((item.ca/n1.ca-1)*100).toFixed(1) : null;
+    const evolDir = evolCa!==null ? (parseFloat(evolCa)>=0?'up':'dn') : '';
+    const evolStr = evolCa!==null ? (parseFloat(evolCa)>=0?'+':'')+evolCa+'%' : '—';
+    // Weight % badge (only if pct field defined on item)
+    const weightBadge = item.pct != null
+      ? `<span style="font-family:'Unbounded',sans-serif;font-size:8px;font-weight:600;letter-spacing:0.05em;background:var(--off);border:1px solid var(--border);padding:2px 6px;margin-left:6px;color:var(--muted)">${item.pct}% du CA</span>`
+      : '';
+    const n1Row = n1
+      ? (() => {
+          if(n1.ca === 0) return `<div class="rank-n1-row">
+           <div></div>
+           <div class="rank-n1-label" style="color:var(--up-txt);font-style:normal;font-weight:500">↗ Nouvelle entrée · absent N-1</div>
+           <div></div><div></div>
+         </div>`;
+          const evolCa2 = ((item.ca/n1.ca-1)*100).toFixed(1);
+          const eDir2 = parseFloat(evolCa2)>=0?'up':'dn';
+          const eStr2 = (parseFloat(evolCa2)>=0?'+':'')+evolCa2+'%';
+          return `<div class="rank-n1-row">
+           <div></div>
+           <div class="rank-n1-label">N-1 · ${n1.n}${n1.pct!=null?` <span style="font-size:9px;color:var(--muted)">${n1.pct}%</span>`:''}</div>
+           <div class="rank-n1-pcs">${n1.pcs} pcs</div>
+           <div class="rank-n1-ca"><span style="font-size:11px;font-weight:300;color:var(--muted)">${fmtK(n1.ca)} €</span> <span class="rank-n1-evol ${eDir2}">${eStr2}</span></div>
+         </div>`;
+        })()
+      : '';
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div>
+        <div class="rank-name">${item.n}${weightBadge}</div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${barPct}" style="width:0"></div></div>
+      </div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1Row}`;
+  }).join('');
+
+  return `<div class="rank-block">
+    <div class="rank-hd">
+      <span class="rank-hd-title">${title}</span>
+      <span class="rank-hd-sub">CA TTC · pcs</span>
+    </div>
+    ${rows}
+  </div>`;
+}
+
+function buildGC(id, gc){
+  let html = `<div class="sec-label">Cartes cadeaux</div><div class="gc-grid">`;
+  if(gc.vendues>0){
+    html+=`<div class="gc-card">
+      <div class="gc-label">Cartes vendues</div>
+      <div class="gc-val">${gc.vendues}</div>
+      <div class="gc-note">Montant émis : ${fmtK(gc.emis)} €</div>
+    </div>`;
+  } else {
+    html+=`<div class="gc-card">
+      <div class="gc-label">Cartes vendues</div>
+      <div class="gc-val" style="color:var(--muted);font-size:18px">Aucune</div>
+      <div class="gc-note">Pas d'émission ce mois</div>
+    </div>`;
+  }
+  html+=`<div class="gc-card">
+    <div class="gc-label">Montant vendu</div>
+    <div class="gc-val">${fmtK(gc.depenses)} €</div>
+    <div class="gc-note">${gc.note}</div>
+  </div>`;
+  html+=`</div>`;
+  return html;
+}
+
+function buildHistory(id, hist, isWeb){
+  const avail = Object.keys(hist);
+  const LABELS = {ca:'CA TTC', cmd:'Commandes', idv:'IDV', pm:'Panier moy.', mg:'Marge HT'};
+
+  const tabBtns = avail.map((k,i)=>
+    `<button class="htab${i===0?' active':''}" onclick="showHist('${id}','${k}',this)">${LABELS[k]||k}</button>`
+  ).join('');
+
+  let contents='';
+  avail.forEach((key,i)=>{
+    const rows = hist[key];
+    const isMg = key==='mg';
+    const isCaOrCmd = (key==='ca'||key==='cmd');
+    const hasCum = isCaOrCmd||isMg;
+
+    let thead=`<thead><tr><th>Année</th><th>Avril</th><th>Mai</th><th>Juin</th><th>Juillet</th>`;
+    if(hasCum) thead+=`<th>Cum. 4M</th>`;
+    if(isMg) thead+=`<th>Taux marge</th>`;
+    else thead+=`<th>Évol. vs N-1</th>`;
+    thead+=`</tr></thead>`;
+
+    let tbody='<tbody>';
+    rows.forEach((r,ri)=>{
+      const cls=ri===0?'y26':'';
+      const isCurr = key==='ca'||isMg;
+
+      const fmtV=(v)=>{
+        if(v===null||v===undefined||v==='—') return `<td class="em">—</td>`;
+        if(isCurr||isMg) return `<td>${typeof v==='number'?fmt(v)+' €':v}</td>`;
+        if(key==='pm') return `<td>${v} €</td>`;
+        return `<td>${typeof v==='number'?fmt(v):v}</td>`;
+      };
+
+      tbody+=`<tr class="${cls}"><td>${r.yr}</td>${fmtV(r.j)}${fmtV(r.f)}${fmtV(r.m)}${fmtV(r.a)}`;
+      if(hasCum) tbody+=fmtV(r.cum);
+      if(isMg) tbody+=`<td>${r.tx||'—'}</td>`;
+      else {
+        if(!r.evol||r.evol==='—') tbody+=`<td class="em">—</td>`;
+        else tbody+=`<td class="${r.dir==='p'?'ep':'en'}">${r.evol}</td>`;
+      }
+      tbody+=`</tr>`;
+    });
+    tbody+='</tbody>';
+
+    contents+=`<div class="hist-content${i===0?' active':''}" id="${id}-${key}">
+      <table class="htable">${thead}${tbody}</table>
+    </div>`;
+  });
+
+  return `<div class="sec-label">Historique mensuel</div>
+  <div class="hist-block">
+    <div class="hist-top">
+      <span class="hist-title">Évolution des indicateurs</span>
+      <div class="htabs">${tabBtns}</div>
+    </div>
+    ${contents}
+  </div>`;
+}
+
+/* ════════════════════════════
+   UTILS
+════════════════════════════ */
+function fmt(n){
+  if(typeof n!=='number') return String(n);
+  return Math.abs(n)<1 && n!==0
+    ? n.toFixed(2)
+    : n.toLocaleString('fr-FR',{maximumFractionDigits:0});
+}
+function fmtK(n){
+  if(typeof n!=='number') return String(n);
+  return n.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+function fmtEur(n){
+  return fmtK(n)+' €';
+}
+
+// Auto-déverrouillage si chargé depuis le hub (#code=XXXX)
+function __autoUnlock(){
+  var h = window.location.hash || '';
+  var m = h.match(/code=(\d{4})/);
+  if(m && typeof CODES !== 'undefined' && CODES[m[1]]){
+    pin = m[1];
+    checkPin();
+  }
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', __autoUnlock);
+} else {
+  __autoUnlock();
+}
+
+</script>
+</body>
+</html>
