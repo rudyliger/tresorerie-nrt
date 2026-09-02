@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapport Semaine S32 — 03→08 Août 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white: #ffffff;
+  --off:   #f7f6f3;
+  --light: #eeece8;
+  --border:#d8d5ce;
+  --muted: #9a9690;
+  --mid:   #6b6760;
+  --ink:   #1a1917;
+  --blue:  #1a3a8f;
+
+  --up-bg:   #eef6f0; --up-bord: #b6dcc2; --up-txt: #1a5c35;
+  --dn-bg:   #fdf0ef; --dn-bord: #f2c0bb; --dn-txt: #9b2318;
+  --neu-bg:  #f2f2f2; --neu-bord:#d0d0d0; --neu-txt:#555;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { background: var(--off); font-family: 'Inter', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+button { cursor: pointer; font-family: inherit; }
+
+/* ══ LOGIN ══ */
+#login {
+  min-height: 100svh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; background: var(--white);
+}
+.login-wrap { width: 100%; max-width: 320px; text-align: center; padding: 40px 24px; }
+.login-logo {
+  font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400;
+  letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px;
+}
+.login-week {
+  font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.05em; color: var(--blue); margin-bottom: 6px;
+}
+.login-period { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 48px; }
+.pin-dots { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
+.pin-dot {
+  width: 46px; height: 46px; border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 500; color: var(--ink); background: var(--white);
+  transition: all .15s;
+}
+.pin-dot.filled { border-color: var(--ink); background: var(--ink); color: var(--white); }
+.pin-dot.error  { border-color: var(--dn-txt); background: var(--dn-bg); color: var(--dn-txt); animation: shake .3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+.numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 220px; margin: 0 auto 14px; }
+.num-btn {
+  height: 50px; border: 1.5px solid var(--border); background: var(--white);
+  color: var(--ink); font-size: 17px; font-weight: 400;
+  display: flex; align-items: center; justify-content: center; transition: all .12s;
+}
+.num-btn:hover { background: var(--off); border-color: var(--ink); }
+.num-btn:active { background: var(--ink); color: var(--white); }
+.num-btn.del { font-size: 12px; color: var(--muted); }
+.num-btn.zero { grid-column: 2; }
+.login-err { font-size: 11px; color: var(--dn-txt); letter-spacing: 0.05em; height: 18px; font-weight: 500; }
+
+/* ══ APP ══ */
+#app { display: none; }
+
+/* TOPBAR */
+.topbar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0 40px; display: flex; align-items: center; justify-content: space-between;
+  height: 52px; position: sticky; top: 0; z-index: 100;
+}
+.topbar-brand { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.3em; text-transform: uppercase; }
+.topbar-week { font-family: 'Unbounded', sans-serif; font-size: 10px; font-weight: 600; color: var(--blue); letter-spacing: 0.1em; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.access-pill { font-size: 10px; padding: 3px 10px; border: 1px solid var(--border); color: var(--mid); background: var(--off); }
+.logout-btn { font-size: 11px; padding: 4px 12px; border: 1px solid var(--border); background: var(--white); color: var(--mid); transition: all .12s; }
+.logout-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* TABS */
+.tabs-strip {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0 40px; display: flex; overflow-x: auto;
+}
+.tab-btn {
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+  padding: 13px 20px; background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--muted); white-space: nowrap; transition: all .15s;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* MAIN */
+.main { padding: 36px 40px; max-width: 1280px; margin: 0 auto; }
+
+/* PANEL */
+.shop-panel { display: none; }
+.shop-panel.active { display: block; animation: fadeUp .2s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* SHOP HEADER */
+.shop-hd {
+  margin-bottom: 28px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.shop-title { font-family: 'Unbounded', sans-serif; font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+.shop-title span { color: var(--blue); }
+.shop-date { font-size: 12px; color: var(--muted); font-weight: 300; margin-top: 4px; }
+
+/* SECTION LABEL */
+.sec-label {
+  font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400;
+  letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 12px; margin-top: 32px;
+}
+.sec-label:first-of-type { margin-top: 0; }
+
+/* KPI BIG */
+.kpi-big { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
+.kpi-card-big { padding: 22px 20px; border: 1.5px solid var(--border); background: var(--white); }
+.kpi-card-big.up   { background: var(--up-bg); border-color: var(--up-bord); }
+.kpi-card-big.down { background: var(--dn-bg); border-color: var(--dn-bord); }
+.kpi-big-label { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.kpi-big-val { font-family: 'Unbounded', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
+.kpi-card-big.up   .kpi-big-val { color: var(--up-txt); }
+.kpi-card-big.down .kpi-big-val { color: var(--dn-txt); }
+.kpi-big-n1 { margin-top: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.kpi-big-n1-val { font-size: 11px; color: var(--muted); font-weight: 300; }
+.evol-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; }
+.evol-badge.up   { background: var(--up-bg); color: var(--up-txt); border: 1px solid var(--up-bord); }
+.evol-badge.down { background: var(--dn-bg); color: var(--dn-txt); border: 1px solid var(--dn-bord); }
+.evol-badge.neu  { background: var(--neu-bg); color: var(--neu-txt); border: 1px solid var(--neu-bord); }
+
+/* KPI SMALL */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 8px; }
+.kpi-card-sm { padding: 14px 16px 12px; border: 1px solid var(--border); background: var(--white); }
+.kpi-card-sm.up   { background: var(--up-bg); border-color: var(--up-bord); }
+.kpi-card-sm.down { background: var(--dn-bg); border-color: var(--dn-bord); }
+.kpi-sm-label { font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.kpi-sm-val { font-family: 'Unbounded', sans-serif; font-size: 17px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+.kpi-card-sm.up   .kpi-sm-val { color: var(--up-txt); }
+.kpi-card-sm.down .kpi-sm-val { color: var(--dn-txt); }
+.kpi-sm-n1 { margin-top: 6px; display: flex; align-items: center; gap: 5px; }
+.kpi-sm-n1-val { font-size: 10px; color: var(--muted); font-weight: 300; }
+
+/* COMPARISON TABLE */
+.cmp-table { border: 1px solid var(--border); background: var(--white); overflow: hidden; overflow-x: auto; margin-bottom: 14px; }
+.tbl-row {
+  display: grid;
+  grid-template-columns: 120px 110px 90px 72px 110px 80px 60px 70px 90px 60px 80px;
+  border-bottom: 1px solid var(--light);
+  min-width: 944px;
+}
+.tbl-row:last-child { border-bottom: none; }
+.tbl-row:hover:not(.tbl-head):not(.tbl-row-total) { background: var(--off); }
+.tbl-head {
+  background: var(--ink); border-bottom: none;
+}
+.tbl-head .tbl-cell {
+  font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6); padding: 10px 12px;
+}
+.tbl-head .tbl-name { color: rgba(255,255,255,0.4); }
+.tbl-cell { padding: 12px 12px; display: flex; flex-direction: column; justify-content: center; }
+.tbl-name { border-right: 1px solid var(--light); }
+.tbl-num  { text-align: right; align-items: flex-end; }
+.tbl-main { font-size: 13px; font-weight: 500; color: var(--ink); }
+.tbl-sub  { font-size: 10px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+.tbl-shop-name { font-size: 13px; font-weight: 500; }
+.tbl-pct-badge {
+  font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 600;
+  background: var(--off); border: 1px solid var(--border);
+  padding: 2px 5px; margin-top: 4px; color: var(--muted); align-self: flex-start;
+}
+.tbl-row-total {
+  background: var(--off);
+  border-top: 2px solid var(--border);
+}
+.tbl-row-total .tbl-main { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 600; }
+.tbl-row-total .tbl-shop-name { font-family: 'Unbounded', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; }
+.tbl-row-web { background: #f8f7ff; }
+.tbl-row-web .tbl-shop-name { color: var(--blue); }
+
+@media(max-width:680px){
+  .cmp-table { font-size: 11px; }
+  .tbl-row { grid-template-columns: 90px 90px 60px 90px 65px 50px 55px 70px 50px 65px; min-width: 680px; }
+  .tbl-cell { padding: 9px 8px; }
+  .tbl-main { font-size: 11px; }
+}
+.daily-chart-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; margin-bottom: 0; }
+.daily-chart-hd { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.daily-chart-title { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+.daily-legend { display: flex; gap: 14px; }
+.daily-legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+.legend-dot.cur { background: var(--ink); }
+.legend-dot.n1  { background: var(--border); }
+.daily-chart-area { padding: 20px 18px 16px; }
+.day-bars { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: end; height: 130px; }
+.day-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; height: 100%; }
+.day-bar-group { width: 100%; display: flex; gap: 3px; align-items: flex-end; justify-content: center; }
+.bar { border-radius: 1px 1px 0 0; transition: opacity .2s; width: 12px; }
+.bar.cur { background: var(--ink); }
+.bar.n1  { background: var(--light); }
+.day-label { font-size: 9px; color: var(--muted); font-weight: 400; text-align: center; }
+.day-val   { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 600; color: var(--ink); text-align: center; white-space: nowrap; }
+
+/* TOP RANKS */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.rank-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; }
+.rank-hd { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--off); }
+.rank-hd-title { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; }
+.rank-hd-sub   { font-size: 10px; color: var(--muted); font-weight: 300; }
+.rank-row {
+  display: grid; grid-template-columns: 26px 1fr 48px 76px;
+  padding: 10px 16px; border-bottom: 1px solid var(--light); align-items: center; gap: 8px;
+}
+.rank-row:last-child { border-bottom: none; }
+.rank-row:hover { background: var(--off); }
+.rank-num { font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 300; color: var(--muted); text-align: center; }
+.rank-num.n1 { font-weight: 600; color: var(--ink); }
+.rank-name { font-size: 12px; font-weight: 400; }
+.rank-bar-bg { height: 2px; background: var(--light); margin-top: 5px; overflow: hidden; }
+.rank-bar-fill { height: 100%; background: var(--ink); transition: width .6s ease; }
+.rank-pcs { font-size: 10px; color: var(--muted); text-align: right; font-weight: 300; }
+.rank-ca  { font-size: 12px; font-weight: 500; text-align: right; }
+.rank-n1-row {
+  display: grid; grid-template-columns: 26px 1fr 48px 76px;
+  padding: 4px 16px 8px; border-bottom: 1px solid var(--light); gap: 8px;
+}
+.rank-n1-row:last-child { border-bottom: none; }
+.rank-n1-label { font-size: 9px; color: var(--muted); font-weight: 300; font-style: italic; }
+.rank-n1-pcs   { font-size: 9px; color: var(--muted); text-align: right; }
+.rank-n1-ca    { font-size: 10px; color: var(--muted); text-align: right; font-weight: 300; }
+.rank-n1-evol  { font-size: 10px; font-weight: 600; margin-left: 4px; }
+.rank-n1-evol.up { color: var(--up-txt); }
+.rank-n1-evol.dn { color: var(--dn-txt); }
+
+/* TOTAL SHOP ROWS */
+.total-block { border: 1px solid var(--border); background: var(--white); overflow: hidden; margin-bottom: 14px; }
+.total-hd { padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--off); font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+.total-shop-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--light); }
+.total-shop-row:last-child { border-bottom: none; }
+.total-shop-name { font-size: 13px; font-weight: 500; }
+.total-shop-meta { font-size: 11px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+.total-shop-right { text-align: right; }
+.total-shop-ca { font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 600; }
+.total-shop-evol { font-size: 11px; font-weight: 600; margin-top: 3px; }
+.total-shop-evol.up { color: var(--up-txt); }
+.total-shop-evol.dn { color: var(--dn-txt); }
+
+/* FOOTER */
+.footer { border-top: 1px solid var(--border); background: var(--white); padding: 14px 40px; display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-weight: 300; }
+
+/* RESPONSIVE */
+@media(max-width:860px){ .two-col{grid-template-columns:1fr;} }
+@media(max-width:680px){
+  .topbar { padding: 0 16px; height: 46px; }
+  .topbar-week { font-size: 9px; }
+  .access-pill { display: none; }
+  .tabs-strip { padding: 0 8px; }
+  .tab-btn { font-size: 11px; padding: 11px 12px; }
+  .main { padding: 20px 16px; }
+  .shop-hd { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 20px; }
+  .shop-title { font-size: 19px; }
+  .kpi-big { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi-card-big { padding: 14px 12px; }
+  .kpi-big-val { font-size: 20px; }
+  .kpi-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .two-col { gap: 12px; }
+  .day-bars { height: 90px; }
+  .bar { width: 9px; }
+  .footer { padding: 12px 16px; flex-direction: column; gap: 4px; font-size: 10px; }
+}
+
+/* KPI grids by count */
+.kpi-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* N-1 value text */
+.kpi-n1-val { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+/* STOCK BAR */
+.stock-bar {
+  border: 1px solid var(--border); background: var(--off);
+  padding: 14px 20px; display: flex; align-items: center; gap: 20px;
+}
+.stock-label {
+  font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
+  white-space: nowrap;
+}
+.stock-val {
+  font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 600; color: var(--ink);
+}
+.stock-note { font-size: 11px; color: var(--muted); font-weight: 300; }
+
+/* DAY CA + IDV labels */
+.day-evol { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 700; text-align: center; }
+.day-ca   { font-family: 'Unbounded', sans-serif; font-size: 8px; font-weight: 600; color: var(--ink); text-align: center; white-space: nowrap; }
+.day-idv  { font-size: 8px; color: var(--mid); text-align: center; white-space: nowrap; }
+
+/* Weight badge */
+.wgt-badge {
+  font-family: 'Unbounded', sans-serif; font-size: 7px; font-weight: 600;
+  background: var(--off); border: 1px solid var(--border);
+  padding: 2px 5px; margin-left: 5px; color: var(--muted);
+}
+
+/* TOTAL stock line */
+.total-shop-stock { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.total-shop-stock strong { color: var(--ink); }
+
+/* DAILY chart height — taller to fit IDV */
+.day-bars { height: 155px !important; }
+
+@media(max-width:680px){
+  .kpi-3, .kpi-4 { grid-template-columns: 1fr 1fr !important; }
+  .day-bars { height: 120px !important; }
+}
+
+
+/* Brand per-shop pills */
+.brand-shops { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+.bs-pill {
+  font-size:9px; font-weight:500; padding:2px 7px;
+  border-radius:2px; white-space:nowrap;
+}
+.bs-orl { background:#e8f0fe; color:#1a3a8f; border:1px solid #c5d4f5; }
+.bs-bou { background:#fef3e2; color:#7a4500; border:1px solid #f5d9a0; }
+.bs-tou { background:#e9f5e9; color:#1a5c35; border:1px solid #b6dcc2; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-wrap">
+    <div class="login-logo">Renouveau</div>
+    <div class="login-week">Semaine 32</div>
+    <div class="login-period">03 → 08 Août 2026</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="numpad">
+      <button class="num-btn" onclick="digit(1)">1</button>
+      <button class="num-btn" onclick="digit(2)">2</button>
+      <button class="num-btn" onclick="digit(3)">3</button>
+      <button class="num-btn" onclick="digit(4)">4</button>
+      <button class="num-btn" onclick="digit(5)">5</button>
+      <button class="num-btn" onclick="digit(6)">6</button>
+      <button class="num-btn" onclick="digit(7)">7</button>
+      <button class="num-btn" onclick="digit(8)">8</button>
+      <button class="num-btn" onclick="digit(9)">9</button>
+      <button class="num-btn del" onclick="del()">⌫</button>
+      <button class="num-btn zero" onclick="digit(0)">0</button>
+    </div>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-brand">Renouveau</div>
+    <div class="topbar-week">S32 · 03→08 Août 2026</div>
+    <div class="topbar-right">
+      <div class="access-pill" id="access-lbl"></div>
+      <button class="logout-btn" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="tabs-strip" id="tabs"></div>
+  <div class="main" id="main-panel"></div>
+  <div class="footer">
+    <span>Renouveau · NRT Associés SAS</span>
+    <span>Semaine 32 · 03→08 Août 2026</span>
+  </div>
+</div>
+
+<script>
+const ACCESS = {
+  '4501': { label:'Orléans', shops:['orleans'] },
+  '9937': { label:'Tours',   shops:['tours'] },
+  '1827': { label:'Bourges', shops:['bourges'] },
+  '2201': { label:'Accès complet', shops:['total','orleans','bourges','tours'] },
+};
+const SHOP_NAMES = { total:'Total', orleans:'Orléans', bourges:'Bourges', tours:'Tours' };
+const DAYS_LABELS = ['Lun','Mar','Mer','Jeu','Ven','Sam'];
+
+const CATS_N1_OK = true;
+
+const OBJ = { orleans:15500, bourges:2900, tours:3250 };
+
+const STOCK = {
+  orleans: { units:14459, val:404039, units_n1:16037, val_n1:478749 },
+  bourges: { units:3549, val:105095, units_n1:3844, val_n1:118650 },
+  tours: { units:1586, val:54560, units_n1:2059, val_n1:76545 },
+};
+
+const D = {
+  orleans: {
+    name:'Renouveau', accent:'Orléans',
+    ca:16076.97, ca_n1:16583.21,
+    profit:5276.77, profit_n1:4892.08,
+    margin_pct:39.4, margin_n1_pct:35.4,
+    orders:223, orders_n1:228,
+    pcs:404, pcs_n1:373,
+    idv:1.81, idv_n1:1.64,
+    panier:72.09, panier_n1:72.73,
+    daily_ca:     [997.87, 3839.96, 3020.7, 2782.54, 1658.8, 3777.1],
+    daily_ca_n1:  [898.35, 2147.0, 2869.58, 2390.98, 3206.6, 5070.7],
+    daily_idv:    [1.73, 2.25, 1.76, 1.51, 1.65, 1.76],
+    daily_idv_n1: [1.33, 1.42, 1.92, 1.66, 1.69, 1.62],
+    brands:[
+      {n:'Carhartt WIP', pcs:86, ca:4786.26, pct:29.8, n1_pcs:92, n1_ca:5963.70},
+      {n:'Onze Mètres Carrés', pcs:187, ca:4656.77, pct:29.0, n1_pcs:163, n1_ca:4924.30},
+      {n:'Arte Antwerp', pcs:15, ca:966.00, pct:6.0, n1_pcs:4, n1_ca:221.50},
+      {n:'Sebago', pcs:5, ca:874.94, pct:5.4, n1_pcs:0, n1_ca:0.00},
+      {n:'Deus Ex Machina', pcs:12, ca:677.40, pct:4.2, n1_pcs:7, n1_ca:409.60},
+      {n:'Obey', pcs:10, ca:534.80, pct:3.3, n1_pcs:7, n1_ca:550.50},
+      {n:'Bobo Choses', pcs:8, ca:431.23, pct:2.7, n1_pcs:6, n1_ca:143.96},
+      {n:'By Parra', pcs:6, ca:427.00, pct:2.7, n1_pcs:2, n1_ca:68.10},
+      {n:'New Era', pcs:11, ca:292.20, pct:1.8, n1_pcs:8, n1_ca:269.00},
+      {n:'Reebok', pcs:2, ca:252.00, pct:1.6, n1_pcs:0, n1_ca:0.00},
+    ],
+    cats:[
+      {n:'T-Shirts', pcs:146, ca:4992.00, pct:34.7, n1_pcs:161, n1_ca:5685.28},
+      {n:'Shorts', pcs:25, ca:1713.26, pct:11.9, n1_pcs:9, n1_ca:591.80},
+      {n:'Pantalons', pcs:21, ca:1611.96, pct:11.2, n1_pcs:37, n1_ca:3022.80},
+      {n:'Chaussures', pcs:10, ca:1296.44, pct:9.0, n1_pcs:12, n1_ca:893.50},
+      {n:'Sweats', pcs:16, ca:972.90, pct:6.8, n1_pcs:23, n1_ca:1671.38},
+      {n:'Hauts', pcs:8, ca:608.90, pct:4.2, n1_pcs:3, n1_ca:310.40},
+      {n:'Casquettes', pcs:16, ca:490.50, pct:3.4, n1_pcs:28, n1_ca:886.30},
+      {n:'Chaussettes', pcs:45, ca:462.80, pct:3.2, n1_pcs:8, n1_ca:96.80},
+      {n:'Sacs', pcs:12, ca:455.51, pct:3.2, n1_pcs:24, n1_ca:1198.10},
+      {n:'Chemises', pcs:7, ca:357.70, pct:2.5, n1_pcs:6, n1_ca:494.10},
+    ],
+    bbrands:[
+      {n:"Onze Mètres Carrés",bb:2197,mg:56.1,bb1:1868,mg1:45.5},
+      {n:"Carhartt WIP",bb:1397,mg:35.0,bb1:1939,mg1:39.0},
+      {n:"Arte Antwerp",bb:311,mg:38.6,bb1:79,mg1:42.6},
+      {n:"Sebago",bb:266,mg:36.4,bb1:0,mg1:0.0},
+      {n:"Deus Ex Machina",bb:224,mg:39.6,bb1:115,mg1:33.8},
+      {n:"Bobo Choses",bb:189,mg:49.5,bb1:26,mg1:21.8},
+      {n:"By Parra",bb:167,mg:46.8,bb1:32,mg1:56.7},
+      {n:"Obey",bb:92,mg:20.6,bb1:151,mg1:33.0},
+      {n:"New Era",bb:91,mg:37.3,bb1:91,mg1:40.6},
+      {n:"Reebok",bb:64,mg:30.5,bb1:0,mg1:0.0},
+    ],
+    bbtotal:{n:'TOTAL boutique',bb:5277,mg:39.2,bb1:4892,mg1:35.4},
+  },
+
+  bourges: {
+    name:'Renouveau', accent:'Bourges',
+    ca:3909.00, ca_n1:2391.50,
+    profit:1237.32, profit_n1:944.82,
+    margin_pct:38.0, margin_n1_pct:47.4,
+    orders:54, orders_n1:27,
+    pcs:84, pcs_n1:46,
+    idv:1.56, idv_n1:1.70,
+    panier:72.39, panier_n1:88.57,
+    daily_ca:     [0, 835.3, 1163.2, 601.5, 465.1, 843.9],
+    daily_ca_n1:  [0, 476.9, 65.3, 207.0, 683.9, 958.4],
+    daily_idv:    [0, 1.0, 2.17, 1.89, 1.43, 1.42],
+    daily_idv_n1: [0, 1.57, 2.0, 1.5, 2.8, 1.27],
+    brands:[
+      {n:'Carhartt WIP', pcs:28, ca:1484.60, pct:38.0, n1_pcs:20, n1_ca:1331.10},
+      {n:'Deus Ex Machina', pcs:8, ca:685.90, pct:17.5, n1_pcs:1, n1_ca:69.00},
+      {n:'Arte Antwerp', pcs:6, ca:364.50, pct:9.3, n1_pcs:0, n1_ca:0.00},
+      {n:'Onze Mètres Carrés', pcs:14, ca:336.00, pct:8.6, n1_pcs:13, n1_ca:444.10},
+      {n:'Obey', pcs:7, ca:304.50, pct:7.8, n1_pcs:1, n1_ca:60.00},
+      {n:'Volcom', pcs:5, ca:265.00, pct:6.8, n1_pcs:0, n1_ca:0.00},
+      {n:'RVCA', pcs:6, ca:217.00, pct:5.6, n1_pcs:1, n1_ca:28.00},
+      {n:'Edwin', pcs:4, ca:164.00, pct:4.2, n1_pcs:0, n1_ca:0.00},
+      {n:'Service Works', pcs:1, ca:60.00, pct:1.5, n1_pcs:0, n1_ca:0.00},
+      {n:'Take Care', pcs:3, ca:27.50, pct:0.7, n1_pcs:0, n1_ca:0.00},
+    ],
+    cats:[
+      {n:'T-Shirts', pcs:35, ca:1363.10, pct:37.2, n1_pcs:18, n1_ca:696.60},
+      {n:'Shorts', pcs:8, ca:612.60, pct:16.7, n1_pcs:0, n1_ca:0.00},
+      {n:'Sweats', pcs:8, ca:594.40, pct:16.2, n1_pcs:6, n1_ca:599.30},
+      {n:'Vestes', pcs:4, ca:375.00, pct:10.2, n1_pcs:0, n1_ca:0.00},
+      {n:'Pantalons', pcs:3, ca:247.40, pct:6.8, n1_pcs:3, n1_ca:271.30},
+      {n:'Chemises', pcs:4, ca:241.20, pct:6.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Chaussettes', pcs:6, ca:77.00, pct:2.1, n1_pcs:1, n1_ca:7.50},
+      {n:'Casquettes', pcs:2, ca:70.50, pct:1.9, n1_pcs:0, n1_ca:0.00},
+      {n:'Porte Clé', pcs:4, ca:35.50, pct:1.0, n1_pcs:1, n1_ca:12.00},
+      {n:'Accessoires Cosmetiques', pcs:2, ca:21.00, pct:0.6, n1_pcs:0, n1_ca:0.00},
+    ],
+    bbrands:[
+      {n:"Carhartt WIP",bb:497,mg:40.2,bb1:526,mg1:47.4},
+      {n:"Deus Ex Machina",bb:264,mg:46.1,bb1:30,mg1:51.3},
+      {n:"Onze Mètres Carrés",bb:174,mg:62.1,bb1:201,mg1:54.4},
+      {n:"Arte Antwerp",bb:84,mg:27.6,bb1:0,mg1:0.0},
+      {n:"Obey",bb:74,mg:29.1,bb1:2,mg1:4.0},
+      {n:"Edwin",bb:57,mg:41.5,bb1:0,mg1:0.0},
+      {n:"Volcom",bb:34,mg:15.3,bb1:0,mg1:0.0},
+      {n:"RVCA",bb:33,mg:17.7,bb1:16,mg1:67.9},
+      {n:"Take Care",bb:12,mg:52.2,bb1:0,mg1:0.0},
+      {n:"Service Works",bb:10,mg:20.0,bb1:0,mg1:0.0},
+    ],
+    bbtotal:{n:'TOTAL boutique',bb:1237,mg:37.9,bb1:945,mg1:47.4},
+  },
+
+  tours: {
+    name:'Renouveau', accent:'Tours',
+    ca:3348.70, ca_n1:2464.20,
+    profit:790.76, profit_n1:635.85,
+    margin_pct:28.3, margin_n1_pct:31.0,
+    orders:47, orders_n1:46,
+    pcs:68, pcs_n1:55,
+    idv:1.45, idv_n1:1.20,
+    panier:71.25, panier_n1:53.57,
+    daily_ca:     [0, 910.9, 686.6, 643.5, 189.5, 918.2],
+    daily_ca_n1:  [0, 704.7, 475.8, 486.3, 272.1, 525.3],
+    daily_idv:    [0, 1.27, 1.33, 1.88, 1.67, 1.42],
+    daily_idv_n1: [0, 1.3, 1.1, 1.12, 1.14, 1.27],
+    brands:[
+      {n:'Deus Ex Machina', pcs:10, ca:638.60, pct:19.1, n1_pcs:6, n1_ca:303.90},
+      {n:'Arte Antwerp', pcs:9, ca:481.00, pct:14.4, n1_pcs:2, n1_ca:170.00},
+      {n:'Onze Mètres Carrés', pcs:8, ca:289.00, pct:8.6, n1_pcs:19, n1_ca:690.70},
+      {n:'Obey', pcs:4, ca:250.00, pct:7.5, n1_pcs:2, n1_ca:198.00},
+      {n:'Service Works', pcs:4, ca:160.30, pct:4.8, n1_pcs:0, n1_ca:0.00},
+      {n:'Rhythm', pcs:4, ca:144.00, pct:4.3, n1_pcs:0, n1_ca:0.00},
+      {n:'RVCA', pcs:3, ca:144.00, pct:4.3, n1_pcs:0, n1_ca:0.00},
+      {n:'Wooden Store', pcs:2, ca:137.50, pct:4.1, n1_pcs:1, n1_ca:60.00},
+      {n:'Fred Perry', pcs:1, ca:120.00, pct:3.6, n1_pcs:0, n1_ca:0.00},
+      {n:'Nixon', pcs:1, ca:115.50, pct:3.4, n1_pcs:0, n1_ca:0.00},
+    ],
+    cats:[
+      {n:'T-Shirts', pcs:20, ca:948.30, pct:29.0, n1_pcs:22, n1_ca:861.20},
+      {n:'Vestes', pcs:6, ca:496.00, pct:15.2, n1_pcs:1, n1_ca:114.00},
+      {n:'Shorts', pcs:9, ca:420.30, pct:12.9, n1_pcs:0, n1_ca:-29.60},
+      {n:'Pantalons', pcs:4, ca:306.50, pct:9.4, n1_pcs:3, n1_ca:323.00},
+      {n:'Sacs', pcs:5, ca:249.50, pct:7.6, n1_pcs:5, n1_ca:138.30},
+      {n:'Sweats', pcs:3, ca:245.90, pct:7.5, n1_pcs:6, n1_ca:421.30},
+      {n:'Hauts', pcs:2, ca:137.50, pct:4.2, n1_pcs:1, n1_ca:60.00},
+      {n:'Montres', pcs:1, ca:115.50, pct:3.5, n1_pcs:0, n1_ca:0.00},
+      {n:'Maillots de Bain', pcs:2, ca:95.40, pct:2.9, n1_pcs:0, n1_ca:0.00},
+      {n:'Chaussettes', pcs:6, ca:91.00, pct:2.8, n1_pcs:3, n1_ca:30.00},
+    ],
+    bbrands:[
+      {n:"Deus Ex Machina",bb:207,mg:38.9,bb1:113,mg1:44.7},
+      {n:"Arte Antwerp",bb:163,mg:40.6,bb1:74,mg1:52.0},
+      {n:"Onze Mètres Carrés",bb:156,mg:61.2,bb1:218,mg1:38.0},
+      {n:"Obey",bb:84,mg:40.5,bb1:41,mg1:24.8},
+      {n:"Service Works",bb:40,mg:29.6,bb1:0,mg1:0.0},
+      {n:"Rhythm",bb:36,mg:30.0,bb1:0,mg1:0.0},
+      {n:"Rains",bb:22,mg:25.7,bb1:0,mg1:0.0},
+      {n:"Fred Perry",bb:20,mg:20.0,bb1:0,mg1:0.0},
+      {n:"RVCA",bb:16,mg:13.0,bb1:0,mg1:0.0},
+      {n:"Nixon",bb:14,mg:14.3,bb1:0,mg1:0.0},
+    ],
+    bbtotal:{n:'TOTAL boutique',bb:791,mg:28.2,bb1:636,mg1:31.0},
+  },
+
+};
+
+const TOTAL_BRANDS = [
+  {n:'Carhartt WIP', ca:6270.86, pcs:114, pct:26.9, n1_ca:7447.50, orl:{pcs:86,ca:4786}, bou:{pcs:28,ca:1485}, tou:{pcs:0,ca:0}},
+  {n:'Onze Mètres Carrés', ca:5281.77, pcs:209, pct:22.6, n1_ca:6059.10, orl:{pcs:187,ca:4657}, bou:{pcs:14,ca:336}, tou:{pcs:8,ca:289}},
+  {n:'Deus Ex Machina', ca:2001.90, pcs:30, pct:8.6, n1_ca:782.50, orl:{pcs:12,ca:677}, bou:{pcs:8,ca:686}, tou:{pcs:10,ca:639}},
+  {n:'Arte Antwerp', ca:1811.50, pcs:30, pct:7.8, n1_ca:391.50, orl:{pcs:15,ca:966}, bou:{pcs:6,ca:364}, tou:{pcs:9,ca:481}},
+  {n:'Obey', ca:1089.30, pcs:21, pct:4.7, n1_ca:808.50, orl:{pcs:10,ca:535}, bou:{pcs:7,ca:304}, tou:{pcs:4,ca:250}},
+  {n:'Sebago', ca:874.94, pcs:5, pct:3.7, n1_ca:0.00, orl:{pcs:5,ca:875}, bou:{pcs:0,ca:0}, tou:{pcs:0,ca:0}},
+  {n:'RVCA', ca:523.00, pcs:15, pct:2.2, n1_ca:127.50, orl:{pcs:6,ca:162}, bou:{pcs:6,ca:217}, tou:{pcs:3,ca:144}},
+  {n:'Volcom', ca:447.00, pcs:8, pct:1.9, n1_ca:0.00, orl:{pcs:3,ca:182}, bou:{pcs:5,ca:265}, tou:{pcs:0,ca:0}},
+  {n:'Bobo Choses', ca:431.23, pcs:8, pct:1.8, n1_ca:143.96, orl:{pcs:8,ca:431}, bou:{pcs:0,ca:0}, tou:{pcs:0,ca:0}},
+  {n:'By Parra', ca:427.00, pcs:6, pct:1.8, n1_ca:77.10, orl:{pcs:6,ca:427}, bou:{pcs:0,ca:0}, tou:{pcs:0,ca:0}},
+];
+
+const TOTAL_CATS_S23 = [
+  {n:'T-Shirts', ca:7303.40, pcs:201, pct:34.3, n1_ca:7243.08, n1_pcs:201},
+  {n:'Shorts', ca:2746.16, pcs:42, pct:12.9, n1_ca:562.20, n1_pcs:9},
+  {n:'Pantalons', ca:2165.86, pcs:28, pct:10.2, n1_ca:3617.10, n1_pcs:43},
+  {n:'Sweats', ca:1813.20, pcs:27, pct:8.5, n1_ca:2691.98, n1_pcs:35},
+  {n:'Chaussures', ca:1296.44, pcs:10, pct:6.1, n1_ca:971.00, n1_pcs:13},
+  {n:'Vestes', ca:1057.00, pcs:13, pct:5.0, n1_ca:1050.10, n1_pcs:10},
+  {n:'Hauts', ca:746.40, pcs:10, pct:3.5, n1_ca:370.40, n1_pcs:4},
+  {n:'Sacs', ca:705.01, pcs:17, pct:3.3, n1_ca:1674.20, n1_pcs:33},
+  {n:'Casquettes', ca:651.10, pcs:21, pct:3.1, n1_ca:1058.80, n1_pcs:34},
+  {n:'Chemises', ca:650.90, pcs:12, pct:3.1, n1_ca:739.10, n1_pcs:10},
+];
+
+function fmtK(n){ return typeof n==='number'?n.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0}):String(n); }
+function fmtEur(n){ return fmtK(n)+' €'; }
+function eDir(v){ return v>=0?'up':'down'; }
+function ePct(cur,ref){ return ref?((cur/ref-1)*100):null; }
+function badge(pct){
+  if(pct===null) return '';
+  const d=eDir(pct), s=pct>=0?'+':'';
+  return `<span class="evol-badge ${d}">${s}${pct.toFixed(1)}%</span>`;
+}
+function n1v(val){ const s=String(val); if(s==='0'||s==='0 €'||s==='0.00'||s==='0.00 €') return `<span class="kpi-n1-val">N-1 : n/d</span>`; return `<span class="kpi-n1-val">N-1 : ${val}</span>`; }
+
+let pin='';
+function digit(n){ if(pin.length>=4)return; pin+=String(n); updateDots(); if(pin.length===4)checkPin(); }
+function del(){ pin=pin.slice(0,-1); updateDots(); document.getElementById('login-err').textContent=''; }
+function updateDots(){
+  for(let i=0;i<4;i++){
+    const d=document.getElementById('d'+i);
+    d.className='pin-dot'+(pin.length>i?' filled':'');
+    d.textContent=pin.length>i?'·':'';
+  }
+}
+function checkPin(){
+  const access=ACCESS[pin];
+  if(!access){
+    for(let i=0;i<4;i++) document.getElementById('d'+i).className='pin-dot error';
+    document.getElementById('login-err').textContent='Code incorrect';
+    setTimeout(()=>{ pin=''; updateDots(); document.getElementById('login-err').textContent=''; },900);
+    return;
+  }
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('access-lbl').textContent=access.label;
+  buildApp(access.shops);
+}
+function logout(){ location.reload(); }
+
+function buildApp(shops){
+  const tabs=document.getElementById('tabs');
+  const panel=document.getElementById('main-panel');
+  shops.forEach((id,i)=>{
+    const btn=document.createElement('button');
+    btn.className='tab-btn'+(i===0?' active':'');
+    btn.textContent=SHOP_NAMES[id];
+    btn.onclick=()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.shop-panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('panel-'+id).classList.add('active');
+      animateBars('panel-'+id);
+    };
+    tabs.appendChild(btn);
+    const div=document.createElement('div');
+    div.id='panel-'+id;
+    div.className='shop-panel'+(i===0?' active':'');
+    div.innerHTML=id==='total'?buildTotal():buildShop(id);
+    panel.appendChild(div);
+  });
+  animateBars('panel-'+shops[0]);
+}
+function animateBars(pid){
+  setTimeout(()=>{ document.querySelectorAll('#'+pid+' .rank-bar-fill').forEach(el=>{ el.style.width=el.dataset.pct+'%'; }); },60);
+}
+
+function buildShop(id){
+  const d=D[id], s=STOCK[id], obj=OBJ[id]||0;
+  const evCA=ePct(d.ca,d.ca_n1), evPr=ePct(d.profit,d.profit_n1);
+  const evMarg=d.margin_pct-d.margin_n1_pct;
+  const evOrd=ePct(d.orders,d.orders_n1), evPcs=ePct(d.pcs,d.pcs_n1);
+  const evPan=ePct(d.panier,d.panier_n1), evIDV=ePct(d.idv,d.idv_n1);
+  const evObj=obj>0?ePct(d.ca,obj):null;
+  const stkEvol=((s.val/s.val_n1-1)*100).toFixed(1);
+  const uDiff=(s.units-s.units_n1).toLocaleString('fr-FR');
+
+  return `
+  <div class="shop-hd">
+    <div><div class="shop-title">${d.name} <span>${d.accent}</span></div>
+    <div class="shop-date">S32 · Lun 03 → Sam 08 Août 2026</div></div>
+  </div>
+  <div class="sec-label">Ligne 1 · Performance commerciale</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evCA)}">
+      <div class="kpi-big-label">CA TTC</div>
+      <div class="kpi-big-val">${fmtEur(d.ca)}</div>
+      <div class="kpi-big-n1">${badge(evCA)} ${n1v(fmtEur(d.ca_n1))}</div>
+    </div>
+    <div class="kpi-card-big ${evObj!==null?eDir(evObj):'neu'}">
+      <div class="kpi-big-label">Objectif semaine</div>
+      <div class="kpi-big-val">${fmtEur(obj)}</div>
+      <div class="kpi-big-n1">
+        ${evObj!==null ? badge(evObj)+' <span class="kpi-n1-val">Écart : '+(evObj>=0?'+':'')+fmtK(Math.round(d.ca-obj))+' €</span>' : '<span class="kpi-n1-val">—</span>'}
+      </div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPr)}">
+      <div class="kpi-big-label">Marge brute</div>
+      <div class="kpi-big-val">${fmtEur(d.profit)}</div>
+      <div class="kpi-big-n1">${badge(evPr)} ${n1v(fmtEur(d.profit_n1))}</div>
+    </div>
+    <div class="kpi-card-big ${evMarg>=0?'up':'down'}">
+      <div class="kpi-big-label">Taux de marge</div>
+      <div class="kpi-big-val">${d.margin_pct}%</div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${evMarg>=0?'up':'down'}">${evMarg>=0?'+':''}${evMarg.toFixed(1)} pt</span>
+        ${n1v(d.margin_n1_pct+'%')}
+      </div>
+    </div>
+  </div>
+  <div class="sec-label" style="margin-top:10px">Ligne 2 · Activité</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evOrd)}">
+      <div class="kpi-big-label">Commandes</div>
+      <div class="kpi-big-val">${d.orders}</div>
+      <div class="kpi-big-n1">${badge(evOrd)} ${n1v(d.orders_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPcs)}">
+      <div class="kpi-big-label">Articles vendus</div>
+      <div class="kpi-big-val">${d.pcs}</div>
+      <div class="kpi-big-n1">${badge(evPcs)} ${n1v(d.pcs_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPan)}">
+      <div class="kpi-big-label">Panier moyen</div>
+      <div class="kpi-big-val">${d.panier} €</div>
+      <div class="kpi-big-n1">${badge(evPan)} ${n1v(d.panier_n1+' €')}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evIDV)}">
+      <div class="kpi-big-label">Indice de vente</div>
+      <div class="kpi-big-val">${d.idv}</div>
+      <div class="kpi-big-n1">${badge(evIDV)} ${n1v(d.idv_n1)}</div>
+    </div>
+  </div>
+  <div class="sec-label" style="margin-top:10px">Ligne 3 · Niveau de stock</div>
+  <div class="stock-bar">
+    <div>
+      <div class="stock-label">Valeur 2026</div>
+      <div class="stock-val">${s.val.toLocaleString('fr-FR')} €</div>
+      <div class="stock-note">${s.units.toLocaleString('fr-FR')} unités</div>
+    </div>
+    <div style="border-left:1px solid var(--border);margin:0 20px;height:40px"></div>
+    <div>
+      <div class="stock-label">N-1 · 04 août 2025</div>
+      <div class="stock-val" style="font-size:16px;color:var(--muted)">${s.val_n1.toLocaleString('fr-FR')} €</div>
+      <div class="stock-note">${s.units_n1.toLocaleString('fr-FR')} unités</div>
+    </div>
+    <div style="border-left:1px solid var(--border);margin:0 20px;height:40px"></div>
+    <div>
+      <div class="stock-label">Évolution</div>
+      <div class="stock-val" style="font-size:16px;color:${s.val<s.val_n1?'var(--dn-txt)':'var(--up-txt)'}">${s.val>=s.val_n1?'+':''}${stkEvol}%</div>
+      <div class="stock-note" style="color:${s.units<s.units_n1?'var(--dn-txt)':'var(--up-txt)'}">${s.units>=s.units_n1?'+':''}${uDiff} unités</div>
+    </div>
+  </div>
+  <div class="sec-label">CA · IDV par jour vs N-1</div>
+  ${buildDailyChart(d)}
+  <div class="sec-label">Top 10 Marques · Catégories</div>
+  <div class="two-col">
+    ${buildRankBrands(d.brands)}
+    ${buildRankCats(d.cats)}
+  </div>
+  ${buildBBShop(d)}`;
+}
+
+function buildDailyChart(d){
+  const maxVal=Math.max(...d.daily_ca,...d.daily_ca_n1,1);
+  const bars=d.daily_ca.map((ca,i)=>{
+    const n1=d.daily_ca_n1[i];
+    const hC=Math.round((ca/maxVal)*100);
+    const hN=Math.round((n1/maxVal)*100);
+    const ev=n1>0&&ca>0?((ca/n1-1)*100).toFixed(0):null;
+    const idv=d.daily_idv?d.daily_idv[i]:null;
+    const idvN=d.daily_idv_n1?d.daily_idv_n1[i]:null;
+    const col=ev!==null?(parseFloat(ev)>=0?'var(--up-txt)':'var(--dn-txt)'):'var(--muted)';
+    return `<div class="day-col">
+      <div class="day-evol" style="color:${col}">${ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'—'}</div>
+      <div class="day-bar-group">
+        <div class="bar cur" style="height:${hC}px;min-height:${ca>0?2:0}px"></div>
+        <div class="bar n1"  style="height:${hN}px;min-height:${n1>0?2:0}px"></div>
+      </div>
+      <div class="day-label">${DAYS_LABELS[i]}</div>
+      <div class="day-ca">${ca>0?fmtK(Math.round(ca))+' €':'<span style="color:var(--muted)">F</span>'}</div>
+      ${idv&&idv>0?`<div class="day-idv">IDV ${idv.toFixed(2)}${idvN&&idvN>0?` <span style="color:${idv>=idvN?'var(--up-txt)':'var(--dn-txt)'};font-size:7px">${idv>=idvN?'↑':'↓'}${idvN.toFixed(2)}</span>`:''}</div>`:`<div class="day-idv" style="color:var(--muted)">—</div>`}
+    </div>`;
+  }).join('');
+  return `<div class="daily-chart-block">
+    <div class="daily-chart-hd">
+      <span class="daily-chart-title">CA & IDV journaliers</span>
+      <div class="daily-legend">
+        <div class="daily-legend-item"><div class="legend-dot cur"></div><span>S32 2026</span></div>
+        <div class="daily-legend-item"><div class="legend-dot n1"></div><span>S.A. 2025</span></div>
+      </div>
+    </div>
+    <div class="daily-chart-area"><div class="day-bars" style="grid-template-columns:repeat(${d.daily_ca.length},1fr)">${bars}</div></div>
+  </div>`;
+}
+
+function buildRankBrands(items){
+  const max=items[0].ca;
+  const rows=items.map((item,i)=>{
+    const bp=(item.ca/max*100).toFixed(1);
+    const wgt=item.pct!=null?`<span class="wgt-badge">${item.pct}%</span>`:'';
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=item.n1_ca===0;
+    const n1row=`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
+      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
+      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}${wgt}</div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div></div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  return `<div class="rank-block"><div class="rank-hd">
+    <span class="rank-hd-title">Marques</span>
+    <span class="rank-hd-sub">vs N-1 S.A.</span>
+  </div>${rows}</div>`;
+}
+
+function buildRankCats(items){
+  const max=items[0].ca;
+  const rows=items.map((item,i)=>{
+    const bp=(item.ca/max*100).toFixed(1);
+    const wgt=item.pct!=null?`<span class="wgt-badge">${item.pct}%</span>`:'';
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=item.n1_ca===0;
+    const n1row=!CATS_N1_OK?'<div class="rank-n1-row"><div></div><div class="rank-n1-label" style="font-style:italic">N-1 non disponible</div><div></div><div></div></div>':`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
+      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
+      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}${wgt}</div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div></div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  return `<div class="rank-block"><div class="rank-hd">
+    <span class="rank-hd-title">Catégories</span>
+    <span class="rank-hd-sub">vs N-1 S.A.</span>
+  </div>${rows}</div>`;
+}
+
+function buildTotalRanks(){
+  const maxB=TOTAL_BRANDS[0].ca, maxC=TOTAL_CATS_S23[0].ca;
+  const brandRows=TOTAL_BRANDS.map((item,i)=>{
+    const bp=(item.ca/maxB*100).toFixed(1);
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=!item.n1_ca||item.n1_ca===0;
+    const shopBreak=`<div class="brand-shops">
+      ${item.orl.ca>0?`<span class="bs-pill bs-orl">Orl. ${item.orl.pcs}p · ${fmtK(item.orl.ca)} €</span>`:''}
+      ${item.bou.ca>0?`<span class="bs-pill bs-bou">Bou. ${item.bou.pcs}p · ${fmtK(item.bou.ca)} €</span>`:''}
+      ${item.tou.ca>0?`<span class="bs-pill bs-tou">Tou. ${item.tou.pcs}p · ${fmtK(item.tou.ca)} €</span>`:''}
+    </div>`;
+    const n1row=`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+fmtK(item.n1_ca)+' €'}</div>
+      <div class="rank-n1-pcs"></div>
+      <div class="rank-n1-ca">${!isNew?'<span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div>
+        ${shopBreak}</div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  const catRows=TOTAL_CATS_S23.map((item,i)=>{
+    const bp=(item.ca/maxC*100).toFixed(1);
+    const ev=item.n1_ca>0?((item.ca/item.n1_ca-1)*100).toFixed(1):null;
+    const eDir2=ev!==null?(parseFloat(ev)>=0?'up':'dn'):'';
+    const eStr=ev!==null?(parseFloat(ev)>=0?'+':'')+ev+'%':'';
+    const isNew=item.n1_ca===0;
+    const n1row=!CATS_N1_OK?'<div class="rank-n1-row"><div></div><div class="rank-n1-label" style="font-style:italic">N-1 non disponible</div><div></div><div></div></div>':`<div class="rank-n1-row">
+      <div></div>
+      <div class="rank-n1-label">${isNew?'<span style="color:var(--up-txt);font-style:normal">↗ Nouvelle entrée</span>':'N-1 · '+item.n1_pcs+' pcs'}</div>
+      <div class="rank-n1-pcs">${!isNew?item.n1_pcs+' pcs':''}</div>
+      <div class="rank-n1-ca">${!isNew?fmtK(item.n1_ca)+' € <span class="rank-n1-evol '+eDir2+'">'+eStr+'</span>':''}</div>
+    </div>`;
+    return `<div class="rank-row">
+      <div class="rank-num${i===0?' n1':''}">${i+1}</div>
+      <div><div class="rank-name">${item.n}<span class="wgt-badge">${item.pct}%</span></div>
+        <div class="rank-bar-bg"><div class="rank-bar-fill" data-pct="${bp}" style="width:0"></div></div></div>
+      <div class="rank-pcs">${item.pcs} pcs</div>
+      <div class="rank-ca">${fmtK(item.ca)} €</div>
+    </div>${n1row}`;
+  }).join('');
+  return `<div class="two-col">
+    <div class="rank-block"><div class="rank-hd">
+      <span class="rank-hd-title">Marques · 3 boutiques</span>
+      <span class="rank-hd-sub">vs N-1 S.A.</span>
+    </div>${brandRows}</div>
+    <div class="rank-block"><div class="rank-hd">
+      <span class="rank-hd-title">Catégories · 3 boutiques</span>
+      <span class="rank-hd-sub">vs N-1 S.A.</span>
+    </div>${catRows}</div>
+  </div>`;
+}
+
+function buildBBTop20(){
+  const D=[
+    {n:"Onze Mètres Carrés",bb:2527,mg:56.8,bb1:2287,mg1:45.3},
+    {n:"Carhartt WIP",bb:1894,mg:36.2,bb1:2491,mg1:40.1},
+    {n:"Deus Ex Machina",bb:694,mg:41.6,bb1:258,mg1:39.6},
+    {n:"Arte Antwerp",bb:558,mg:36.9,bb1:152,mg1:46.7},
+    {n:"Sebago",bb:266,mg:36.4,bb1:0,mg1:0.0},
+    {n:"Obey",bb:250,mg:27.5,bb1:194,mg1:28.8},
+    {n:"Bobo Choses",bb:189,mg:49.5,bb1:26,mg1:21.8},
+    {n:"By Parra",bb:167,mg:46.8,bb1:36,mg1:55.9},
+    {n:"New Era",bb:102,mg:35.7,bb1:121,mg1:39.6},
+    {n:"Rhythm",bb:94,mg:28.5,bb1:0,mg1:0.0},
+    {n:"Service Works",bb:79,mg:28.5,bb1:8,mg1:20.0},
+    {n:"Rains",bb:78,mg:34.5,bb1:345,mg1:46.7},
+    {n:"Edwin",bb:74,mg:27.1,bb1:97,mg1:22.3},
+    {n:"RVCA",bb:70,mg:15.8,bb1:28,mg1:26.4},
+    {n:"Reebok",bb:64,mg:30.5,bb1:0,mg1:0.0},
+    {n:"Volcom",bb:47,mg:12.7,bb1:0,mg1:0.0},
+    {n:"American Vintage",bb:44,mg:45.7,bb1:0,mg1:0.0},
+    {n:"Fred Perry",bb:33,mg:20.0,bb1:0,mg1:0.0},
+    {n:"Take Care",bb:27,mg:35.7,bb1:0,mg1:0.0},
+    {n:"Eastpak",bb:24,mg:23.8,bb1:9,mg1:41.1},
+  ];
+  const AUTRES={n:'Autres marques (48)',bb:26,mg:1.8,bb1:421,mg1:13.5};
+  const TOT={n:'TOTAL \u00b7 toutes marques',bb:7305,mg:37.4,bb1:6473,mg1:36.2};
+  const vbad=o=>{
+    if(!o.bb1){return '<span class="evol-badge up">Nouv.</span>';}
+    const v=o.mg-o.mg1;
+    const disp=(v>=0?'+':'')+v.toFixed(1)+' pt';
+    return `<span class="evol-badge ${v>=0?'up':'down'}">${disp}</span>`;
+  };
+  const line=(o,i,cls)=>`<div class="tbl-row ${cls||''}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${i!=null?'<span class="bb-rk">'+(i+1)+'</span>':''}${o.n}</span></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(o.bb)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${o.mg.toFixed(1)}%</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':fmtEur(o.bb1)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':o.mg1.toFixed(1)+'%'}</div></div>
+      <div class="tbl-cell tbl-num">${vbad(o)}</div>
+    </div>`;
+  const head=`<div class="tbl-row tbl-head">
+      <div class="tbl-cell tbl-name">Marque</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut</div>
+      <div class="tbl-cell tbl-num">Taux</div>
+      <div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut N-1</div>
+      <div class="tbl-cell tbl-num">Taux N-1</div>
+      <div class="tbl-cell tbl-num">Var.</div>
+    </div>`;
+  return `<style>
+    .bb-cmp .tbl-row{grid-template-columns:minmax(120px,1fr) 104px 60px 116px 70px 76px;min-width:600px}
+    .bb-cmp .bb-rk{color:var(--muted);font-size:11px;margin-right:8px;font-weight:400}
+    .bb-cmp .bb-n1{color:var(--muted);font-weight:400}
+    .bb-cmp .bb-autres{background:var(--off)}
+    .bb-cmp .bb-autres .tbl-shop-name{color:var(--muted);font-style:italic}
+  </style>
+  <div class="sec-label">B\u00e9n\u00e9fice brut \u00b7 Top 20 marques \u00b7 3 boutiques</div>
+  <div class="cmp-table bb-cmp">${head}${D.map((o,i)=>line(o,i)).join('')}${line(AUTRES,null,'bb-autres')}${line(TOT,null,'tbl-row-total')}</div>`;
+}
+
+function buildBBShop(d){
+  const rows=d.bbrands||[];const TOT=d.bbtotal;
+  const vbad=o=>{ if(!o.bb1){return '<span class="evol-badge up">Nouv.</span>';}
+    const v=o.mg-o.mg1;return `<span class="evol-badge ${v>=0?'up':'down'}">${(v>=0?'+':'')+v.toFixed(1)+' pt'}</span>`; };
+  const line=(o,i,cls)=>`<div class="tbl-row ${cls||''}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${i!=null?'<span class="bb-rk">'+(i+1)+'</span>':''}${o.n}</span></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(o.bb)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${o.mg.toFixed(1)}%</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':fmtEur(o.bb1)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main bb-n1">${!o.bb1?'\u2014':o.mg1.toFixed(1)+'%'}</div></div>
+      <div class="tbl-cell tbl-num">${vbad(o)}</div>
+    </div>`;
+  const head=`<div class="tbl-row tbl-head">
+      <div class="tbl-cell tbl-name">Marque</div><div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut</div>
+      <div class="tbl-cell tbl-num">Taux</div><div class="tbl-cell tbl-num">B\u00e9n\u00e9f. brut N-1</div>
+      <div class="tbl-cell tbl-num">Taux N-1</div><div class="tbl-cell tbl-num">Var.</div></div>`;
+  return `<style>
+    .bb-cmp .tbl-row{grid-template-columns:minmax(120px,1fr) 104px 60px 116px 70px 76px;min-width:600px}
+    .bb-cmp .bb-rk{color:var(--muted);font-size:11px;margin-right:8px;font-weight:400}
+    .bb-cmp .bb-n1{color:var(--muted);font-weight:400}
+  </style>
+  <div class="sec-label" style="margin-top:10px">B\u00e9n\u00e9fice brut \u00b7 Top 10 marques \u00b7 ${d.accent}</div>
+  <div class="cmp-table bb-cmp">${head}${rows.map((o,i)=>line(o,i)).join('')}${line(TOT,null,'tbl-row-total')}</div>`;
+}
+
+function buildTotal(){
+  const SL=['orleans','bourges','tours'].map(id=>({id,name:D[id].accent,isShop:true,ca:D[id].ca,ca_n1:D[id].ca_n1,orders:D[id].orders,orders_n1:D[id].orders_n1,pcs:D[id].pcs,pcs_n1:D[id].pcs_n1,profit:D[id].profit,profit_n1:D[id].profit_n1,margin_pct:D[id].margin_pct,margin_n1:D[id].margin_n1_pct}));
+  function totals(arr){
+    const ca=arr.reduce((s,r)=>s+r.ca,0), ca_n1=arr.reduce((s,r)=>s+r.ca_n1,0);
+    const ord=arr.reduce((s,r)=>s+r.orders,0), ord_n1=arr.reduce((s,r)=>s+r.orders_n1,0);
+    const pcs=arr.reduce((s,r)=>s+r.pcs,0), pcs_n1=arr.reduce((s,r)=>s+r.pcs_n1,0);
+    const prof=arr.reduce((s,r)=>s+r.profit,0), prof_n1=arr.reduce((s,r)=>s+r.profit_n1,0);
+    return {ca,ca_n1,ord,ord_n1,pcs,pcs_n1,prof,prof_n1,
+      marg:prof/(ca/1.2)*100,marg_n1:prof_n1/(ca_n1/1.2)*100,
+      idv:pcs/ord,idv_n1:pcs_n1/ord_n1,panier:ca/ord,panier_n1:ca_n1/ord_n1};
+  }
+  const T3=totals(SL);
+  const totalObj=Object.values(OBJ).reduce((s,v)=>s+v,0);
+  const evCA=ePct(T3.ca,T3.ca_n1), evObj=ePct(T3.ca,totalObj);
+  const evOrd=ePct(T3.ord,T3.ord_n1), evPcs=ePct(T3.pcs,T3.pcs_n1);
+  const evPan=ePct(T3.panier,T3.panier_n1), evIDV=ePct(T3.idv,T3.idv_n1);
+  const evPr=ePct(T3.prof,T3.prof_n1), evMarg=T3.marg-T3.marg_n1;
+  const tCa=T3.ca;
+  const tableRows=[...SL,null].map(s=>{
+    const isTot=s===null;
+    const name=isTot?'TOTAL':s.name;
+    const stk=s&&STOCK[s.id]?STOCK[s.id]:null;
+    const obj_v=!isTot&&s.isShop&&OBJ[s.id]?OBJ[s.id]:(isTot?totalObj:0);
+    const ca_r=isTot?T3.ca:s.ca, ca_n1_r=isTot?T3.ca_n1:s.ca_n1;
+    const ev_ca_r=ePct(ca_r,ca_n1_r), ev_obj_r=obj_v>0?ePct(ca_r,obj_v):null;
+    const marg_r=isTot?T3.marg:s.margin_pct, marg_n1_r=isTot?T3.marg_n1:s.margin_n1;
+    const prof_r=isTot?T3.prof:s.profit;
+    const ord_r=isTot?T3.ord:s.orders, ord_n1_r=isTot?T3.ord_n1:s.orders_n1;
+    const pcs_r=isTot?T3.pcs:s.pcs, pcs_n1_r=isTot?T3.pcs_n1:s.pcs_n1;
+    const pan_r=ca_r/ord_r, pan_n1_r=ca_n1_r/ord_n1_r;
+    const idv_r=pcs_r/ord_r, idv_n1_r=pcs_n1_r/ord_n1_r;
+    const pct_ca=(ca_r/tCa*100).toFixed(1);
+    const stkTv=stk?stk.val:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].val,0);
+    const stkTu=stk?stk.units:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].units,0);
+    const stkN1v=stk?stk.val_n1:SL.filter(x=>STOCK[x.id]).reduce((a,r)=>a+STOCK[r.id].val_n1,0);
+    const stkEv=((stkTv/stkN1v-1)*100).toFixed(1);
+    const stkHtml=`<div class="tbl-main">${stkTv.toLocaleString('fr-FR')} €</div>
+      <div class="tbl-sub">${stkTu.toLocaleString('fr-FR')} u.</div>
+      <div class="tbl-sub" style="color:${stkTv<stkN1v?'var(--dn-txt)':'var(--up-txt)'}">${stkTv>=stkN1v?'+':''}${stkEv}% vs N-1</div>`;
+    const rowCls=isTot?'tbl-row tbl-row-total':'tbl-row';
+    return `<div class="${rowCls}">
+      <div class="tbl-cell tbl-name"><span class="tbl-shop-name">${name}</span>${!isTot?`<span class="tbl-pct-badge">${pct_ca}%</span>`:''}</div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(ca_r)}</div><div class="tbl-sub">${n1v(fmtEur(ca_n1_r))}</div></div>
+      <div class="tbl-cell tbl-num">${obj_v>0?`<div class="tbl-main">${fmtEur(obj_v)}</div><div class="tbl-sub"><span class="evol-badge ${ev_obj_r>=0?'up':'dn'}" style="font-size:9px;padding:1px 5px">${ev_obj_r>=0?'+':''}${ev_obj_r.toFixed(1)}%</span></div>`:'<div class="tbl-main" style="color:var(--muted)">—</div>'}</div>
+      <div class="tbl-cell tbl-num">${ev_ca_r===null?'<span class="evol-badge" style="opacity:.5">n/d</span>':`<span class="evol-badge ${ev_ca_r>=0?'up':'dn'}">${ev_ca_r>=0?'+':''}${ev_ca_r.toFixed(1)}%</span>`}</div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${fmtEur(Math.round(prof_r))}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${marg_r.toFixed(1)}%</div><div class="tbl-sub">${n1v(isFinite(marg_n1_r)&&marg_n1_r>0?marg_n1_r.toFixed(1)+'%':'n/d')}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${ord_r}</div><div class="tbl-sub">${n1v(ord_n1_r)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${pcs_r}</div><div class="tbl-sub">${n1v(pcs_n1_r)}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${pan_r.toFixed(0)} €</div><div class="tbl-sub">${n1v(isFinite(pan_n1_r)&&pan_n1_r>0?pan_n1_r.toFixed(0)+' €':'n/d')}</div></div>
+      <div class="tbl-cell tbl-num"><div class="tbl-main">${idv_r.toFixed(2)}</div><div class="tbl-sub">${n1v(isFinite(idv_n1_r)&&idv_n1_r>0?idv_n1_r.toFixed(2):'n/d')}</div></div>
+      <div class="tbl-cell tbl-num">${stkHtml}</div>
+    </div>`;
+  }).join('');
+  const tableHead=`<div class="tbl-row tbl-head">
+    <div class="tbl-cell tbl-name">Boutique</div><div class="tbl-cell tbl-num">CA TTC</div>
+    <div class="tbl-cell tbl-num">Objectif</div><div class="tbl-cell tbl-num">vs N-1</div>
+    <div class="tbl-cell tbl-num">Marge</div><div class="tbl-cell tbl-num">Taux</div>
+    <div class="tbl-cell tbl-num">Cmd.</div><div class="tbl-cell tbl-num">Articles</div>
+    <div class="tbl-cell tbl-num">Panier</div><div class="tbl-cell tbl-num">IDV</div>
+    <div class="tbl-cell tbl-num">Stock</div>
+  </div>`;
+  const dtCA=[0,1,2,3,4,5].map(i=>SL.reduce((s,r)=>s+(D[r.id].daily_ca[i]||0),0));
+  const dtN1=[0,1,2,3,4,5].map(i=>SL.reduce((s,r)=>s+(D[r.id].daily_ca_n1[i]||0),0));
+  return `
+  <div class="shop-hd">
+    <div><div class="shop-title">Total <span>Tous canaux</span></div>
+    <div class="shop-date">S32 · Lun 03 → Sam 08 Août 2026</div></div>
+  </div>
+  <div class="sec-label">Ligne 1 · Performance commerciale — 3 boutiques</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evCA)}">
+      <div class="kpi-big-label">CA TTC</div>
+      <div class="kpi-big-val">${fmtEur(Math.round(T3.ca))}</div>
+      <div class="kpi-big-n1">${badge(evCA)} ${n1v(fmtEur(Math.round(T3.ca_n1)))}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evObj)}">
+      <div class="kpi-big-label">Objectif semaine</div>
+      <div class="kpi-big-val">${fmtEur(totalObj)}</div>
+      <div class="kpi-big-n1">${badge(evObj)} <span class="kpi-n1-val">Écart : ${evObj>=0?'+':''}${fmtK(Math.round(T3.ca-totalObj))} €</span></div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPr)}">
+      <div class="kpi-big-label">Marge brute</div>
+      <div class="kpi-big-val">${fmtEur(Math.round(T3.prof))}</div>
+      <div class="kpi-big-n1">${badge(evPr)} ${n1v(fmtEur(Math.round(T3.prof_n1)))}</div>
+    </div>
+    <div class="kpi-card-big ${evMarg>=0?'up':'down'}">
+      <div class="kpi-big-label">Taux de marge</div>
+      <div class="kpi-big-val">${T3.marg.toFixed(1)}%</div>
+      <div class="kpi-big-n1">
+        <span class="evol-badge ${evMarg>=0?'up':'down'}">${evMarg>=0?'+':''}${evMarg.toFixed(1)} pt</span>
+        ${n1v(T3.marg_n1.toFixed(1)+'%')}
+      </div>
+    </div>
+  </div>
+  <div class="sec-label" style="margin-top:10px">Ligne 2 · Activité</div>
+  <div class="kpi-big kpi-4">
+    <div class="kpi-card-big ${eDir(evOrd)}">
+      <div class="kpi-big-label">Commandes</div>
+      <div class="kpi-big-val">${T3.ord}</div>
+      <div class="kpi-big-n1">${badge(evOrd)} ${n1v(T3.ord_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPcs)}">
+      <div class="kpi-big-label">Articles vendus</div>
+      <div class="kpi-big-val">${T3.pcs}</div>
+      <div class="kpi-big-n1">${badge(evPcs)} ${n1v(T3.pcs_n1)}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evPan)}">
+      <div class="kpi-big-label">Panier moyen</div>
+      <div class="kpi-big-val">${T3.panier.toFixed(0)} €</div>
+      <div class="kpi-big-n1">${badge(evPan)} ${n1v(T3.panier_n1.toFixed(0)+' €')}</div>
+    </div>
+    <div class="kpi-card-big ${eDir(evIDV)}">
+      <div class="kpi-big-label">Indice de vente</div>
+      <div class="kpi-big-val">${T3.idv.toFixed(2)}</div>
+      <div class="kpi-big-n1">${badge(evIDV)} ${n1v(T3.idv_n1.toFixed(2))}</div>
+    </div>
+  </div>
+  <div class="sec-label">Tableau comparatif par canal</div>
+  <div class="cmp-table">${tableHead}${tableRows}</div>
+  <div class="sec-label">Top 10 Marques · Catégories · 3 boutiques</div>
+  ${buildTotalRanks()}
+  ${buildBBTop20()}
+  <div class="sec-label">CA journalier consolidé vs N-1</div>
+  ${buildDailyChart({daily_ca:dtCA,daily_ca_n1:dtN1,daily_idv:null,daily_idv_n1:null})}`;
+}
+
+
+
+// Auto-déverrouillage si chargé depuis le hub (#code=XXXX)
+function __autoUnlock(){
+  var h = window.location.hash || '';
+  var m = h.match(/code=(\d{4})/);
+  if(m && typeof ACCESS !== 'undefined' && ACCESS[m[1]]){
+    pin = m[1];
+    checkPin();
+  }
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', __autoUnlock);
+} else {
+  __autoUnlock();
+}
+
+</script>
+</body>
+</html>
